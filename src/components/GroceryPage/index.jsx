@@ -59,7 +59,7 @@ export default class GroceryPage extends React.Component {
     // var url = `http://localhost:5000/api/authenticate-grocery-page`
     fetch(url, {
       method: 'GET',
-      credentials: 'include',
+      // credentials: 'include',
       headers: {
         'Content-type': 'application/json',
       },
@@ -85,7 +85,7 @@ export default class GroceryPage extends React.Component {
 
         fetch(url, {
           method: 'GET',
-          credentials: 'include',
+          // credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -120,7 +120,7 @@ export default class GroceryPage extends React.Component {
 
     fetch(url, {
       method: 'GET',
-      credentials: 'include',
+      // credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       }
@@ -152,7 +152,7 @@ export default class GroceryPage extends React.Component {
 
     fetch(url,{
       method: 'GET',
-      credentials: 'include',
+      // credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       }
@@ -195,7 +195,7 @@ export default class GroceryPage extends React.Component {
 
       fetch(url, {
         method: 'POST',
-        credentials: 'include',
+        // credentials: 'include',
         headers: {
           'Content-type': 'application/json',
         },
