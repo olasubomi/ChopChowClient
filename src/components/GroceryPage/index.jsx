@@ -60,9 +60,9 @@ export default class GroceryPage extends React.Component {
     fetch(url, {
       method: 'GET',
       // credentials: 'include',
-      headers: {
-        'Content-type': 'application/json',
-      },
+      // headers: {
+      //   'Content-type': 'application/json',
+      // },
     })
       .then(res => {
         return res.json()
@@ -86,9 +86,9 @@ export default class GroceryPage extends React.Component {
         fetch(url, {
           method: 'GET',
           // credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          // headers: {
+          //   'Content-Type': 'application/json',
+          // },
 
         })
           .then(res => {
@@ -121,9 +121,9 @@ export default class GroceryPage extends React.Component {
     fetch(url, {
       method: 'GET',
       // credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      }
+      // headers: {
+      //   'Content-Type': 'application/json',
+      // }
     })
       .then(res => {
         return res.json()
@@ -153,9 +153,9 @@ export default class GroceryPage extends React.Component {
     fetch(url,{
       method: 'GET',
       // credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      }
+      // headers: {
+      //   'Content-Type': 'application/json',
+      // }
     })
       .then(res => res.text())
       .then(body => {
@@ -196,9 +196,9 @@ export default class GroceryPage extends React.Component {
       fetch(url, {
         method: 'POST',
         // credentials: 'include',
-        headers: {
-          'Content-type': 'application/json',
-        },
+        // headers: {
+        //   'Content-type': 'application/json',
+        // },
         body: JSON.stringify({
           email,
           password,
@@ -248,10 +248,10 @@ export default class GroceryPage extends React.Component {
 
     fetch(url, {
       method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
+      // headers: {
+      //   Accept: 'application/json',
+      //   'Content-Type': 'application/json',
+      // },
 
     })
       .then(res => {
@@ -303,9 +303,9 @@ export default class GroceryPage extends React.Component {
 
     fetch(url, {
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      }
+      // headers: {
+      //   'Content-Type': 'application/json',
+      // }
     })
       .then(response => {
         console.log("delete response is: ");
@@ -369,10 +369,10 @@ export default class GroceryPage extends React.Component {
       // var url = `./api/add-data-typeahead-for-customer/${productID}/${this.state.customerId}`
       fetch(url, {
         method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
+        // headers: {
+        //   Accept: 'application/json',
+        // //   'Content-Type': 'application/json',
+        // },
       })
         .then(response => {
           // .then(res => {
