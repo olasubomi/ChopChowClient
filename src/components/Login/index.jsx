@@ -67,13 +67,14 @@ export default class Login extends React.Component {
           console.log(body.token);
           console.log(body.customerID);
           let customerID = body.customerID;
+          let username = body.username;
           window.localStorage.setItem("userToken", body.token);
           // console.log("converted body is :")
           // var jsonBody = body.json();
           // console.log(jsonBody)
 
           console.log("before prop func call");
-          this.props.updateLogInStatus(customerID);
+          this.props.updateLogInStatus(customerID, username);
           console.log("after prop func call");
           // return to page that called log in popup.
           return (window.location.href = "/grocery");
