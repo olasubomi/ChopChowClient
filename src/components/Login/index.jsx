@@ -1,9 +1,9 @@
 import React from "react";
 import "./style.css";
-import { Form, Button, Container, Modal, Row, Col, Card } from "react-bootstrap";
+import { Form, Button, Container, Modal, Row, Col } from "react-bootstrap";
 
-import { Link } from "react-router-dom";
-
+// import { Link } from "react-router-dom";
+///////////////////////////////////////////////////////////////////////////////////
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -15,9 +15,11 @@ export default class Login extends React.Component {
     };
   }
 
+  ///////////////////////////////////////////////////////////////////////////////////
   handleChange = ({ target: { value, name } }) =>
     this.setState({ [name]: value });
 
+    ///////////////////////////////////////////////////////////////////////////////////
   handleLoginClick = () => {
     var email = this.state.email;
     var password = this.state.password;
@@ -25,7 +27,7 @@ export default class Login extends React.Component {
     // const { email, password } = this.state;
     if (email && password) {
       // var url = `https://chopchowdev.herokuapp.com/api/login`;
-      var url = `./api/login`;
+      var url = `/api/login`;
       // var url = `http://localhost:5000/api/login`
 
       fetch(url, {

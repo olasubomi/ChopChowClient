@@ -5,6 +5,7 @@ import MealsPage from "../mealsPage/MealsPage";
 import ProductsSection from "../productsPage/ProductsPage";
 import Login from "../Login";
 import GroceryPage from "../GroceryPage";
+import ProductFullDetail from "../ProductFullDetail/ProductFullDetail";
 import SignUp from "../signup";
 import ForgotPassword from "../forgotpassword";
 import ResetPassword from "../resetpassword";
@@ -56,7 +57,7 @@ class Header extends Component {
     var localToken = window.localStorage.getItem("userToken");
     // api authenticate user calls authenticationVerify,isAuthenticated
     // var url = `https://chopchowdev.herokuapp.com/api/authenticate-grocery-page`;
-    var url = `./api/authenticate-app-page`;
+    var url = `/api/authenticate-app-page`;
     // var url = `http://localhost:5000/api/authenticate-grocery-page`
     fetch(url, {
       method: "GET",
@@ -506,6 +507,8 @@ class Header extends Component {
           <Route path="/products" render={(props) => <ProductsSection />} />
           <Route exact path="/SuggestMeal" render={(props) => <SuggestMeal />}/>
           <Route exact path="/ViewSuggestedMeals" render={(props) => <ViewSuggestedMeals />}/>
+          <Route path="/product-detail/:customerId/:productId" component={ProductFullDetail} />
+
         </Switch>
       </div>
     );

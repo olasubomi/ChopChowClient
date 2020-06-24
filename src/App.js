@@ -34,7 +34,7 @@ class App extends Component {
     // api authenticate user calls authenticationVerify,isAuthenticated
 
     // var url = `https://chopchowdev.herokuapp.com/api/authenticate-grocery-page`;
-    var url = `./api/authenticate-app-page`;
+    var url = `/api/authenticate-app-page`;
     // var url = `http://localhost:5000/api/authenticate-grocery-page`
     fetch(url, {
       method: "GET",
