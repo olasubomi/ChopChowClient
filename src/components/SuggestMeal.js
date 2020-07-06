@@ -3,6 +3,7 @@ import TextField from "@material-ui/core/TextField";
 import ChipInput from "material-ui-chip-input";
 import Chip from "@material-ui/core/Chip";
 import Autocomplete from "@material-ui/lab/Autocomplete"; // createFilterOptions,
+import axios from 'axios';
 
 // height of the TextField
 
@@ -10,17 +11,7 @@ class SuggestMeal extends Component {
   products = [];
   categories = [];
   measurements = [
-    "mL",
-    "oz",
-    "L",
-    "cup(s)",
-    "Tbsp",
-    "tsp",
-    "pt",
-    "lb",
-    "g",
-    "kg",
-    "lb",
+    "mL",    "oz",    "L",    "cup(s)",    "Tbsp",    "tsp",    "pt",    "lb",    "g",    "kg",    "lb",
   ];
   constructor(props) {
     super(props);
@@ -115,14 +106,13 @@ class SuggestMeal extends Component {
   }
 
   onTextFieldChange = (e) => {
-    /*
-          Because we named the inputs to match their
-          corresponding values in state, it's
-          super easy to update the state
-        */
-    console.log("Comes in on change");
-    // console.log("Target name: " + [e.target]);
     this.setState({ [e.target.id]: e.target.value });
+  };
+
+  onTextFieldClick = (event) => {     
+    console.log("Comes in on change");
+    this.setState({ imgSrc: event.target.files[0] });
+    console.log(" file ---", event.target.files[0]);
   };
 
   handleAddIngredientChip(chip) {
@@ -209,17 +199,9 @@ class SuggestMeal extends Component {
     }
 
     if (this.state.currentIngredientQuantity === 0) {
-      properIngredientStringSyntax = document.getElementById(
-        "currentIngredient"
-      ).value;
-    } else if (
-      document.getElementById("currentIngredientMeasurement").value === null
-    ) {
-      properIngredientStringSyntax =
-        "" +
-        this.state.currentIngredientQuantity +
-        " " +
-        document.getElementById("currentIngredient").value;
+      properIngredientStringSyntax = document.getElementById("currentIngredient").value;
+    } else if (  document.getElementById("currentIngredientMeasurement").value === null  ) {
+      properIngredientStringSyntax = "" + this.state.currentIngredientQuantity +  " " +  document.getElementById("currentIngredient").value;
     } else {
       properIngredientStringSyntax =
         "" +
@@ -251,16 +233,7 @@ class SuggestMeal extends Component {
     console.log("Comes in suggest meal func");
     // get our form data out of state
     const {
-      mealLabel,
-      intro,
-      servings,
-      ingredientStrings,
-      formatted_ingredient,
-      instructionsChip,
-      imgSrc,
-      readTime,
-      cookTime,
-      categoryChips,
+      mealLabel,      intro,      servings,      ingredientStrings,      formatted_ingredient,      instructionsChip,      imgSrc,      readTime,      cookTime,      categoryChips,
     } = this.state;
 
     if (mealLabel === "") {
@@ -276,41 +249,73 @@ class SuggestMeal extends Component {
       return;
     }
 
-    var url = "/api/addMealSuggestion/";
-    console.log("gets to call fetch");
+    var url = "http://localhost:5000/api/addMealSuggestion/";
+    console.log("gets to call fetch", instructionsChip);
 
-    fetch(url, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        mealLabel,
-        intro,
-        servings,
-        formatted_ingredient,
-        instructionsChip,
-        ingredientStrings,
-        imgSrc,
-        readTime,
-        cookTime,
-        categoryChips,
-      }),
+    let sugestMealForm = new FormData();
+    sugestMealForm.set('mealLabel', mealLabel);
+    sugestMealForm.set('intro', intro);
+    sugestMealForm.set('servings', servings);
+    sugestMealForm.set('formatted_ingredient', JSON.stringify(formatted_ingredient));
+    sugestMealForm.set('instructionsChip', JSON.stringify(instructionsChip));
+    sugestMealForm.set('ingredientStrings', ingredientStrings);
+    sugestMealForm.set('imgSrc', imgSrc, imgSrc.name);
+    sugestMealForm.set('readTime', readTime);
+    sugestMealForm.set('cookTime', cookTime);
+    sugestMealForm.set('categoryChips', JSON.stringify(categoryChips));
+
+
+    const config = {
+      method: 'POST',
+      data: sugestMealForm,
+      url: url
+    };
+    axios(config).then(response => {
+      if (response.status >= 200 && response.status < 300) {
+        console.log(response);
+        console.log("Display Meal submitted successfully");
+        // return response;
+        // window.location.reload();
+      } else {
+        console.log("Somthing happened wrong");
+      }
+    }).catch(error => {
+      console.log(error);
     })
-      .then((response) => {
-        if (response.status >= 200 && response.status < 300) {
-          console.log(response);
-          console.log("Display Meal submitted successfully");
-          // return response;
-          // window.location.reload();
-        } else {
-          console.log("Somthing happened wrong");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+
+
+    // fetch(url, {
+    //   method: "POST",
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     mealLabel,
+    //     intro,
+    //     servings,
+    //     formatted_ingredient,
+    //     instructionsChip,
+    //     ingredientStrings,
+    //     imgSrc,
+    //     readTime,
+    //     cookTime,
+    //     categoryChips,
+    //   }),
+    // })
+    //   .then((response) => {
+    //     if (response.status >= 200 && response.status < 300) {
+    //       console.log(response);
+    //       console.log("Display Meal submitted successfully");
+    //       // return response;
+    //       // window.location.reload();
+    //     } else {
+    //       console.log("Somthing happened wrong");
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   render() {
@@ -334,30 +339,11 @@ class SuggestMeal extends Component {
           <br></br>
           {/* add hash action so that form does not reload on enter or button click */}
           <form autoComplete="off" action="#">
-            <TextField
-              id="mealLabel"
-              onChange={this.onTextFieldChange}
-              label="Meal Name"
-              required
-              variant="filled"
-            />
+            <TextField id="mealLabel" onChange={this.onTextFieldChange} label="Meal Name" required variant="filled"/>
             <br></br>
-            <TextField
-              multiline
-              id="intro"
-              onChange={this.onTextFieldChange}
-              label="Intro"
-              variant="filled"
-            />
+            <TextField multiline id="intro" onChange={this.onTextFieldChange} label="Intro"  variant="filled" />
             <br></br>
-            <TextField
-              id="servings"
-              type="number"
-              onChange={this.onTextFieldChange}
-              label="Servings"
-              variant="filled"
-              placeholder="1 person, 2, 4 or 10 people"
-            />
+            <TextField id="servings" type="number" onChange={this.onTextFieldChange} label="Servings"  variant="filled"  placeholder="1 person, 2, 4 or 10 people" />
             <br></br>
             {/*  Be able to display product images on clock */}
             <ChipInput
@@ -449,13 +435,21 @@ class SuggestMeal extends Component {
             />
             <br></br>
             {/* <TextField id="instructions" onChange={this.onChange} label="Instructions" variant="filled" /><br></br> */}
-            <TextField
+            <input
+                accept="image/*"
+                // style={{ display: "none" }}
+                id="imgSrc" 
+                type="file" 
+                onChange={(ev)=>this.onTextFieldClick(ev)}/>
+            {/* <input
+              accept="image/*"
+              // style={{ display: "none" }}
               id="imgsrc"
               type="file"
-              onChange={this.onTextFieldChange}
-              label="Upload meal image"
-              variant="filled"
-            />
+              onChange={this.onTextFieldClick}
+              // label="Upload meal image"
+              // variant="filled"
+            /> */}
             <br></br>
             {/* <input type="file" name="file-input" multiple /><br></br>  */}
             {/* {...props} */}

@@ -1,16 +1,16 @@
 import React, { Component, useState } from "react";
 import { Link, Route, Switch } from "react-router-dom";
-import HomePage from "../HomePage";
-import MealsPage from "../mealsPage/MealsPage";
-import ProductsSection from "../productsPage/ProductsPage";
-import Login from "../Login";
-import GroceryPage from "../GroceryPage";
-import ProductFullDetail from "../ProductFullDetail/ProductFullDetail";
-import SignUp from "../signup";
-import ForgotPassword from "../forgotpassword";
-import ResetPassword from "../resetpassword";
-import SuggestMeal from "../SuggestMeal";
-import ViewSuggestedMeals from "../ViewSuggestedMeals";
+// import HomePage from "../HomePage";
+// import MealsPage from "../mealsPage/MealsPage";
+// import ProductsSection from "../productsPage/ProductsPage";
+// import Login from "../Login";
+// import GroceryPage from "../GroceryPage";
+// import ProductFullDetail from "../ProductFullDetail/ProductFullDetail";
+// import SignUp from "../signup";
+// import ForgotPassword from "../forgotpassword";
+// import ResetPassword from "../resetpassword";
+// import SuggestMeal from "../SuggestMeal";
+// import ViewSuggestedMeals from "../ViewSuggestedMeals";
 import img_logo from "../../assets/images/logo2.png"
 import './header.scss';
 import Dropdown from 'react-bootstrap/Dropdown'
@@ -45,49 +45,49 @@ class Header extends Component {
     console.log("customerID is:" + customerId);
   }
 
-  //////////////////////////////////////////////////////////////////////
-  componentDidMount() {
-    console.log("Comes in app.js's component did mount");
-    this.authenticateUser();
-    console.log("customerID is:" + this.state.customerId);
-  }
+  // //////////////////////////////////////////////////////////////////////
+  // componentDidMount() {
+  //   console.log("Comes in app.js's component did mount");
+  //   this.authenticateUser();
+  //   console.log("customerID is:" + this.state.customerId);
+  // }
 
-  //////////////////////////////////////////////////////////////////////
-  authenticateUser() {
-    var localToken = window.localStorage.getItem("userToken");
-    // api authenticate user calls authenticationVerify,isAuthenticated
-    // var url = `https://chopchowdev.herokuapp.com/api/authenticate-grocery-page`;
-    var url = `/api/authenticate-app-page`;
-    // var url = `http://localhost:5000/api/authenticate-grocery-page`
-    fetch(url, {
-      method: "GET",
-      credentials: "same-origin",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: "Bearer " + localToken,
-      },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((response) => {
-        console.log("api/ authenticate (app page) response:");
-        console.log(response);
+  // //////////////////////////////////////////////////////////////////////
+  // authenticateUser() {
+  //   var localToken = window.localStorage.getItem("userToken");
+  //   // api authenticate user calls authenticationVerify,isAuthenticated
+  //   // var url = `https://chopchowdev.herokuapp.com/api/authenticate-grocery-page`;
+  //   var url = `/api/authenticate-app-page`;
+  //   // var url = `http://localhost:5000/api/authenticate-grocery-page`
+  //   fetch(url, {
+  //     method: "GET",
+  //     credentials: "same-origin",
+  //     headers: {
+  //       "Content-type": "application/json",
+  //       Authorization: "Bearer " + localToken,
+  //     },
+  //   })
+  //     .then((res) => {
+  //       return res.json();
+  //     })
+  //     .then((response) => {
+  //       console.log("api/ authenticate (app page) response:");
+  //       console.log(response);
 
-        if (response.success && response.data) {
-          this.setState({ isAuthenticated: true });
-        } else { this.setState({ isAuthenticated: false }); }
+  //       if (response.success && response.data) {
+  //         this.setState({ isAuthenticated: true });
+  //       } else { this.setState({ isAuthenticated: false }); }
 
-        this.setState({ customerId: response.data, username: response.username });
-        const { customerId, username } = this.state;
-        console.log("customer id iis: " + customerId);
-        console.log("username iis: " + username);
-      })
-      .catch((err) => {
-        console.log("fails to authenticate app page");
-        console.log(err);
-      });
-  }
+  //       this.setState({ customerId: response.data, username: response.username });
+  //       const { customerId, username } = this.state;
+  //       console.log("customer id iis: " + customerId);
+  //       console.log("username iis: " + username);
+  //     })
+  //     .catch((err) => {
+  //       console.log("fails to authenticate app page");
+  //       console.log(err);
+  //     });
+  // }
 
   //////////////////////////////////////////////////////////////////////
   CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
@@ -110,9 +110,9 @@ class Header extends Component {
     {
       //clear cookie cache
       window.localStorage.setItem("userToken", null);
+      window.localStorage.setItem("userRole", null);
 
       var url = "/api/logout";
-
       fetch(url, {
         method: "GET",
         credentials: "same-origin",
@@ -140,6 +140,8 @@ class Header extends Component {
 
       this.setState({ isAuthenticated: false });
       window.location.reload(false);
+    }else if(e === "2"){
+      return (window.location.href = "/admin");
     }
   }
 
@@ -149,41 +151,21 @@ class Header extends Component {
     // the layout provider
     //const elements = ['one', 'two', 'three'];
     //const popOverInfo = []
-    const {
-      itemTypeahead,
-      // valueAllDataLists,
-      isAuthenticated,
-      customerId,
-      username,
-    } = this.state;
-
+    const { isAuthenticated, customerId, username,  } = this.props.data;
     const items = [];
     /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
     function myFunction() {
       var x = document.getElementById("mobileNavbar");
       console.log(x);
-      // console.log({this.state.topNav_className});
       if (x.className === "mobileNavbar") {
         x.className += " visible";
       } else {
         x.className = "mobileNavbar";
       }
-
-      // var y = document.getElementById("myTopnav2");
-      // if (y.className === "topnav"){
-      //     y.className += " responsive";
-      //   }
-      //   else{
-      //       //sync test nav bar as well
-      //       y.className = "topnav";
-      //   }
     }
 
     var login_on_desktop_navbar;
     var login_on_burger_navbar;
-
-    console.log("sssss,", isAuthenticated);
-
 
     if (isAuthenticated) {
       login_on_desktop_navbar = (
@@ -195,7 +177,7 @@ class Header extends Component {
           <Dropdown.Menu >
             <Dropdown.Item eventKey="1" onSelect={(ev, obj)=>this.handleLogout(ev)}>Profile</Dropdown.Item>
             <Dropdown.Divider />
-            <Dropdown.Item eventKey="2" onSelect={(ev, obj)=>this.handleLogout(ev)}>Dashboard/orders</Dropdown.Item>
+            <Dropdown.Item eventKey="2" onSelect={(ev, obj)=>this.handleLogout(ev)}> Dashboard/orders</Dropdown.Item>
             <Dropdown.Divider />
             <Dropdown.Item eventKey="3" onSelect={(ev, obj)=>this.handleLogout(ev)}>Support</Dropdown.Item>
             <Dropdown.Divider />
@@ -472,7 +454,7 @@ class Header extends Component {
           </div>
         </nav>
 
-        <Switch>
+        {/* <Switch>
           <Route exact path="/login"  
             render={() => (
               <Login updateLogInStatus={this.updateLogInStatus}/>
@@ -509,7 +491,7 @@ class Header extends Component {
           <Route exact path="/ViewSuggestedMeals" render={(props) => <ViewSuggestedMeals />}/>
           <Route path="/product-detail/:customerId/:productId" component={ProductFullDetail} />
 
-        </Switch>
+        </Switch> */}
       </div>
     );
   }

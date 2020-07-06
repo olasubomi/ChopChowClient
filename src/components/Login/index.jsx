@@ -63,7 +63,7 @@ export default class Login extends React.Component {
         })
         .then((body) => {
           // .then(firstBody=>{return firstBody.json()})
-
+          console.log("login_data");
           console.log(body);
           console.log(body.message);
           console.log(body.token);
@@ -71,6 +71,7 @@ export default class Login extends React.Component {
           let customerID = body.customerID;
           let username = body.username;
           window.localStorage.setItem("userToken", body.token);
+          window.localStorage.setItem("userRole", body.role);
           // console.log("converted body is :")
           // var jsonBody = body.json();
           // console.log(jsonBody)
@@ -78,8 +79,11 @@ export default class Login extends React.Component {
           console.log("before prop func call");
           this.props.updateLogInStatus(customerID, username);
           console.log("after prop func call");
+
           // return to page that called log in popup.
+
           return (window.location.href = "/grocery");
+
           // window.location.reload(false);
         })
         .catch(() => {

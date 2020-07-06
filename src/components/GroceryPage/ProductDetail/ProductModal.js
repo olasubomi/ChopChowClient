@@ -9,7 +9,6 @@ class ProductModal extends React.Component {
         super(props);
     }
     gotoViewPage = (customerId, productID) => {
-        console.log("_______________________ called ");
         const url = `/product-detail/${customerId}/${productID}`;
         this.props.history.push(url);
     }
