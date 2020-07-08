@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer";
 
-import { Link, Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import HomePage from "./components/HomePage";
 import MealsPage from "./components/mealsPage/MealsPage";
 import ProductsSection from "./components/productsPage/ProductsPage";
@@ -165,7 +165,7 @@ class App extends Component {
   render() {
     // Render your page inside
     // the layout provider
-    const { itemTypeahead, isAuthenticated,  customerId,  username,  } = this.state;
+    const { itemTypeahead,  customerId } = this.state;
     const items = [];
     var userRole = window.localStorage.getItem("userRole");
     var userToken = window.localStorage.getItem("userToken");

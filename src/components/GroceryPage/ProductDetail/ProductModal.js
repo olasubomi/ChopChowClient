@@ -5,9 +5,9 @@ import { withRouter } from 'react-router-dom';
 
 
 class ProductModal extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+    // constructor(props) {
+    //     super(props);
+    // }
     gotoViewPage = (customerId, productID) => {
         const url = `/product-detail/${customerId}/${productID}`;
         this.props.history.push(url);
@@ -32,7 +32,7 @@ class ProductModal extends React.Component {
                             </div>
                             <Row>
                                 <Col md={6} style={{ textAlign: "center" }}>
-                                    <img src={product_img} width="100%" className="product-img" />
+                                    <img src={product_img} width="100%" className="product-img" alt="alt_product_img"/>
                                 </Col>
                                 <Col md={6}>
                                     <div className="detail-info-panel" style={{ marginLeft: "10px", marginRight: "20px" }}>

@@ -1,6 +1,5 @@
 import React from "react";
-import { MDBCol, MDBContainer, MDBRow, MDBFooter } from "mdbreact";
-import { Form, Button, Container, Modal, Row, Col, Card } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import img_logo from "../assets/images/logo2.png";
 import './Footer.scss';
 

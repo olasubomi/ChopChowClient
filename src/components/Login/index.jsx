@@ -3,7 +3,6 @@ import "./style.css";
 import { Form, Button, Container, Modal, Row, Col } from "react-bootstrap";
 
 // import { Link } from "react-router-dom";
-///////////////////////////////////////////////////////////////////////////////////
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -15,11 +14,8 @@ export default class Login extends React.Component {
     };
   }
 
-  ///////////////////////////////////////////////////////////////////////////////////
   handleChange = ({ target: { value, name } }) =>
     this.setState({ [name]: value });
-
-    ///////////////////////////////////////////////////////////////////////////////////
   handleLoginClick = () => {
     var email = this.state.email;
     var password = this.state.password;
@@ -62,7 +58,6 @@ export default class Login extends React.Component {
           }
         })
         .then((body) => {
-          // .then(firstBody=>{return firstBody.json()})
           console.log("login_data");
           console.log(body);
           console.log(body.message);
@@ -72,19 +67,12 @@ export default class Login extends React.Component {
           let username = body.username;
           window.localStorage.setItem("userToken", body.token);
           window.localStorage.setItem("userRole", body.role);
-          // console.log("converted body is :")
-          // var jsonBody = body.json();
-          // console.log(jsonBody)
 
           console.log("before prop func call");
           this.props.updateLogInStatus(customerID, username);
           console.log("after prop func call");
-
           // return to page that called log in popup.
-
           return (window.location.href = "/grocery");
-
-          // window.location.reload(false);
         })
         .catch(() => {
           this.setState(
@@ -148,10 +136,8 @@ export default class Login extends React.Component {
                         className="login__form__input"
                         autoComplete="current-password"
                         />
-                      {/* <Form.Group controlId="formBasicEmail">                        
-                      </Form.Group>
-                      <Form.Group controlId="formBasicPassword">                        
-                      </Form.Group> */}
+                      <p className="msg-success">{messageSuccess}</p>
+                      <p className="msg-err">{messageErr}</p> 
                       <Form.Label className="lbl_text text-left" column md={12}><a className="forget" href="/forgotpass">Forget Password?</a></Form.Label>
 
                       <Button 

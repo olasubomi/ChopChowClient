@@ -44,7 +44,7 @@ componentWillMount() {
         
           for(let i=0; i< response.data.length; i++ )
           {
-            if(response.data[i].id == productId){
+            if(response.data[i].id === productId){
                 this.setState({ productData: response.data[i] });
                 break;
             }
@@ -77,17 +77,17 @@ componentWillMount() {
                             <Col md={2} style={{ textAlign: "center" }}>
                                 {
                                     this.state.productData &&
-                                    <img src={ `/images/products/${this.state.productData.product_image}`}  width="100%" className="productF-img1" />
+                                    <img src={ `/images/products/${this.state.productData.product_image}`}  width="100%" className="productF-img1" alt="product data alt img" />
                                 }
                                 {
                                     this.state.productData &&
-                                    <img src={ `/images/products/${this.state.productData.product_image}`}  width="100%" className="productF-img1" />
+                                    <img src={ `/images/products/${this.state.productData.product_image}`}  width="100%" className="productF-img1" alt="product data alt img"/>
                                 }
                             </Col>
                             <Col md={5} style={{ textAlign: "center" }}>
                                 {
                                     this.state.productData &&
-                                    <img src={ `/images/products/${this.state.productData.product_image}`}  width="100%" className="productF-img" />
+                                    <img src={ `/images/products/${this.state.productData.product_image}`}  width="100%" className="productF-img" alt="product data alt img"/>
                                 }
                             </Col>
                             <Col md={5}>
