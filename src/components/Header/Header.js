@@ -135,16 +135,6 @@ class Header extends Component {
       );
 
       login_on_burger_navbar = (
-        // <li className="nav-item" style={{ padding: "14px 16px" }}>
-        //   <button
-        //     to="/login"
-        //     className="nav-link px-2"
-        //     style={{ color: "#FFFFFF" }}
-        //     onClick={this.handleLogout}
-        //   >
-        //     Logout
-        //   </button>
-        // </li>
         <li className="nav-item">
           <Dropdown>
           <Dropdown.Toggle className="user-item" as={this.CustomToggle} id="dropdown-custom-components">
@@ -277,37 +267,8 @@ class Header extends Component {
                     </span>
                 </form>
               </div>
-
-              {/* <form className="form-inline" style={{ padding: "14px 0px" }}>
-                <div className="input-group">
-                  <input
-                    className="form-control"
-                    placeholder="Search meal or category"
-                    style={{
-                      backgroundColor: "#fd7e14",
-                      border: "1px solid #FFFFFF",
-                      width: "150px",
-                    }}
-                  />
-                  <span className="input-group-append">
-                      <div className="btn btn-outline-secondary" style={{
-                        backgroundColor: "#FFFFFF",
-                        borderColor: "#fd7e14",
-                      }}>
-                      <i className="fa fa-search " style={{ color: "#fd7e14"}} ></i>
-                      </div>
-                  </span>
-                </div>                  
-              </form> */}
               </li>
               {login_on_burger_navbar}
-
-              {/* <li className="nav-item" style={{ padding: "14px 16px" }}>
-                <button className="nav-link px-2" style={{ color: "#FFFFFF" }}>
-                  Cart Page
-                  </button>
-              </li> */}
-
               <li className="nav-item" style={{ padding: "14px 16px" }}>
                 <Link
                   to="/grocery"
@@ -360,17 +321,6 @@ class Header extends Component {
                   Receipes
                   </Link>
               </li>
-              {/* <li
-                className="nav-item"
-                style={{
-                  padding: "14px 16px",
-                  borderBottom: "1px solid #FFFFFF",
-                }}
-              >
-                <button className="nav-link px-2" style={{ color: "#FFFFFF" }}>
-                  Stats
-                  </button>
-              </li> */}
             </ul>
           </div>
         </div>
@@ -398,45 +348,6 @@ class Header extends Component {
             </ul>
           </div>
         </nav>
-
-        {/* <Switch>
-          <Route exact path="/login"  
-            render={() => (
-              <Login updateLogInStatus={this.updateLogInStatus}/>
-            )}
-          />
-
-          <Route exact path="/signup" render={(props) => <SignUp {...props} />} />
-          <Route exact path="/resetpass" render={(props) => <ResetPassword {...props} />} />
-          <Route exact path="/forgotpass" render={(props) => <ForgotPassword {...props} />}/>
-          <Route exact path="/" render={(props) => (
-              <div>
-                <div id="title"><b>Meals</b></div>
-                <div className="container">
-                  <div className="row">{items}</div>
-                </div>
-              </div>
-            )}
-          />
-
-          <Route path="/home" render={() => <HomePage />} />
-          <Route path="/v2" render={() => <MealsPage />} />
-          <Route exact path="/grocery"
-            render={() => (
-              <GroceryPage
-                auth={isAuthenticated}
-                dataTypeaheadProps={itemTypeahead}
-                customerId={customerId}
-              />
-            )}
-          />
-
-          <Route path="/products" render={(props) => <ProductsSection />} />
-          <Route exact path="/SuggestMeal" render={(props) => <SuggestMeal />}/>
-          <Route exact path="/ViewSuggestedMeals" render={(props) => <ViewSuggestedMeals />}/>
-          <Route path="/product-detail/:customerId/:productId" component={ProductFullDetail} />
-
-        </Switch> */}
       </div>
     );
   }

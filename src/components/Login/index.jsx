@@ -3,7 +3,6 @@ import "./style.css";
 import { Form, Button, Container, Modal, Row, Col } from "react-bootstrap";
 
 // import { Link } from "react-router-dom";
-///////////////////////////////////////////////////////////////////////////////////
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -72,7 +71,6 @@ export default class Login extends React.Component {
           }
         })
         .then((body) => {
-          // .then(firstBody=>{return firstBody.json()})
           console.log("login_data");
           console.log(body);
           console.log(body.message);
@@ -86,7 +84,6 @@ export default class Login extends React.Component {
           console.log("before prop func call");
           this.props.updateLogInStatus(customerID, username);
           console.log("after prop func call");
-
           // return to page that called log in popup.
           return (window.location.href = "/grocery");
           // window.location.reload(false);
