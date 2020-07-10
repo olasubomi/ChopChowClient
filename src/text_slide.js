@@ -42,23 +42,23 @@ class TextSlider extends Component {
   render() {
     const { mealPrep1, value } = this.props;
     console.log({ mealPrep1 }, "pppppppppp");
-    var popUpSlides = [];
+    // var popUpSlides = [];
     var carouselSlides = [];
     var i;
     const instructionsLength = value.instructions.length;
 
-    for (i = 0; i < instructionsLength / 3; i++) {
-      popUpSlides.push(
-        <button key={i} onClick={this.updateInstructionsDisplayBaseIndex}>
-          Slide {i}{" "}
-        </button>
-      );
-    }
+    // for (i = 0; i < instructionsLength / 3; i++) {
+    //   popUpSlides.push(
+    //     <button key={i} onClick={this.updateInstructionsDisplayBaseIndex}>
+    //       Slide {i}{" "}
+    //     </button>
+    //   );
+    // }
 
     console.log("instructions length: " + instructionsLength);
     for (i = 0; i <= instructionsLength / 2; i++) {
       console.log("i is :" + i);
-      if (mealPrep1[((i * 2) + 1)] !== undefined) {
+      if (mealPrep1[i * 2 + 1] !== undefined) {
         console.log("Comes in here with 3 instructions for slide #: " + i);
         carouselSlides.push(
           <Carousel.Item>
@@ -70,16 +70,16 @@ class TextSlider extends Component {
             <Carousel.Caption>
               <div id="mealPrepChunk">
                 {/* manually add intstruction numbering for display as list */}
-                {(i * 2) + 1}. {mealPrep1[(i * 2) + 0]}
-                {(i * 2) + 2}. {mealPrep1[(i * 2) + 1]}
-                {/* {(i * 3) + 3}. {mealPrep1[(i * 3) + 2]} */}
+                {i * 2 + 1}. {mealPrep1[i * 2]}
+                <br></br>
+                {i * 2 + 2}. {mealPrep1[i * 2 + 1]}
               </div>
             </Carousel.Caption>
           </Carousel.Item>
         )
       }
       else {
-        if (mealPrep1[(i * 2)] !== undefined) {
+        if (mealPrep1[i * 2] !== undefined) {
           console.log("Comes in here with 2 instructions for slide #: " + i);
 
           carouselSlides.push(
@@ -91,33 +91,12 @@ class TextSlider extends Component {
               />
               <Carousel.Caption>
                 <div id="mealPrepChunk">
-                  {(i * 2) + 0}. {mealPrep1[(i * 2) + 0]}
-                  {/* {(i * 3) + 1}. {mealPrep1[(i * 3) + 1]} */}
+                  {i * 2}. {mealPrep1[i * 2]}
                 </div>
               </Carousel.Caption>
             </Carousel.Item>
           )
         }
-        // else if (mealPrep1[(i * 3) ] != undefined) {
-        //   console.log("Comes in here with 1 instructions for slide #: "+ i);
-
-        //   carouselSlides.push(
-        //     <Carousel.Item>
-        //       <img
-        //         className="img-responsive imageHeighgt"
-        //         src="https://www.beautycolorcode.com/f6f0f0-2880x1800.png"
-        //         alt="First slide"
-        //       />
-        //       <Carousel.Caption>
-        //         <div id="mealPrepChunk">
-
-        //           {(i * 3) + 0}. {mealPrep1[(i * 3) + 0]}
-
-        //         </div>
-        //       </Carousel.Caption>
-        //     </Carousel.Item>
-        //   )
-        // }
       }
     }
 

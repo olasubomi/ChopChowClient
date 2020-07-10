@@ -96,7 +96,7 @@ class MyModal extends Component {
                         style={{ height: "300px" }}
                         alt="pp"
                         key={index}
-                        src={value.imageSrc}
+                        src={value.mealImage}
                       />
                     ))}
                   </Carousel>
@@ -157,13 +157,13 @@ class MyModal extends Component {
                     <b>Ingredients</b>
                   </div>
                   <div className="row">
-                    {ingredientsList.map(ingredient => (
+                    {/* {ingredientsList.map(ingredient => (
                       <div className="col-md-6" key={value.label + ingredient}>
                         <input type="checkbox" value="" />
                         {ingredient}
                         <br />
                       </div>
-                    ))}
+                    ))} */}
                   </div>
                   <hr></hr>
                     <TextSlider mealPrep1={mealPrep} value={value} />

@@ -82,8 +82,7 @@ export default class GroceryPage extends React.Component {
 
     console.log("this.props, ", nextProps);
 
-    if (auth === true) {
-      // or if (customerId !== null) , grocery page not displaying after login click
+    if (auth !== null) {
       this.getCustomerList(customerId);
     }
   }

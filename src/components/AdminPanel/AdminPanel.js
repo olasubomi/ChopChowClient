@@ -1,14 +1,9 @@
 import React from "react";
 import "./AdminPanel.scss";
-import { Container, Alert, Card, Col, Row, Button } from "react-bootstrap";
+import { Container, Col, Row } from "react-bootstrap";
 import img_oil from "../../assets/images/ola_ola_palm_oil.jpg";
 import img_logo from "../../assets/images/logo2.png";
-import { Link } from "react-router-dom";
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import {Dialog, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
 
 //////////////////////////////////////////////////////////////////////
 class AdminPanel extends React.Component {
@@ -20,15 +15,17 @@ class AdminPanel extends React.Component {
   }
 //////////////////////////////////////////////////////////////////////
   handleOnClickItems=(item, userRole)=>{
-    if (item =="suggest" && userRole=="admin"){
+    if (item === "suggest" && userRole === "admin"){
       return (window.location.href = "/ViewSuggestedMeals");
     }else{
       this.setState({open:true});
     }
   }
 
+  //////////////////////////////////////////////////////////////////////
   handleClose = () => { this.setState({open: false});};
-    //////////////////////////////////////////////////////////////////////
+
+  //////////////////////////////////////////////////////////////////////
   render() {
     const userRole = window.localStorage.getItem("userRole");
     console.log("yyy:", userRole);
@@ -42,19 +39,19 @@ class AdminPanel extends React.Component {
             <Col md={4} className="admin-item-panel">
                 <div className="item-card">
                   <div className="admin-item-title"><div style={{width: "100%"}}>INVENTORY</div></div>
-                  <img src={img_oil} className="admin-item-img"/>
+                  <img src={img_oil} className="admin-item-img" alt=""/>
                 </div>
             </Col> 
             <Col md={4} className="admin-item-panel">
                 <div className="item-card">
                   <div className="admin-item-title"><div style={{width: "100%"}}>ORDERS</div></div>
-                  <img src={img_oil} className="admin-item-img"/>
+                  <img src={img_oil} className="admin-item-img" alt=""/>
                 </div>
             </Col> 
             <Col md={4} className="admin-item-panel">
               <div className="item-card" id="suggest_admin" onClick={()=>this.handleOnClickItems("suggest", userRole)}>
                 <div className="admin-item-title"><div style={{width: "100%"}}>MEAL SUGGESTIONS/SUPPORT</div></div>
-                <img src={img_logo} className="admin-item-img"/>
+                <img src={img_logo} className="admin-item-img" alt=""/>
               </div>
             </Col> 
            </Row>

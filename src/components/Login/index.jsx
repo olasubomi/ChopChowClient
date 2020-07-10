@@ -12,14 +12,24 @@ export default class Login extends React.Component {
       password: "",
       messageErr: false,
       messageSuccess: false,
+
+      dialogue_open_flag: true
     };
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
-  handleChange = ({ target: { value, name } }) =>
-    this.setState({ [name]: value });
+  handleChange = ({ target: { value, name } }) => this.setState({ [name]: value });
 
-    ///////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+  handleClose = () => this.setState({dialogue_open_flag: false});
+
+  componentWillReceiveProps(nextProps){
+    const { openFlag } = nextProps;
+    console.log("openFlag:", openFlag);
+    this.setState({dialogue_open_flag: openFlag});
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////
   handleLoginClick = () => {
     var email = this.state.email;
     var password = this.state.password;
@@ -72,18 +82,13 @@ export default class Login extends React.Component {
           let username = body.username;
           window.localStorage.setItem("userToken", body.token);
           window.localStorage.setItem("userRole", body.role);
-          // console.log("converted body is :")
-          // var jsonBody = body.json();
-          // console.log(jsonBody)
 
           console.log("before prop func call");
           this.props.updateLogInStatus(customerID, username);
           console.log("after prop func call");
 
           // return to page that called log in popup.
-
           return (window.location.href = "/grocery");
-
           // window.location.reload(false);
         })
         .catch(() => {
@@ -106,11 +111,12 @@ export default class Login extends React.Component {
   };
 
   render() {
-    const { email, password, messageErr, messageSuccess } = this.state;
+    const { email, password} = this.state;
+    
     return (      
       <Container>
             <Modal 
-            show={true}
+            show={this.state.dialogue_open_flag}
             onHide={this.handleClose}
             className="text-center custom-card1"
             backdrop="static"
@@ -148,12 +154,7 @@ export default class Login extends React.Component {
                         className="login__form__input"
                         autoComplete="current-password"
                         />
-                      {/* <Form.Group controlId="formBasicEmail">                        
-                      </Form.Group>
-                      <Form.Group controlId="formBasicPassword">                        
-                      </Form.Group> */}
                       <Form.Label className="lbl_text text-left" column md={12}><a className="forget" href="/forgotpass">Forget Password?</a></Form.Label>
-
                       <Button 
                         variant="primary"
                         className="mb-1 float-left login-button"
