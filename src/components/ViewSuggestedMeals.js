@@ -115,11 +115,8 @@ class ViewSuggestedMeals extends Component {
     this.setState({ productImgSetting_flag: false});
 
     const last_slider = data.product_slider[data.product_slider.length-1];
-    if(!last_slider.flag) {
-      this.setState({productImg_path: "public/products/"+last_slider.image});
-    }else{
-      this.setState({productImg_path: last_slider.image});
-    }
+    this.setState({productImg_path: last_slider.image});
+
 
     let temp = [];
     let tmp_ingredientData = []

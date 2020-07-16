@@ -112,7 +112,7 @@ class App extends Component {
   render() {
     // Render your page inside
     // the layout provider
-    const { itemTypeahead, customerId, isAuthenticated } = this.state;
+    const { itemTypeahead, customerId } = this.state;
 
     console.log("Login_customerId:", customerId);
 

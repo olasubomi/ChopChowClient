@@ -72,7 +72,6 @@ class MealsPage extends Component {
     this.meal_popups[index] = !this.meal_popups[index];
   }
 
-
   render() {
     const items = [];
     console.log("Hello RENDER");
@@ -105,8 +104,10 @@ class MealsPage extends Component {
                 className="images"
                 style={{ width: "200px", height: "180px" }}
                 alt="/"
+
                 onClick={() => {
                   this.meal_popups[index] = !this.meal_popups[index];
+                 
                   console.log(this.meal_popups);
                   var x = document.getElementById(value._id);
                   var y = document.getElementById(value._id + "products");
@@ -132,9 +133,10 @@ class MealsPage extends Component {
                 <span style={{ color: "grey" }}>View Details | {value.cookTime}</span>
                 <span
                   style={{ color: "black" }}
-                  onClick={() => {
+                  onClick={() => {                    
                     this.meal_popups[index] = !this.meal_popups[index];
                     console.log(this.meal_popups);
+
                     var x = document.getElementById(value._id);
                     var y = document.getElementById(value._id + "products");
                     if (this.meal_popups[index]) {
@@ -147,6 +149,7 @@ class MealsPage extends Component {
                   }}
                 >
                 </span>
+
                 <div id={value._id} style={{ display: "none" }}>
                   {value.intro}
                   <MyModal
