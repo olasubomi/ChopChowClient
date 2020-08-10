@@ -276,13 +276,6 @@ export default class GroceryPage extends React.Component {
   handleClickTypeahead = (selected) => {
     this.setState({ selectedProduct: selected });
     // var arrayOfProductNames = Array.from(this.productNamesForTypeahead.keys());
-
-    console.log("selected is:");
-    console.log(selected[0]);
-    console.log(typeof selected[0]);
-    console.log("array of product names is:");
-    console.log(this.productNamesForTypeahead);
-
     this.productNamesForTypeahead.get(selected);
 
     // var index = arrayOfProductNames.findIndex((el) => el === selected[0]);
@@ -368,18 +361,10 @@ export default class GroceryPage extends React.Component {
 
                     return (
                       // <>
-                      <Row
-                        display="inline-flex"
-                        key = {customer_grocery_product_item.id}
-                      >
+                      <Row display="inline-flex" key = {customer_grocery_product_item.id} >
                         <Col key={customer_grocery_product_item.id}>
                           {/* check for private or public images (can be used for suggest meal) */}
-                          {customer_grocery_product_item.product_image.startsWith(
-                            "http://"
-                          ) ||
-                            customer_grocery_product_item.product_image.startsWith(
-                              "data"
-                            ) ? (
+                          {customer_grocery_product_item.product_image.startsWith("http://") || customer_grocery_product_item.product_image.startsWith("data") ? (
                               <img
                                 src={`${customer_grocery_product_item.product_image}`}
                                 alt="product_img "
@@ -411,12 +396,7 @@ export default class GroceryPage extends React.Component {
                         </Col>
 
                         <Col>
-                          <Button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              this.handleAddItemToCart(productID);
-                            }}
-                          >
+                          <Button onClick={(e) => { e.stopPropagation(); this.handleAddItemToCart(productID);  }} >
                             {" "}
                             Add To Cart
                           </Button>

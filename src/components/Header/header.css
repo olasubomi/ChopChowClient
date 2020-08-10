@@ -25,10 +25,9 @@
 
 .nav-item {
   padding: 1px 16px !important; }
-
-.nav-item a:hover {
-  color: rgba(0, 0, 0, 0.6);
-  text-decoration: none; }
+  .nav-item a:hover {
+    color: rgba(0, 0, 0, 0.6);
+    text-decoration: none; }
 
 .dropdown a {
   color: rgba(0, 0, 0, 0.6);
@@ -63,25 +62,23 @@
 .search_bar {
   position: relative;
   height: 40px; }
-
-.search_bar .form-control {
-  padding: 0 20px 0 12px;
-  height: 35px;
-  border-radius: 5px;
-  font-weight: 400;
-  font-size: 13px;
-  color: #53576d;
-  outline: 0;
-  width: 100%;
-  background: #fd7e14;
-  border: 1px solid #FFFFFF; }
-
-.search_bar__icon {
-  position: absolute;
-  right: 0px;
-  top: 50%;
-  margin-top: -20px;
-  cursor: pointer; }
+  .search_bar .form-control {
+    padding: 0 20px 0 12px;
+    height: 35px;
+    border-radius: 5px;
+    font-weight: 400;
+    font-size: 13px;
+    color: #53576d;
+    outline: 0;
+    width: 100%;
+    background: #fd7e14;
+    border: 1px solid #FFFFFF; }
+  .search_bar__icon {
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    margin-top: -20px;
+    cursor: pointer; }
 
 .lds-ripple {
   display: none;

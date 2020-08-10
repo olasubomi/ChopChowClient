@@ -13,6 +13,10 @@
   border-radius: 20px !important;
   background-color: #d6d6d6 !important; }
 
+.carousel .carousel-status {
+  color: #1d1d1d;
+  text-shadow: none; }
+
 .lbl_text {
   margin-left: 0px; }
 
@@ -48,7 +52,7 @@
   padding-right: 50px !important; }
 
 .modal-content {
-  border-radius: 30px !important;
+  /* border-radius: 30px !important; */
   /*<!-- HERE I AM!---*/
   /* margin: auto;  */ }
 
@@ -67,8 +71,8 @@ button:focus {
   .custom-card1 {
     width: 98% !important;
     margin-left: 1% !important; }
-  .modal-content {
-    margin-left: 0px !important; }
+  /* .modal-content {
+    margin-left: 0px !important; } */
   .fb-btn,
   .google-btn {
     width: 100% !important;
