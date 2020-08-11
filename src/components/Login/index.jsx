@@ -36,8 +36,8 @@ export default class Login extends React.Component {
 
     // const { email, password } = this.state;
     if (email && password) {
-      // var url = `https://chopchowdev.herokuapp.com/api/login`;
-      var url = `/api/login`;
+      var url = `https://chopchowsd.herokuapp.com/api/login`;
+      // var url = `/api/login`;
       // var url = `http://localhost:5000/api/login`
 
       fetch(url, {

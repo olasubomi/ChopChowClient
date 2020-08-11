@@ -171,8 +171,8 @@ export default class GroceryPage extends React.Component {
   handleShowDeleteItem = (productID) => {
     this.setState({ deletedItemId: productID });
     const { customerId, deletedItemId } = this.state;
-    // var url = `https://chopchowdev.herokuapp.com/api/remove-item/${productID}/${customerId}`
-    var url = `./api/remove-item/${productID}/${customerId}`;
+    var url = `https://chopchowsd.herokuapp.com/api/remove-item/${productID}/${customerId}`
+    // var url = `./api/remove-item/${productID}/${customerId}`;
 
     fetch(url, {
       method: "DELETE",
@@ -226,7 +226,7 @@ export default class GroceryPage extends React.Component {
   handleDeleteList = () => {
     console.log("Comes in deletes list");
     const { customerId } = this.state;
-    var url = `https://chopchowdev.herokuapp.com/api/remove-list/${customerId}`;
+    var url = `https://chopchowsd.herokuapp.com/api/remove-list/${customerId}`;
     // var url = `./api/remove-list/${customerId}`
 
     fetch(url, {
@@ -283,8 +283,8 @@ export default class GroceryPage extends React.Component {
     console.log("productID is: " + productID);
     console.log("customer id is: " + this.state.customerId);
     if (!isNaN(productID)) {
-      // var url = `https://chopchowdev.herokuapp.com/api/addTypeaheadDataToCustomerGroceryList/${productID}/${this.state.customerId}`
-      var url = `./api/addTypeaheadDataToCustomerGroceryList/${productID}/${this.state.customerId}`;
+      var url = `https://chopchowsd.herokuapp.com/api/addTypeaheadDataToCustomerGroceryList/${productID}/${this.state.customerId}`
+      // var url = `./api/addTypeaheadDataToCustomerGroceryList/${productID}/${this.state.customerId}`;
       fetch(url, {
         method: "POST",
       }).then((response) => {
