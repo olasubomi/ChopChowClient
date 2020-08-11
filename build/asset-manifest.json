@@ -1,27 +1,28 @@
 {
   "files": {
-    "main.css": "/static/css/main.3d81e187.chunk.css",
-    "main.js": "/static/js/main.46790e4d.chunk.js",
-    "main.js.map": "/static/js/main.46790e4d.chunk.js.map",
+    "main.css": "/static/css/main.ba6563af.chunk.css",
+    "main.js": "/static/js/main.dc4a3d54.chunk.js",
+    "main.js.map": "/static/js/main.dc4a3d54.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.685e71ab.js",
     "runtime-main.js.map": "/static/js/runtime-main.685e71ab.js.map",
-    "static/css/2.be394cd5.chunk.css": "/static/css/2.be394cd5.chunk.css",
-    "static/js/2.f92b3077.chunk.js": "/static/js/2.f92b3077.chunk.js",
-    "static/js/2.f92b3077.chunk.js.map": "/static/js/2.f92b3077.chunk.js.map",
+    "static/css/2.8dd0fb17.chunk.css": "/static/css/2.8dd0fb17.chunk.css",
+    "static/js/2.17666306.chunk.js": "/static/js/2.17666306.chunk.js",
+    "static/js/2.17666306.chunk.js.map": "/static/js/2.17666306.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.34a7ffbc7b923bc1212f6176bd4a0f33.js": "/precache-manifest.34a7ffbc7b923bc1212f6176bd4a0f33.js",
+    "precache-manifest.b98b7815f858adf9f148754bf9a9f910.js": "/precache-manifest.b98b7815f858adf9f148754bf9a9f910.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/2.be394cd5.chunk.css.map": "/static/css/2.be394cd5.chunk.css.map",
-    "static/css/main.3d81e187.chunk.css.map": "/static/css/main.3d81e187.chunk.css.map",
-    "static/js/2.f92b3077.chunk.js.LICENSE.txt": "/static/js/2.f92b3077.chunk.js.LICENSE.txt",
+    "static/css/2.8dd0fb17.chunk.css.map": "/static/css/2.8dd0fb17.chunk.css.map",
+    "static/css/main.ba6563af.chunk.css.map": "/static/css/main.ba6563af.chunk.css.map",
+    "static/js/2.17666306.chunk.js.LICENSE.txt": "/static/js/2.17666306.chunk.js.LICENSE.txt",
     "static/media/logo2.png": "/static/media/logo2.8340d35f.png",
+    "static/media/no_meal_step_image.png": "/static/media/no_meal_step_image.da8c3317.png",
     "static/media/ola_ola_palm_oil.jpg": "/static/media/ola_ola_palm_oil.70ad3e22.jpg"
   },
   "entrypoints": [
     "static/js/runtime-main.685e71ab.js",
-    "static/css/2.be394cd5.chunk.css",
-    "static/js/2.f92b3077.chunk.js",
-    "static/css/main.3d81e187.chunk.css",
-    "static/js/main.46790e4d.chunk.js"
+    "static/css/2.8dd0fb17.chunk.css",
+    "static/js/2.17666306.chunk.js",
+    "static/css/main.ba6563af.chunk.css",
+    "static/js/main.dc4a3d54.chunk.js"
   ]
 }
