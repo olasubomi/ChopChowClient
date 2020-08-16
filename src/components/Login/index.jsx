@@ -43,6 +43,7 @@ export default class Login extends React.Component {
       fetch(url, {
         method: "POST",
         credentials: "include",
+        mode: 'cors',
         headers: {
           "Content-type": "application/json",
         },
