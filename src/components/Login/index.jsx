@@ -45,7 +45,7 @@ export default class Login extends React.Component {
         credentials: "include",
         mode: 'cors',
         headers: {
-          "Content-Type": "text/plain",
+          "Content-Type": "application/x-www-form-urlencoded",
         },
         body: JSON.stringify({
           email,
