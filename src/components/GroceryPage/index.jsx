@@ -127,44 +127,44 @@ export default class GroceryPage extends React.Component {
         );
       });
 
-    // // url = "https://chopchowdev.herokuapp.com/api/get-all-products";
-    // // url = `http://localhost:5000/api/get-all-products`
+    url = "https://chopchowsd.herokuapp.com/api/get-all-products";
+    // url = `http://localhost:5000/api/get-all-products`
     // url = "./api/get-all-products";
-    // // or should we call this in App.js and pass it as a prop ??
+    // or should we call this in App.js and pass it as a prop ??
 
-    // fetch(url, {
-    //   method: "GET",
-    //   // credentials: 'include',
-    //   // headers: {
-    //   //   'Content-Type': 'application/json',
-    //   // }
-    // })
-    //   .then((res) => res.text())
-    //   .then((body) => {
-    //     // console.log("should print body");
-    //     // console.log(body);
-    //     var productsList = JSON.parse(body);
-    //     console.log("PRINTING ALL PRODUCTS LIST");
-    //     // console.log(productsList);
-    //     if (productsList && productsList.data.length !== 0) {
-    //       console.log("returns GET ALL PRODUCTS ");
-    //       console.log(productsList.data.length);
-    //       for (var i = 0; i < productsList.data.length; i++) {
-    //         this.products.push(productsList.data[i]);
-    //         this.productNamesForTypeahead.set(
-    //           productsList.data[i].product_name,
-    //           productsList.data[i].id
-    //         );
-    //       }
-    //       console.log(this.products);
-    //       console.log(this.productNamesForTypeahead);
-    //     } else {
-    //       console.log("get all products function does not return");
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    fetch(url, {
+      method: "GET",
+      // credentials: 'include',
+      // headers: {
+      //   'Content-Type': 'application/json',
+      // }
+    })
+      .then((res) => res.text())
+      .then((body) => {
+        // console.log("should print body");
+        // console.log(body);
+        var productsList = JSON.parse(body);
+        console.log("PRINTING ALL PRODUCTS LIST");
+        // console.log(productsList);
+        if (productsList && productsList.data.length !== 0) {
+          console.log("returns GET ALL PRODUCTS ");
+          console.log(productsList.data.length);
+          for (var i = 0; i < productsList.data.length; i++) {
+            this.products.push(productsList.data[i]);
+            this.productNamesForTypeahead.set(
+              productsList.data[i].product_name,
+              productsList.data[i].id
+            );
+          }
+          console.log(this.products);
+          console.log(this.productNamesForTypeahead);
+        } else {
+          console.log("get all products function does not return");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   //////////////////////////////////////////////////////////////////////
