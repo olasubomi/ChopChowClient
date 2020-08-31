@@ -231,7 +231,7 @@ class Header extends Component {
                 </li>
                 <li className="nav-item">
                   <Link to="/products" className="nav-link px-3">
-                    Cart
+                    Shoping Cart
                     </Link>
                 </li>
                 {login_on_desktop_navbar}                
@@ -348,7 +348,7 @@ class Header extends Component {
                   className="nav-link px-2"
                   style={{ color: "#FFFFFF" }}
                 >
-                  Stores
+                  Products
                   </Link>
               </li>
               <li className="nav-item" style={{ padding: "14px 16px" }}>
@@ -387,7 +387,7 @@ class Header extends Component {
               </li>
               <li className="nav-item" style={{ marginRight: "50%" }}>
                 <Link to="/products" className="nav-link px-2">
-                  Stores
+                  Products
                   </Link>
               </li>
               <li className="nav-item" style={{ marginRight: "50%" }}>

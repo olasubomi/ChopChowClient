@@ -39,7 +39,7 @@ button.detail-step-btn {
     width: 85% !important;
     max-width: 900px !important;
     margin: auto !important; }
-  .modal-content {
+  .mymodal-dlg .modal-content {
     height: 90vh;
     overflow: overlay; } }
 
@@ -48,6 +48,6 @@ button.detail-step-btn {
     width: 90% !important;
     height: 100vh;
     margin: auto !important; }
-  .modal-content {
+  .mymodal-dlg .modal-content {
     height: 90vh;
     overflow: overlay; } }

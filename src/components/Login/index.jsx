@@ -36,16 +36,15 @@ export default class Login extends React.Component {
 
     // const { email, password } = this.state;
     if (email && password) {
-      var url = `https://chopchowsd.herokuapp.com/api/login`;
-      // var url = `/api/login`;
+      // var url = `https://chopchowdev.herokuapp.com/api/login`;
+      var url = `/api/login`;
       // var url = `http://localhost:5000/api/login`
 
       fetch(url, {
         method: "POST",
         credentials: "include",
-        mode: 'cors',
         headers: {
-          "Content-Type": "application/json",
+          "Content-type": "application/json",
         },
         body: JSON.stringify({
           email,
@@ -122,6 +121,7 @@ export default class Login extends React.Component {
             className="text-center custom-card1"
             backdrop="static"
             size="lg"
+            centered
             >
             <Modal.Header closeButton>
               <Modal.Title className="text-center" >Log In to View your Grocery List</Modal.Title>

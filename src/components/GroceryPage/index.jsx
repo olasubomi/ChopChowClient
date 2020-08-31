@@ -91,7 +91,7 @@ export default class GroceryPage extends React.Component {
   getCustomerList = (customerId) => {
     var localToken = window.localStorage.getItem("userToken");
     console.log("customder id  iss: " + customerId);
-    var url = `https://chopchowsd/api/getCustomerGroceryList/${customerId}`
+    var url = `./api/getCustomerGroceryList/${customerId}`;
     // var url = `http://localhost:5000/api/getCustomerGroceryList/${customerId}`
 
     fetch(url, {
@@ -127,52 +127,52 @@ export default class GroceryPage extends React.Component {
         );
       });
 
-    url = "https://chopchowsd.herokuapp.com/api/get-all-products";
-    // url = `http://localhost:5000/api/get-all-products`
+    // // url = "https://chopchowdev.herokuapp.com/api/get-all-products";
+    // // url = `http://localhost:5000/api/get-all-products`
     // url = "./api/get-all-products";
-    // or should we call this in App.js and pass it as a prop ??
+    // // or should we call this in App.js and pass it as a prop ??
 
-    fetch(url, {
-      method: "GET",
-      // credentials: 'include',
-      // headers: {
-      //   'Content-Type': 'application/json',
-      // }
-    })
-      .then((res) => res.text())
-      .then((body) => {
-        // console.log("should print body");
-        // console.log(body);
-        var productsList = JSON.parse(body);
-        console.log("PRINTING ALL PRODUCTS LIST");
-        // console.log(productsList);
-        if (productsList && productsList.data.length !== 0) {
-          console.log("returns GET ALL PRODUCTS ");
-          console.log(productsList.data.length);
-          for (var i = 0; i < productsList.data.length; i++) {
-            this.products.push(productsList.data[i]);
-            this.productNamesForTypeahead.set(
-              productsList.data[i].product_name,
-              productsList.data[i].id
-            );
-          }
-          console.log(this.products);
-          console.log(this.productNamesForTypeahead);
-        } else {
-          console.log("get all products function does not return");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // fetch(url, {
+    //   method: "GET",
+    //   // credentials: 'include',
+    //   // headers: {
+    //   //   'Content-Type': 'application/json',
+    //   // }
+    // })
+    //   .then((res) => res.text())
+    //   .then((body) => {
+    //     // console.log("should print body");
+    //     // console.log(body);
+    //     var productsList = JSON.parse(body);
+    //     console.log("PRINTING ALL PRODUCTS LIST");
+    //     // console.log(productsList);
+    //     if (productsList && productsList.data.length !== 0) {
+    //       console.log("returns GET ALL PRODUCTS ");
+    //       console.log(productsList.data.length);
+    //       for (var i = 0; i < productsList.data.length; i++) {
+    //         this.products.push(productsList.data[i]);
+    //         this.productNamesForTypeahead.set(
+    //           productsList.data[i].product_name,
+    //           productsList.data[i].id
+    //         );
+    //       }
+    //       console.log(this.products);
+    //       console.log(this.productNamesForTypeahead);
+    //     } else {
+    //       console.log("get all products function does not return");
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   //////////////////////////////////////////////////////////////////////
   handleShowDeleteItem = (productID) => {
     this.setState({ deletedItemId: productID });
     const { customerId, deletedItemId } = this.state;
-    var url = `https://chopchowsd.herokuapp.com/api/remove-item/${productID}/${customerId}`
-    // var url = `./api/remove-item/${productID}/${customerId}`;
+    // var url = `https://chopchowdev.herokuapp.com/api/remove-item/${productID}/${customerId}`
+    var url = `./api/remove-item/${productID}/${customerId}`;
 
     fetch(url, {
       method: "DELETE",
@@ -226,7 +226,7 @@ export default class GroceryPage extends React.Component {
   handleDeleteList = () => {
     console.log("Comes in deletes list");
     const { customerId } = this.state;
-    var url = `https://chopchowsd.herokuapp.com/api/remove-list/${customerId}`;
+    var url = `https://chopchowdev.herokuapp.com/api/remove-list/${customerId}`;
     // var url = `./api/remove-list/${customerId}`
 
     fetch(url, {
@@ -283,8 +283,8 @@ export default class GroceryPage extends React.Component {
     console.log("productID is: " + productID);
     console.log("customer id is: " + this.state.customerId);
     if (!isNaN(productID)) {
-      var url = `https://chopchowsd.herokuapp.com/api/addTypeaheadDataToCustomerGroceryList/${productID}/${this.state.customerId}`
-      // var url = `./api/addTypeaheadDataToCustomerGroceryList/${productID}/${this.state.customerId}`;
+      // var url = `https://chopchowdev.herokuapp.com/api/addTypeaheadDataToCustomerGroceryList/${productID}/${this.state.customerId}`
+      var url = `./api/addTypeaheadDataToCustomerGroceryList/${productID}/${this.state.customerId}`;
       fetch(url, {
         method: "POST",
       }).then((response) => {

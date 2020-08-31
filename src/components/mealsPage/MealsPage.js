@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import MyModal from "./Mymodal";
 import WithScrollbar from "./product_slider/WithScrollbar";
-import "./MealsPage.scss";
+import "./MealsPage.scoped.scss";
 import { Modal } from "react-bootstrap";
 
 class MealsPage extends Component {
@@ -34,8 +34,8 @@ class MealsPage extends Component {
     this.update();
 
     console.log("Comes in meal pages component did mount");
-    var url = "https://chopchowsd.herokuapp.com/api/get-meals";
-    // var url = "./api/get-meals"
+    // var url = "https://chopchowdev.herokuapp.com/api/get-meals";
+    var url = "./api/get-meals"
 
     fetch(url)
       .then(res => res.text())
