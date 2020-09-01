@@ -1,145 +1,176 @@
-import React from 'react';
-import './style.css';
-import { Form, Button, Container ,Modal} from 'react-bootstrap';
+import React from "react";
+import "./style.css";
+import { Form, Button, Container, Modal, Row, Col } from "react-bootstrap";
 
- import { Link } from 'react-router-dom';
+// import { Link } from "react-router-dom";
+///////////////////////////////////////////////////////////////////////////////////
+export default class Login extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: "",
+      password: "",
+      messageErr: false,
+      messageSuccess: false,
 
- export default class Login extends React.Component {
-  state = {
-    email: '',
-    password: '',
-    messageErr:false,
-    messageSuccess:false,
-    isAuthenticated: false,
-  };
+      dialogue_open_flag: true
+    };
+  }
 
-   handleClick = () => {
-    const { email, password } = this.state;
+  ///////////////////////////////////////////////////////////////////////////////////
+  handleChange = ({ target: { value, name } }) => this.setState({ [name]: value });
+
+///////////////////////////////////////////////////////////////////////////////////
+  handleClose = () => this.setState({dialogue_open_flag: false});
+
+  componentWillReceiveProps(nextProps){
+    const { openFlag } = nextProps;
+    console.log("openFlag:", openFlag);
+    this.setState({dialogue_open_flag: openFlag});
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////
+  handleLoginClick = () => {
+    var email = this.state.email;
+    var password = this.state.password;
+
+    // const { email, password } = this.state;
     if (email && password) {
+      // var url = `https://chopchowdev.herokuapp.com/api/login`;
+      var url = `/api/login`;
+      // var url = `http://localhost:5000/api/login`
 
-       // make a requset to the back with method post and data{email , password}
-      fetch('/api/login', {
-        method: 'POST',
-        credentials: 'include',
+      fetch(url, {
+        method: "POST",
+        credentials: "include",
         headers: {
-          'Content-type': 'application/json',
+          "Content-type": "application/json",
         },
         body: JSON.stringify({
           email,
           password,
         }),
       })
-        .then(response => {
+        .then((response) => {
           if (response.status === 400 || response.status === 404) {
-            this.setState({ messageErr: 'Bad Request , Check username or password ... !!' });
+            this.setState({
+              messageErr: "Bad Request. Please check email or password.",
+            });
           } else if (response.status === 401) {
-            this.setState({ messageErr: 'you are UnAuthorized' });
+            this.setState({ messageErr: "Sorry, you are not authorized" });
           } else if (response.status >= 500) {
-            this.setState({ messageErr: 'Sorry , Internal Server ERROR' })
+            this.setState({ messageErr: "Sorry , Internal Server ERROR" });
           } else {
-            this.setState({messageErr:''});
-            this.setState({isAuthenticated:true})
-            this.setState({ messageSuccess: 'login sucessfully '});
-            return window.location.href = '/grocery'
+            console.log("Reponse status is:");
+            console.log(response.status);
+
+            this.setState({ messageErr: "" });
+
+            this.setState({ isAuthenticated: true });
+            this.setState({ messageSuccess: "Logged in Sucessfully! " });
+            return response.json();
           }
         })
+        .then((body) => {
+          // .then(firstBody=>{return firstBody.json()})
+          console.log("login_data");
+          console.log(body);
+          console.log(body.message);
+          console.log(body.token);
+          console.log(body.customerID);
+          let customerID = body.customerID;
+          let username = body.username;
+          window.localStorage.setItem("userToken", body.token);
+          window.localStorage.setItem("userRole", body.role);
 
+          console.log("before prop func call");
+          this.props.updateLogInStatus(customerID, username);
+          console.log("after prop func call");
 
-     } else {
-      this.setState({ messageErr: 'Please enter all fields' });
+          // return to page that called log in popup.
+          return (window.location.href = "/grocery");
+          // window.location.reload(false);
+        })
+        .catch(() => {
+          this.setState(
+            {
+              messageAlert: "Internal Server Error while logging in",
+              showAlert: true,
+              variant: "danger",
+            },
+            () =>
+              setTimeout(() => {
+                this.setState({ messageAlert: "", showAlert: false });
+              }, 8000)
+          );
+        });
+    } else {
+      this.setState({ messageErr: "Please enter all fields" });
+      console.log("Please enter all fields");
     }
   };
 
-   handleChange = ({ target: { value, name } }) =>
-    this.setState({ [name]: value });
+  render() {
+    const { email, password} = this.state;
+    
+    return (      
+      <Container>
+            <Modal 
+            show={this.state.dialogue_open_flag}
+            onHide={this.handleClose}
+            className="text-center custom-card1"
+            backdrop="static"
+            size="lg"
+            centered
+            >
+            <Modal.Header closeButton>
+              <Modal.Title className="text-center" >Log In to View your Grocery List</Modal.Title>
+            </Modal.Header>
+              <Modal.Body>
+                <Row>
+                  <Col md={5}>
+                    <Button className="fb-btn mb-3 px-3 py-2">Login In with Facebook</Button>
+                    <Button className="google-btn px-3 py-2">Login In with Google</Button>
+                  </Col>
+                  <Col md={1} className="or">
+                    or
+                  </Col>
+                  <Col md={6} className="d-block right-panel">
+                    <Form>
+                      <Form.Control 
+                        type="text" 
+                        name="email"
+                        value={email}
+                        placeholder="Your Email or Username" 
+                        onChange={this.handleChange}
+                        className="login__form__input1"
+                        autoComplete="username"
+                      />
+                      <Form.Control 
+                        type="password"
+                        name="password"
+                        value={password}
+                        placeholder="Your password"
+                        onChange={this.handleChange}
+                        className="login__form__input"
+                        autoComplete="current-password"
+                        />
+                      <Form.Label className="lbl_text text-left" column md={12}><a className="forget" href="/forgotpass">Forget Password?</a></Form.Label>
+                      <Button 
+                        variant="primary"
+                        className="mb-1 float-left login-button"
+                        onClick={this.handleLoginClick}
+                      >Login</Button>
 
-   render() {
-    const { email, password, messageErr, messageSuccess } = this.state;
-    return (
-      <> 
-        <Container>
-        <Modal show="true" onHide={this.handleClose} className="modal" backdrop="static">
-                        <Modal.Body>
+                      <Form.Label className="lbl_text mt-4 text-right pb-0" column md={12}>Dont's have an account? <a className="signup" href="/signup">Sign Up</a></Form.Label>
+                      <Form.Label className="lbl_text text-right pt-0" column md={12}>or <a className="continue" href="/v2">continue as guest</a></Form.Label>
 
-                           <Form className="login__form">
-                            <div className="login__form-div-title">
-                            <h2 className="login__form-title">Log in to View Grocery List</h2>
-
-                             </div>
-
-
-
-                           <div className="vl">
-                            <span className="vl-innertext">or</span>
-                          </div>
-
-                           <div className="col">
-                            <button className="fb btn">
-                                <i class="fa fa-facebook fa-fw"></i> Login with Facebook
-                                                  </button>
-                            <button className="google btn"><i class="fa fa-google fa-fw">
-                            </i> Login with Google+
-                                                  </button>
-                          </div>
-
-                           <div className="col">
-                            <div className="hide-md-lg">
-                                <p>Or sign in manually:</p>
-                            </div>
-                          </div>
-                            <Form.Group>
-                            <Form.Label>Email :</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="email"
-                                value={email}
-                                placeholder="Enter your email"
-                                onChange={this.handleChange}
-                            />
-                            </Form.Group>
-                            <Form.Group>
-                            <Form.Label>Password :</Form.Label>
-                            <Form.Control
-                                type="password"
-                                name="password"
-                                value={password}
-                                placeholder="Enter your password"
-                                onChange={this.handleChange}
-                            />
-                            </Form.Group>
-                                <p className="msg-success">{messageSuccess}</p>
-                                <p className="msg-err">{messageErr}</p> 
-                                <Link>
-                                <span className="link-forgot-password">Forget Password  ?</span>
-                                </Link>
-
-                                 <Button
-                                  type="button"
-                                  className="login__form-btn"
-                                  onClick={this.handleClick}
-                                >
-                                  Log in
-                              </Button>
-                            <Form.Text className="login__form__text-muted">
-                            Don’t have an account? {''}
-
-                             <Link className="link-signup-word" to="/signup">
-                            Sign Up  
-                            </Link>
-                            <br/>
-                            or
-
-                             <Link className="link-guest-word" to="/aguest">
-                            continue as guest 
-                            </Link>
-
-                             </Form.Text>
-                          </Form>
-                          </Modal.Body>
-                      </Modal>
-        </Container>
-      </>
+                    </Form>
+                  </Col>
+                </Row>
+              </Modal.Body>
+            </Modal>        
+      </Container>
     );
   }
-  
 }
