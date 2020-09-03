@@ -57,7 +57,9 @@ class Header extends Component {
       window.localStorage.setItem("userToken", null);
       window.localStorage.setItem("userRole", null);
 
-      var url = "/api/logout";
+      // var url = "/api/logout";
+      var url = `https://chopchowdev.herokuapp.com/api/logout`;
+
       fetch(url, {
         method: "GET",
         credentials: "same-origin",

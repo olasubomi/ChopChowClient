@@ -51,6 +51,7 @@ class App extends Component {
     // var url = `https://chopchowdev.herokuapp.com/api/authenticate-grocery-page`;
     var url = `/api/authenticate-app-page`;
     // var url = `http://localhost:5000/api/authenticate-grocery-page`
+    console.log("localToken: ", localToken)
     fetch(url, {
       method: "GET",
       credentials: "same-origin",

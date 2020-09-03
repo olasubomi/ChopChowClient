@@ -1,6 +1,7 @@
 import React from "react";
 import "./style.css";
 import { Form, Button, Container, Modal, Row, Col } from "react-bootstrap";
+import Axios from "axios";
 
 // import { Link } from "react-router-dom";
 ///////////////////////////////////////////////////////////////////////////////////
@@ -36,57 +37,61 @@ export default class Login extends React.Component {
 
     // const { email, password } = this.state;
     if (email && password) {
-      // var url = `https://chopchowdev.herokuapp.com/api/login`;
-      var url = `/api/login`;
+      var url = `https://chopchowdev.herokuapp.com/api/login`;
+      // var url = `/api/login`;
       // var url = `http://localhost:5000/api/login`
 
-      fetch(url, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+      // Axios(url, {
+      //   method: "POST",
+      //   credentials: "include",
+      //   headers: {
+      //     "Content-type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     email,
+      //     password,
+      //   }),
+      // })
+
+      Axios.post(url, {
+        email,
+        password,
       })
-        .then((response) => {
-          if (response.status === 400 || response.status === 404) {
-            this.setState({
-              messageErr: "Bad Request. Please check email or password.",
-            });
-          } else if (response.status === 401) {
-            this.setState({ messageErr: "Sorry, you are not authorized" });
-          } else if (response.status >= 500) {
-            this.setState({ messageErr: "Sorry , Internal Server ERROR" });
-          } else {
-            console.log("Reponse status is:");
-            console.log(response.status);
+        // .then((response) => {
+        //   if (response.status === 400 || response.status === 404) {
+        //     this.setState({
+        //       messageErr: "Bad Request. Please check email or password.",
+        //     });
+        //   } else if (response.status === 401) {
+        //     this.setState({ messageErr: "Sorry, you are not authorized" });
+        //   } else if (response.status >= 500) {
+        //     this.setState({ messageErr: "Sorry , Internal Server ERROR" });
+        //   } else {
+        //     console.log("Reponse status is:");
+        //     console.log(response.status);
 
-            this.setState({ messageErr: "" });
+        //     this.setState({ messageErr: "" });
 
-            this.setState({ isAuthenticated: true });
-            this.setState({ messageSuccess: "Logged in Sucessfully! " });
-            return response.json();
-          }
-        })
-        .then((body) => {
+        //     this.setState({ isAuthenticated: true });
+        //     this.setState({ messageSuccess: "Logged in Sucessfully! " });
+        //     return response.json();
+        //   }
+        // })
+        .then(({data}) => {
           // .then(firstBody=>{return firstBody.json()})
-          console.log("login_data");
-          console.log(body);
-          console.log(body.message);
-          console.log(body.token);
-          console.log(body.customerID);
-          let customerID = body.customerID;
-          let username = body.username;
-          window.localStorage.setItem("userToken", body.token);
-          window.localStorage.setItem("userRole", body.role);
+          console.log("login_data", data);
+          console.log(data.message);
+          console.log(data.token);
+          console.log(data.customerID);
+          let customerID = data.customerID;
+          let username = data.username;
+          window.localStorage.setItem("userToken", data.token);
+          window.localStorage.setItem("userRole", data.role);
 
           console.log("before prop func call");
           this.props.updateLogInStatus(customerID, username);
           console.log("after prop func call");
-
+          this.setState({ isAuthenticated: true });
           // return to page that called log in popup.
           return (window.location.href = "/grocery");
           // window.location.reload(false);

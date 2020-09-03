@@ -69,6 +69,7 @@ export default class GroceryPage extends React.Component {
       this.setState({ Authentication: auth });
       this.setState({ customerId: customerId });
       this.getCustomerList(customerId);
+      console.log("componentDidMount: ", customerId)
     }
   }
 
@@ -78,7 +79,6 @@ export default class GroceryPage extends React.Component {
     const { auth, customerId } = nextProps;
     console.log("comes in grocery page cdm");
     this.setState({ Authentication: auth });
-    this.setState({ customerId: customerId });
 
     console.log("this.props, ", nextProps);
 
@@ -91,9 +91,10 @@ export default class GroceryPage extends React.Component {
   getCustomerList = (customerId) => {
     var localToken = window.localStorage.getItem("userToken");
     console.log("customder id  iss: " + customerId);
-    var url = `./api/getCustomerGroceryList/${customerId}`;
+    // var url = `/api/getCustomerGroceryList/${customerId}`;
     // var url = `http://localhost:5000/api/getCustomerGroceryList/${customerId}`
-
+    var url = `https://chopchowdev.herokuapp.com/api/getCustomerGroceryList/${customerId}`;
+    
     fetch(url, {
       method: "GET",
       // credentials: 'include',
@@ -126,45 +127,6 @@ export default class GroceryPage extends React.Component {
             }, 8000)
         );
       });
-
-    // // url = "https://chopchowdev.herokuapp.com/api/get-all-products";
-    // // url = `http://localhost:5000/api/get-all-products`
-    // url = "./api/get-all-products";
-    // // or should we call this in App.js and pass it as a prop ??
-
-    // fetch(url, {
-    //   method: "GET",
-    //   // credentials: 'include',
-    //   // headers: {
-    //   //   'Content-Type': 'application/json',
-    //   // }
-    // })
-    //   .then((res) => res.text())
-    //   .then((body) => {
-    //     // console.log("should print body");
-    //     // console.log(body);
-    //     var productsList = JSON.parse(body);
-    //     console.log("PRINTING ALL PRODUCTS LIST");
-    //     // console.log(productsList);
-    //     if (productsList && productsList.data.length !== 0) {
-    //       console.log("returns GET ALL PRODUCTS ");
-    //       console.log(productsList.data.length);
-    //       for (var i = 0; i < productsList.data.length; i++) {
-    //         this.products.push(productsList.data[i]);
-    //         this.productNamesForTypeahead.set(
-    //           productsList.data[i].product_name,
-    //           productsList.data[i].id
-    //         );
-    //       }
-    //       console.log(this.products);
-    //       console.log(this.productNamesForTypeahead);
-    //     } else {
-    //       console.log("get all products function does not return");
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
   };
 
   //////////////////////////////////////////////////////////////////////
