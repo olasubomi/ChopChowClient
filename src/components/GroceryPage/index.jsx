@@ -69,6 +69,8 @@ export default class GroceryPage extends React.Component {
       this.setState({ Authentication: auth });
       this.setState({ customerId: customerId });
       this.getCustomerList(customerId);
+
+      
       console.log("componentDidMount: ", customerId)
     }
   }
