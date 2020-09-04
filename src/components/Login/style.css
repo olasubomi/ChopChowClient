@@ -88,6 +88,7 @@ button:focus {
           margin: auto !important;
       }  */
   .custom-card1 .modal-content {
+    height: auto;
     overflow: overlay; } }
 
 @media screen and (max-height: 500px) and (max-width: 900px) {
@@ -97,4 +98,5 @@ button:focus {
           margin: auto !important;
       }  */
   .custom-card1 .modal-content {
+    height: auto;
     overflow: overlay; } }

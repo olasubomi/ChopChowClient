@@ -1,7 +1,6 @@
 import React from "react";
 import "./style.css";
 import { Form, Button, Container, Modal, Row, Col } from "react-bootstrap";
-import Axios from "axios";
 import { connect } from 'react-redux';
 import { userSignIn } from '../../actions';
 import { withRouter } from "react-router-dom";
