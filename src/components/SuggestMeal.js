@@ -3,7 +3,8 @@ import TextField from "@material-ui/core/TextField";
 import ChipInput from "material-ui-chip-input";
 import Chip from "@material-ui/core/Chip";
 import Autocomplete from "@material-ui/lab/Autocomplete"; // createFilterOptions,
-import axios from 'axios';
+// import axios from 'axios';
+import axios from '../util/Api';
 import { Row, Col } from "react-bootstrap";
 import Button from '@material-ui/core/Button';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -384,7 +385,7 @@ class SuggestMeal extends Component {
 
     let productImg_paths = null;
     if(img_count1 !== 0){
-      var productImg_url = "./api/getProductImgURL/";
+      var productImg_url = "/getProductImgURL/";
       const productImg_config = {  method: 'POST',  data: productImgForm, url: productImg_url };
 
       const response = await axios(productImg_config)
