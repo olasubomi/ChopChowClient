@@ -388,6 +388,7 @@ class SuggestMeal extends Component {
       const productImg_config = {  method: 'POST',  data: productImgForm, url: productImg_url };
 
       const response = await axios(productImg_config)
+      console.log("UploadedImage_URL: ", response)
       productImg_paths = response.data.productImg_paths;
     }
 

@@ -117,13 +117,19 @@ class App extends Component {
           <Route path="/home" render={() => (customer_id !== undefined) ? <HomePage /> : (<Redirect to={{ pathname: "#" }} />)} />
           <Route path="/v2" render={() => <MealsPage />} />
 
-          <Route exact path="/grocery" render={() => {
+          <Route exact path="/grocery" render={() => {           
             return ((customer_id !== undefined || customer_id !== 'null' ) ? <GroceryPage /> : <Redirect to={{ pathname: "#" }} />)
           }}/>
+
           <Route path="/products" render={(props) => {
             return <ProductsSection />
           }} />
-          <Route exact path="/SuggestMeal" render={(props) => (customer_id !== undefined) ? (<SuggestMeal />) : (<Redirect to={{ pathname: "#" }} />)} />
+          <Route exact path="/SuggestMeal" render={(props) => 
+            {
+              console.log("oooooooooooo:", customer_id)
+              return(
+              (customer_id !== undefined) ? <SuggestMeal /> : <Redirect to={{ pathname: "#" }} /> )
+            }}/>
           <Route exact path="/ViewSuggestedMeals" render={(props) => ((customer_id !== undefined) && (userRole === "admin")) ? <ViewSuggestedMeals /> : (<Redirect to={{ pathname: "#" }} />)} />
           <Route path="/product-detail/:customerId/:productId" render={(props) => (customer_id !== undefined) ? <ProductFullDetail /> : (<Redirect to={{ pathname: "#" }} />)} />
           {/* <Route path="/product-detail/:customerId/:productId" component={ProductFullDetail} /> */}

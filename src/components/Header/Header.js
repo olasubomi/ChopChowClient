@@ -46,7 +46,7 @@ class Header extends Component {
 
   //////////////////////////////////////////////////////////////////////
   handleLogout(e) {
-    if(e === "5")
+    if(e === "6")
     {
       //clear cookie cache
       window.localStorage.setItem("userToken", null);
@@ -82,12 +82,17 @@ class Header extends Component {
       this.setState({ isAuthenticated: false });
       window.location.reload(false);
     }
+    else if(e === "4"){
+      this.props.history.push('/SuggestMeal');
+    }
   }
 
 
   handleDashborad(){
     this.props.history.push('/admin');
   }
+
+
   //////////////////////////////////////////////////////////////////////
   render() {
     const username = this.props.authUser;
@@ -121,9 +126,11 @@ class Header extends Component {
               <Dropdown.Divider />
               <Dropdown.Item eventKey="3" onSelect={(ev, obj)=>this.handleDashborad()}>Support</Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item eventKey="4" onSelect={(ev, obj)=>this.handleDashborad()}>Switch to driver mode</Dropdown.Item>
+              <Dropdown.Item eventKey="4" onSelect={(ev, obj)=>this.handleLogout(ev)}>Suggest Meal</Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item eventKey="5" onSelect={(ev, obj)=>this.handleLogout(ev)}>Log out</Dropdown.Item>
+              <Dropdown.Item eventKey="5" onSelect={(ev, obj)=>this.handleDashborad()}>Switch to driver mode</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item eventKey="6" onSelect={(ev, obj)=>this.handleLogout(ev)}>Log out</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </li>
@@ -138,13 +145,15 @@ class Header extends Component {
             <Dropdown.Menu >
               <Dropdown.Item eventKey="1" onSelect={(ev, obj)=>this.handleDashborad()}>Profile</Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item eventKey="2" onSelect={(ev, obj)=>this.handleDashborad()}>Dashboard/orders</Dropdown.Item>
+              <Dropdown.Item eventKey="2" onSelect={(ev, obj)=>this.handleDashborad()}> Dashboard/orders</Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item eventKey="3" onSelect={(ev, obj)=>this.handleDashborad()}>Support</Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item eventKey="4" onSelect={(ev, obj)=>this.handleDashborad()}>Switch to driver mode</Dropdown.Item>
+              <Dropdown.Item eventKey="4" onSelect={(ev, obj)=>this.handleLogout(ev)}>Suggest Meal</Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item eventKey="5" onSelect={(ev, obj)=>this.handleLogout(ev)}>Log out</Dropdown.Item>
+              <Dropdown.Item eventKey="5" onSelect={(ev, obj)=>this.handleDashborad()}>Switch to driver mode</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item eventKey="6" onSelect={(ev, obj)=>this.handleLogout(ev)}>Log out</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </li>
