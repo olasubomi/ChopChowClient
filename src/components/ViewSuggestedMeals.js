@@ -341,11 +341,10 @@ handleUpdateSubmit= async() => {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 componentDidMount() {
-  var url = "./api/get-all-products";
-  fetch(url, { method: "GET"})
-    .then((res) => res.text())
+  var url = "/get-all-products";
+  axios.get(url)
     .then((body) => {
-      var productsList = JSON.parse(body);
+      var productsList = body.data;
       if (productsList && productsList.data.length !== 0) {
 
         console.log("returns GET ALL PRODUCTS ");
@@ -362,9 +361,9 @@ componentDidMount() {
 
   console.log("Comes in meal pages component did mount");
 
-  var url1 = "./api/get-suggested-meals"
-  fetch(url1).then(res => res.text()).then(body => {
-      var productsList = JSON.parse(body);
+  var url1 = "/get-suggested-meals"
+  axios.get(url1).then(body => {
+      var productsList = body.data;
 
       if(productsList && productsList.data.length !== 0){
         console.log("shows products does return");
@@ -374,14 +373,9 @@ componentDidMount() {
     }).catch(err => {console.log(err);});
 
  //----get category meals-------------------------
- url = "./api/get-all-categories";
- fetch(url, {
-   method: "GET",
- })
-   .then((res) => res.text())
-   .then((body) => {
-     
-     var categoryList = JSON.parse(body);
+ url = "/get-all-categories";
+ axios.get(url).then((body) => {     
+     var categoryList = body.data;
      console.log(categoryList);
      if (categoryList && categoryList.data.length !== 0) {
        console.log("returns GET of ALL Categories ");
