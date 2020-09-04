@@ -60,10 +60,9 @@ class ViewSuggestedMeals extends Component {
       mealLabel: "",
       intro: "",
       servings: 0,
-      // currentIngredient: "Butter scotch",
-      currentIngredient: "",
-      currentIngredientMeasurement: "",
-      currentIngredientQuantity: "",
+      currentIngredient: "Butter scotch",
+      currentIngredientMeasurement: null,
+      currentIngredientQuantity: 0,
       ingredientStrings: [],
       formatted_ingredient: [],
       instructionsChip: [],
@@ -93,7 +92,6 @@ class ViewSuggestedMeals extends Component {
       instructionImgData: null,
       instructionImgPath: "",    
             
-      categoryList:[],
     };
 
     this.handleIngredientDropdownChange = this.handleIngredientDropdownChange.bind(
@@ -135,11 +133,11 @@ updateSuggestItem = (data, mealRole) => {
     tmp_instrutionData.push(tmp);
   }
 
-  this.setState({categories: data.categories});
   this.setState({selected_id: data._id, instructionGroupList:tmp_instrutionData, suggestMealRole: mealRole, mealLabel: data.label, intro: data.intro, servings: data.servings, loading_imgSrc:  data.mealImage, formatted_ingredient:data.newer_ingredient_format});
   this.setState({open: true});
 
-  // this.setState({ currentIngredientMeasurement: last_ingredient.measurement, currentIngredientQuantity: last_ingredient.quantity, currentIngredient: last_ingredient.product });
+  const last_ingredient = data.newer_ingredient_format[data.newer_ingredient_format.length-1];
+  this.setState({ currentIngredientMeasurement: last_ingredient.measurement, currentIngredientQuantity: last_ingredient.quantity, currentIngredient: last_ingredient.product });
   this.setState({ imgSrc: data.mealImage, readTime:  data.readTime,  cookTime:  data.cookTime, product_slider:  data.product_slider, productImgSetting_flag: false});
 
   const last_slider = data.product_slider[data.product_slider.length-1];
@@ -189,7 +187,7 @@ onhandleInstructionImg = (event) => {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 handleUpdateSubmit= async() => {    
   const data = this.state; 
-    const {mealLabel,intro,servings,instructionGroupList,ingredientGroupList, ingredientStrings,imgSrc,readTime,cookTime, selected_id, categoryList } = data;
+    const {mealLabel,intro,servings,instructionGroupList,ingredientGroupList, ingredientStrings,imgSrc,readTime,cookTime,categoryChips, selected_id } = data;
   
   let productImgForm = new FormData();
   let img_count1 = 0;
@@ -201,7 +199,7 @@ handleUpdateSubmit= async() => {
     }
   }
 
-  let productImg_paths = null;
+  const productImg_paths = null;
   if(img_count1 !== 0){
     var productImg_url = "./api/getProductImgURL/";
     const productImg_config = {  method: 'POST',  data: productImgForm, url: productImg_url };
@@ -215,7 +213,7 @@ handleUpdateSubmit= async() => {
   const formatted_ingredient1 = [];
   const product_slider = [];
   let n1 = -1;
-  for ( i = 0; i < ingredientGroupList.length; i++){
+  for (var i = 0; i < ingredientGroupList.length; i++){
     var tmp_ingredient = { 
       product: ingredientGroupList[i].product,  
       quantity: ingredientGroupList[i].quantity,  
@@ -224,7 +222,7 @@ handleUpdateSubmit= async() => {
     formatted_ingredient1.push(tmp_ingredient);
 
     //-----------------------------------------------
-    let image = "";
+    const image = "";
     if (ingredientGroupList[i].productImgData !== null)
     {   
       n1 ++; image = productImg_paths[n1]
@@ -244,7 +242,7 @@ handleUpdateSubmit= async() => {
   //------------- to get glabal path for instrution image ----------------------------------------
   let instructionImgForm = new FormData();
   let img_count = 0;
-  for ( i = 0; i < instructionGroupList.length; i++){
+  for (var i = 0; i < instructionGroupList.length; i++){
     if (instructionGroupList[i].imgdata !== null && instructionGroupList[i].imgdata !== -1)
     {
       instructionImgForm.append('instructionImgs', instructionGroupList[i].imgdata);
@@ -252,7 +250,7 @@ handleUpdateSubmit= async() => {
     }
   }
 
-  let instructionImg_paths = null;
+  const instructionImg_paths = null;
   if(img_count !== 0){
     var instructionImg_url = "./api/getInstructionImgURL/";
     const instructionImg_config = {  method: 'POST',  data: instructionImgForm, url: instructionImg_url };
@@ -264,8 +262,8 @@ handleUpdateSubmit= async() => {
   //-------------to make instruction data ------------------------------------------
   const instructionGroupData = [];
   let n = -1;
-  for ( i = 0; i < instructionGroupList.length; i++){
-    let image = null;
+  for (var i = 0; i < instructionGroupList.length; i++){
+    const image = null;
     if (instructionGroupList[i].imgdata !== null && instructionGroupList[i].imgdata !== -1)
     {   
       n ++; image = instructionImg_paths[n] 
@@ -281,13 +279,6 @@ handleUpdateSubmit= async() => {
     instructionGroupData.push(tmp);
   }
 
-  //-------------to make new category data ------------------------------------------
-  let new_categories = [];
-  for(i =0; i< categoryList.length; i++)
-  {
-    let index = this.categories.indexOf(categoryList[i]);
-    if(index == -1) new_categories.push(categoryList[i])
-  }
 
   let suggestMealForm = new FormData();
   suggestMealForm.append('id', selected_id);
@@ -300,8 +291,7 @@ handleUpdateSubmit= async() => {
   suggestMealForm.append('ingredientStrings', ingredientStrings);
   suggestMealForm.append('readTime', readTime);
   suggestMealForm.append('cookTime', cookTime);
-  suggestMealForm.append('categoryChips', JSON.stringify(categoryList)); 
-  suggestMealForm.append('newCategories', JSON.stringify(new_categories));    
+  suggestMealForm.append('categoryChips', JSON.stringify(categoryChips));    
   suggestMealForm.append('imgSrc', imgSrc);
   
   // const ingredient_list = [];
@@ -371,32 +361,6 @@ componentDidMount() {
       }
       else{  console.log("shows products do not return"); }
     }).catch(err => {console.log(err);});
-
- //----get category meals-------------------------
- url = "./api/get-all-categories";
- fetch(url, {
-   method: "GET",
- })
-   .then((res) => res.text())
-   .then((body) => {
-     
-     var categoryList = JSON.parse(body);
-     console.log(categoryList);
-     if (categoryList && categoryList.data.length !== 0) {
-       console.log("returns GET of ALL Categories ");
-
-       for (var i = 0; i < categoryList.data.length; i++) {
-         this.categories.push(categoryList.data[i].category_name);
-       }
-       console.log("PRINTING UPDATED CATEGORIES LIST");
-     } else {
-       console.log("get all products function does not return");
-     }
-   })
-   .catch((err) => {
-     console.log(err);
-   });
-
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -512,20 +476,15 @@ handleDeleteIngredientChip(chip) {
 }
 
 ////////////////////////////////////////////////////////////////////////////
-handleDeleteCategoryChip(chip, index) {
-  console.log("handleDeleteCategoryChip:", index)
+handleDeleteCategoryChip(chip) {
+  console.log("removing chop input");
+  var array = [...this.state.categoryChips]; // make a separate copy of the array
+  var index = array.indexOf(chip);
+  if (index !== -1) {
+    array.splice(index, 1);
+    this.setState({ categoryChips: array });
+  }
 }
-
-// ////////////////////////////////////////////////////////////////////////////
-// handleDeleteCategoryChip(chip) {
-//   console.log("removing chop input");
-//   var array = [...this.state.categoryChips]; // make a separate copy of the array
-//   var index = array.indexOf(chip);
-//   if (index !== -1) {
-//     array.splice(index, 1);
-//     this.setState({ categoryChips: array });
-//   }
-// }
 
 ////////////////////////////////////////////////////////////////////////////
 handleDeleteInstructionsStep(chip) {
@@ -571,11 +530,6 @@ handleProductName = (event, val) => {
     this.setState({productImgSetting_flag:false});
     this.setState({ currentIngredient: val });
   }
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
-handleCategoryDropdownChange=(val)=>{
-  this.setState({categoryList: val});
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -811,44 +765,19 @@ handleClick = (event, id) => {
 
 ////////////////////////////////////////////////////////////////////////////
   render() {
-    console.log("this.state.instructionGroupList: ",this.state.instructionGroupList)
-    var comp_instructions = [];
-    var count_index = 1;
-    for (let i = 0; i < this.state.instructionGroupList.length ; i++) {
-      if(i !==0 ){
-        count_index += this.state.instructionGroupList[i-1].step.length;
-      }
-      
-      comp_instructions.push(
-        <div key={i}  className="mb-3" style={{margin:"10px", padding:"10px", backgroundColor:"white",  boxShadow: "1px 1px 4px 2px #00000030"}}>
-          <Row style={{justifyContent: "flex-end"}}> 
-            <i className="fa fa-remove" style={{fontSize:"50%", marginTop: "0px", marginRight: "15px"}} onClick={()=>this.onHandleInstructionItem(i)}></i>
-          </Row>                        
-          <Row >
-            <Col md={4}  className="mb-2" style={{overflowWrap: "break-word"}}>
-              <div className="mdc-list">
-                {this.state.instructionGroupList[i].step.map((chip, index1) => (
-                  <div className="mdc-list-item" key={index1}>
-                    <span className="mdc-list-item__text">{index1+count_index}. 
-                      <span className="mdc-list-item__text"> {chip}</span>
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </Col>
-            <Col md={4}  className="mb-2" style={{textAlign: "center"}}>
-              <img className="mb-2" src={this.state.instructionGroupList[i].imgpath} width="auto" height="150px" alt=""/>
-              <input accept="image/*" id="imgSrc1" type="file" className="mb-2, ml-3" onChange={(ev)=>this.onUpdateInstructionImg(ev, i)} />
-            </Col>
-            <Col md={4}  className="mb-2"></Col>
-          </Row>
-        </div>
-      )
-    }
+    var instructionSteps = (
+      <ol className="mdc-list">
+        {this.state.instructionsChip.map((chip,index) => (
+          <li className="mdc-list-item" tabIndex="0" key={index}>
+            <span className="mdc-list-item__text">{chip}</span>
+          </li>
+        ))}
+      </ol>
+    );
 
     const { classes } = this.props;
-    const {mealData_list, page, rowsPerPage, open, suggestMealRole, loading_imgSrc, categoryList} = this.state;
-    const {mealLabel, intro, currentIngredient, currentIngredientQuantity, currentIngredientMeasurement, readTime, cookTime, servings, categories} = this.state;
+    const {mealData_list, page, rowsPerPage, open, suggestMealRole, loading_imgSrc, productImg_path} = this.state;
+    const {mealLabel, intro, servings, currentIngredient, currentIngredientQuantity, currentIngredientMeasurement, readTime, cookTime} = this.state;
 
     const theme = createMuiTheme({
       palette: { primary: green,  },
@@ -856,7 +785,9 @@ handleClick = (event, id) => {
   
     const numSelected = this.state.selected.length;
     const rowCount = mealData_list? mealData_list.length:0;
-  
+    
+    console.log("FFFFFF: ", this.state.instructionGroupList);
+
     return (
       <div className={classes.root} style={{boxShadow:"2px 2px 8px 0px #a0a0a0"}}>
         <Toolbar className={clsx(classes.root, {  [classes.highlight]: numSelected > 0  })} >
@@ -997,31 +928,32 @@ handleClick = (event, id) => {
                 </Row>           
 
                 {
-                    this.state.ingredientGroupList &&
-                    this.state.ingredientGroupList.map((data, index)=>(
-                      <div key={index}  className="mb-3" style={{margin:"10px", padding:"10px", backgroundColor:"white",  boxShadow: "1px 1px 4px 2px #00000030"}}>
-                        <Row style={{justifyContent: "flex-end"}}> 
-                          <i className="fa fa-remove" style={{fontSize:"50%", marginTop: "0px", marginRight: "15px"}} onClick={()=>this.onHandleIngredientItem(index)}></i>
-                        </Row>                        
-                        <Row >
-                          <Col md={5}  className="mb-2" style={{overflowWrap: "break-word"}}>
-                            <div className="card-ingredient-content">
-                              <div><span style={{fontWeight:"600"}}>1. Product &emsp;&emsp;&nbsp; :</span> {data.product}</div>
-                              <div><span style={{fontWeight:"600"}}>2. Quantity&emsp;&emsp; :</span> {data.quantity}</div>
-                              <div><span style={{fontWeight:"600"}}>3. Measurement:</span> {data.measurement}</div>
-  
-                              <input accept="image/*" id="imgSrc1" type="file" className="mb-2 ml-3 mt-3 " onChange={(ev)=>this.onUpdateIngredientImg(ev, index)} />
-                            </div>
-                          </Col>
-                          <Col md={4}  className="mb-2" style={{textAlign: "center"}}>
-                            <img className="mb-2" src={ data.productImgPath} width="auto" height="150px" alt=""/>
-                            
-                          </Col>
-                          <Col md={3}  className="mb-2"></Col>
-                        </Row>
-                      </div>
-                    ))
+                  this.state.ingredientGroupList &&
+                  this.state.ingredientGroupList.map((data, index)=>(
+                    <div key={index}  className="mb-3" style={{margin:"10px", padding:"10px", backgroundColor:"white",  boxShadow: "1px 1px 4px 2px #00000030"}}>
+                      <Row style={{justifyContent: "flex-end"}}> 
+                        <i className="fa fa-remove" style={{fontSize:"50%", marginTop: "0px", marginRight: "15px"}} onClick={()=>this.onHandleIngredientItem(index)}></i>
+                      </Row>                        
+                      <Row >
+                        <Col md={5}  className="mb-2" style={{overflowWrap: "break-word"}}>
+                          <div className="card-ingredient-content">
+                            <div><span style={{fontWeight:"600"}}>1. Product &emsp;&emsp;&nbsp; :</span> {data.product}</div>
+                            <div><span style={{fontWeight:"600"}}>2. Quantity&emsp;&emsp; :</span> {data.quantity}</div>
+                            <div><span style={{fontWeight:"600"}}>3. Measurement:</span> {data.measurement}</div>
+
+                            <input accept="image/*" id="imgSrc1" type="file" className="mb-2 ml-3 mt-3 " onChange={(ev)=>this.onUpdateIngredientImg(ev, index)} />
+                          </div>
+                        </Col>
+                        <Col md={4}  className="mb-2" style={{textAlign: "center"}}>
+                          <img className="mb-2" src={ data.productImgPath} width="auto" height="150px" alt=""/>
+                          
+                        </Col>
+                        <Col md={3}  className="mb-2"></Col>
+                      </Row>
+                    </div>
+                  ))
                 }
+
 
                 <Row className="mb-1">
                   <Col md={4}>
@@ -1039,19 +971,21 @@ handleClick = (event, id) => {
                      <TextField fullWidth id="currentIngredientQuantity" type="number"  onChange={this.onTextFieldChange}  label="Quantity" variant="filled" placeholder="1.."  className="mb-3" value={currentIngredientQuantity}/>
                   </Col>
 
+                  {/* <Col md={4}>
+                    <TextField fullWidth id="currentIngredientQuantity" type="number"  onChange={this.onTextFieldChange}  label="Quantity" variant="filled" placeholder="1.."  className="mb-3"  value={currentIngredientQuantity}/>
+                  </Col> */}
+
                   <Col md={4}>
                     {
                       this.state.productImgSetting_flag ?  
                       <input accept="image/*" id="imgSrc1" type="file" className="mt-3 mb-4" onChange={(ev)=>this.onhandleProductImg(ev)} />:<div style={{marginTop:"70px"}}/>
                     }
 
-                    <Autocomplete 
-                      id="currentIngredientMeasurement" 
-                      options={this.measurements.map((option) => option)} 
-                      value={currentIngredientMeasurement} 
-                      onChange={this.handleIngredientMeasurement}
+                    <Autocomplete id="currentIngredientMeasurement" options={this.measurements.map((option) => option)} value={currentIngredientMeasurement} onChange={this.handleIngredientMeasurement}
                       freeSolo
-                      renderInput={(params) => ( <TextField {...params} label="Measurement.." variant="filled"/>  )}
+                      renderInput={(params) => (
+                        <TextField {...params} label="Measurement.." variant="filled"/>
+                      )}
                       className="mb-3"
                     />
                   </Col>
@@ -1062,7 +996,7 @@ handleClick = (event, id) => {
                 </Row>
                 <Row className="mb-3">
                   <Col md={4}  style={{textAlign:"center", margin: "auto"}}> 
-                  <TextField id="servings" fullWidth type="number" onChange={this.onTextFieldChange} label="Servings"  variant="filled"  className="mb-2" placeholder="1 person, 2, 4 or 10 people" style={{marginTop:"10px"}} value={servings}/>
+                  <TextField id="servings" fullWidth type="number" onChange={this.onTextFieldChange} label="Servings"  variant="filled"  className="mb-2" placeholder="1 person, 2, 4 or 10 people" style={{marginTop:"10px"}}/>
                   </Col>   
                   <Col md={4}  style={{textAlign:"center", margin: "auto"}}> </Col>   
                   <Col md={4}  style={{textAlign:"center", margin: "auto"}}> </Col>   
@@ -1070,33 +1004,31 @@ handleClick = (event, id) => {
                 <hr/>
 
                  {
-                   comp_instructions
-                    // this.state.instructionGroupList.length > 0 &&
-                    // this.state.instructionGroupList.map((data, index)=>(
-                    //   <div key={index}  className="mb-3" style={{margin:"10px", padding:"10px", backgroundColor:"white",  boxShadow: "1px 1px 4px 2px #00000030"}}>
-                    //     <Row style={{justifyContent: "flex-end"}}> 
-                    //       <i className="fa fa-remove" style={{fontSize:"50%", marginTop: "0px", marginRight: "15px"}} onClick={()=>this.onHandleInstructionItem(index)}></i>
-                    //     </Row>                        
-                    //     <Row >
-                    //       <Col md={4}  className="mb-2" style={{overflowWrap: "break-word"}}>
-                    //         <ol className="mdc-list">
-                    //           {data.step.map((chip, index1) => (
-                    //             <li className="mdc-list-item" tabIndex="0" key={index1}>
-                    //               <span className="mdc-list-item__text">{chip}</span>
-                    //             </li>
-                    //           ))}
-                    //         </ol>
-                    //       </Col>
-                    //       <Col md={4}  className="mb-2" style={{textAlign: "center"}}>
-                    //         <img className="mb-2" src={data.image} width="auto" height="150px" alt=""/>
-                    //         <input accept="image/*" id="imgSrc1" type="file" className="mb-2, ml-3" onChange={(ev)=>this.onUpdateInstructionImg(ev, index)} />
-                    //       </Col>
-                    //       <Col md={4}  className="mb-2"></Col>
-                    //     </Row>
-                    //   </div>
-                    // ))
+                    this.state.instructionGroupList.length > 0 &&
+                    this.state.instructionGroupList.map((data, index)=>(
+                      <div key={index}  className="mb-3" style={{margin:"10px", padding:"10px", backgroundColor:"white",  boxShadow: "1px 1px 4px 2px #00000030"}}>
+                        <Row style={{justifyContent: "flex-end"}}> 
+                          <i className="fa fa-remove" style={{fontSize:"50%", marginTop: "0px", marginRight: "15px"}} onClick={()=>this.onHandleInstructionItem(index)}></i>
+                        </Row>                        
+                        <Row >
+                          <Col md={4}  className="mb-2" style={{overflowWrap: "break-word"}}>
+                            <ol className="mdc-list">
+                              {data.step.map((chip, index1) => (
+                                <li className="mdc-list-item" tabIndex="0" key={index1}>
+                                  <span className="mdc-list-item__text">{chip}</span>
+                                </li>
+                              ))}
+                            </ol>
+                          </Col>
+                          <Col md={4}  className="mb-2" style={{textAlign: "center"}}>
+                            <img className="mb-2" src={data.image} width="auto" height="150px" alt=""/>
+                            <input accept="image/*" id="imgSrc1" type="file" className="mb-2, ml-3" onChange={(ev)=>this.onUpdateInstructionImg(ev, index)} />
+                          </Col>
+                          <Col md={4}  className="mb-2"></Col>
+                        </Row>
+                      </div>
+                    ))
                   }
-
                   <Row className="mb-3">
                     <Col md={12}>
                       <ChipInput label="Instructions"  className="mb-2" fullWidth  value={this.state.instructionsChip} onAdd={(chip) => this.handleAddInstructionStep(chip)} onDelete={(chip, index) =>this.handleDeleteInstructionsStep(chip, index)}   variant="filled" />
@@ -1120,44 +1052,11 @@ handleClick = (event, id) => {
                     <TextField id="cookTime" className="mb-2" type="number" fullWidth onChange={this.onTextFieldChange} label="CookTime (mins)" variant="filled" required value={cookTime}/>
                   </Col>   
                   <Col md={4}>
-                    {/* <Autocomplete 
-                        multiple 
-                        limitTags={5}
-                        id="tags-filled" 
-                        className="mb-2" 
-                        fullWidth 
-                        options={this.categories.map((option) => option)} 
-                        onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
-                        freeSolo
-                        renderInput={(params) => (<TextField {...params} variant="filled" label="Categories" placeholder="Suggest categories for this meal.." fullWidth/>)} 
-                        // onDelete={(chip, index) =>this.handleDeleteCategoryChip(chip, index)}
-                        value = { categories }
-                        /> */}
-
-                    <Autocomplete
-                      multiple
-                      id="tags-standard"
-                      className="mb-2" 
+                    <Autocomplete multiple id="tags-filled" className="mb-2" fullWidth options={this.categories.map((option) => option)} defaultValue={[this.categories[0]]}
                       freeSolo
-                       // filterSelectedOptions
-                       options={this.categories.map((option) => option)} 
-                       // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
-                       onChange={(e, newValue) => this.handleCategoryDropdownChange(newValue)}
-                       // getOptionLabel={option => option}
-                       // renderTags={() => {}}
-                       value={categoryList}
-                       renderInput={params => (
-                         <TextField
-                           {...params}
-                           variant="filled"
-                           label="Categories"
-                           placeholder="Suggest categories for this meal.."
-                           fullWidth
-                         />
-                       )}
-                    />
-
-                    </Col>                        
+                      renderTags={(value, getTagProps) => value.map((option, index) => (<Chip variant="outlined" label={option} {...getTagProps({ index })}/>))}
+                      renderInput={(params) => (<TextField {...params} variant="filled" label="Categories" placeholder="Suggest categories for this meal.."/>)} />
+                  </Col>                        
                 </Row>
                 {
                   suggestMealRole !== "moreView" &&
