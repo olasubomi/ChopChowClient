@@ -55,7 +55,7 @@ button.detail-step-btn{
         margin: auto !important;
     } 
 
-    .mymodal-dlg .modal-content{
+    .modal-dialog .modal-content{
         height: 90vh;
         overflow: overlay;
     }
@@ -70,9 +70,10 @@ button.detail-step-btn{
         // margin: auto !important;
     } 
 
-    .mymodal-dlg .modal-content{
-        // height: 90wh;
+    .modal-dialog .modal-content{
         height: 90vh;
         overflow: overlay;
     }
 }
+
+  

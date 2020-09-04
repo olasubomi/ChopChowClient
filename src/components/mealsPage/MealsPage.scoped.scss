@@ -1,10 +1,11 @@
+
 .meals-Page {
     .mealPage-container{
         max-width: 100% !important;
-        justify-content: center;
+        // justify-content: center;
         flex-wrap: wrap;
         justify-content: left;
-        display: flex;
+        padding: 20px 0px 20px 20px;
 
         .modal-content{
             margin: auto;
@@ -14,7 +15,7 @@
 
         .mealContainer{
             width: 90%;
-            margin: auto;
+            // margin: auto;
 
             .meal-card{
                 justify-content: center;
@@ -53,12 +54,25 @@
     margin: auto !important;
 } 
 
-@media screen and (max-width: 800px) {
+.fade.modal.show{
+    padding-right: 0px!important;
+}
+
+@media screen and (max-width: 600px) {
     .modal-100w {
       height: auto;
       width: 90% !important;
       max-width: 900px !important;
       margin: auto !important;
       margin-top: 25%!important
+    }
+
+    .meals-Page {
+        .mealPage-container{    
+            .mealContainer{
+                width: 100%;
+                margin: auto;
+            }
+        }
     }
 }

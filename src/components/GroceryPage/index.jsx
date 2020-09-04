@@ -5,9 +5,12 @@ import { Spinner } from "react-bootstrap";
 import { Container, Alert, Card, Col, Row, Button } from "react-bootstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
 import ProductDetail from './ProductDetail/ProductModal'
+import { connect } from 'react-redux';
+import { withRouter } from "react-router-dom";
+import axios from '../../util/Api';
 
 //////////////////////////////////////////////////////////////////////
-export default class GroceryPage extends React.Component {
+class GroceryPage extends React.Component {
   // Mongo
   _isMounted = false;
   products = [];
@@ -61,65 +64,44 @@ export default class GroceryPage extends React.Component {
   onCloseClicked = () => {
     this.setState({ product_modal_flg: false });
   }
+
 //////////////////////////////////////////////////////////////////////
   componentDidMount() {
     this._isMounted = true;
-    if (this._isMounted) {
-      const { auth, customerId } = this.props;
-      this.setState({ Authentication: auth });
-      this.setState({ customerId: customerId });
-      this.getCustomerList(customerId);
 
-      
-      console.log("componentDidMount: ", customerId)
+    if (this._isMounted) {
+      const { authUser, customer_id } = this.props;
+      this.setState({ Authentication: authUser });
+      this.setState({ customerId: customer_id });
+      this.getCustomerList(customer_id);
     }
   }
 
   //////////////////////////////////////////////////////////////////////
   componentWillReceiveProps(nextProps) {
     // checks if user is already logged in in app.
-    const { auth, customerId } = nextProps;
-    console.log("comes in grocery page cdm");
-    this.setState({ Authentication: auth });
+    const { authUser, customer_id } = nextProps;
+    this.setState({ Authentication: authUser });
 
-    console.log("this.props, ", nextProps);
-
-    if (auth !== null) {
-      this.getCustomerList(customerId);
+    if (authUser !== null) {
+      this.setState({ customerId: customer_id });
+      this.getCustomerList(customer_id);
     }
   }
 
   //////////////////////////////////////////////////////////////////////
   getCustomerList = (customerId) => {
-    var localToken = window.localStorage.getItem("userToken");
-    console.log("customder id  iss: " + customerId);
-    // var url = `/api/getCustomerGroceryList/${customerId}`;
+    var url = `/getCustomerGroceryList/${customerId}`;
     // var url = `http://localhost:5000/api/getCustomerGroceryList/${customerId}`
-    var url = `https://chopchowdev.herokuapp.com/api/getCustomerGroceryList/${customerId}`;
-    
-    fetch(url, {
-      method: "GET",
-      // credentials: 'include',
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localToken,
-      },
-    })
-      .then((res) => {
-        console.log("customer list response is ");
-        console.log(res);
-        return res.json();
-      })
-      .then((response) => {
-        if (response) {
-          this.setState({ customerList: response.data });
-        }
-      })
+    // var url = `https://chopchowdev.herokuapp.com/api/getCustomerGroceryList/${customerId}`;
+    axios(url)
+      .then(({data}) => {
+        this.setState({ customerList: data.data });
+      })      
       .catch(() => {
         this.setState(
           {
-            messageAlert:
-              "Authentication Error while fetching your grocery list...",
+            messageAlert:"Authentication Error while fetching your grocery list...",
             showAlert: true,
             variant: "danger",
           },
@@ -128,7 +110,7 @@ export default class GroceryPage extends React.Component {
               this.setState({ messageAlert: "", showAlert: false });
             }, 8000)
         );
-      });
+      });    
   };
 
   //////////////////////////////////////////////////////////////////////
@@ -274,9 +256,13 @@ export default class GroceryPage extends React.Component {
   //////////////////////////////////////////////////////////////////////
   render() {
     const { showAlert, variant, messageAlert, customerList } = this.state;
+
     console.log("Authentication, ", this.state.Authentication);
     console.log("customerId, ", this.state.customerId);
     console.log("customerList, ", this.state.customerList);
+
+    console.log("Props:", this.props)
+  
 
     return (
       <>
@@ -303,16 +289,12 @@ export default class GroceryPage extends React.Component {
         ) : null}
         {this.state.Authentication ? (
           <>
-            <PageTitle title=" Your Grocery List" />
+          <PageTitle title=" Your Grocery List" />
             <div>
               <Button
                   className="yourlist__buttonDeleteList"
                   variant="danger"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    this.handleDeleteList();
-                  }}
-                  >
+                  onClick={(e) => { e.stopPropagation(); this.handleDeleteList();}}>
                   Delete List Items
               </Button>
 
@@ -322,15 +304,15 @@ export default class GroceryPage extends React.Component {
                 {customerList ? (
                   customerList.map((customer_grocery_product_item) => {
                     let productID = customer_grocery_product_item.id;
-
+                    console.log("customer_grocery_product_item:", customer_grocery_product_item.product_image)
                     return (
                       // <>
                       <Row display="inline-flex" key = {customer_grocery_product_item.id} >
                         <Col key={customer_grocery_product_item.id}>
                           {/* check for private or public images (can be used for suggest meal) */}
-                          {customer_grocery_product_item.product_image.startsWith("http://") || customer_grocery_product_item.product_image.startsWith("data") ? (
+                          {customer_grocery_product_item.product_image.startsWith('https://') ? (
                               <img
-                                src={`${customer_grocery_product_item.product_image}`}
+                                src={customer_grocery_product_item.product_image}
                                 alt="product_img "
                                 className="card-img"
                                 onClick = {() => this.handleProductClick(customer_grocery_product_item.product_image, customer_grocery_product_item.product_name, productID, false)}
@@ -361,16 +343,13 @@ export default class GroceryPage extends React.Component {
 
                         <Col>
                           <Button onClick={(e) => { e.stopPropagation(); this.handleAddItemToCart(productID);  }} >
-                            {" "}
-                            Add To Cart
+                            {" "}  Add To Cart
                           </Button>
                         </Col>
                         <Col>
                           <i
                             className="fa fa-remove"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              this.handleShowDeleteItem(
+                            onClick={(e) => {e.stopPropagation();this.handleShowDeleteItem(
                                 customer_grocery_product_item.id
                               );
                             }}
@@ -389,8 +368,7 @@ export default class GroceryPage extends React.Component {
             <>
               {/* <Login /> */}
               <div>
-                Log into your account or continue as guest to load your grocery
-                list
+                Log into your account or continue as guest to load your grocery list
             </div>
             </>
           )}
@@ -403,3 +381,9 @@ export default class GroceryPage extends React.Component {
     );
   }
 }
+const mapStateToProps = ({ auth }) => {
+  const { authUser, role, customer_id } = auth;
+  return { authUser, role, customer_id }
+};
+
+export default connect(mapStateToProps, ()=>({}))(withRouter(GroceryPage));
