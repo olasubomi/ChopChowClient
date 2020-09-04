@@ -11,7 +11,8 @@ import ChipInput from "material-ui-chip-input";
 import Autocomplete from "@material-ui/lab/Autocomplete"; 
 import { createMuiTheme, withStyles, ThemeProvider } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
-import axios from 'axios';
+// import axios from 'axios';
+import axios from '../util/Api';
 import { Row, Col } from "react-bootstrap";
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -203,7 +204,7 @@ handleUpdateSubmit= async() => {
 
   let productImg_paths = null;
   if(img_count1 !== 0){
-    var productImg_url = "./api/getProductImgURL/";
+    var productImg_url = "/getProductImgURL/";
     const productImg_config = {  method: 'POST',  data: productImgForm, url: productImg_url };
 
     const response = await axios(productImg_config)
@@ -254,7 +255,7 @@ handleUpdateSubmit= async() => {
 
   let instructionImg_paths = null;
   if(img_count !== 0){
-    var instructionImg_url = "./api/getInstructionImgURL/";
+    var instructionImg_url = "/getInstructionImgURL/";
     const instructionImg_config = {  method: 'POST',  data: instructionImgForm, url: instructionImg_url };
 
     const response = await axios(instructionImg_config)
@@ -326,7 +327,7 @@ handleUpdateSubmit= async() => {
   // }  
   // suggestMealForm.append('ingredient_list', JSON.stringify(ingredient_list));
   
-  var url = "./api/updateSuggestItem";
+  var url = "/updateSuggestItem";
   const config = {  method: 'POST',  data: suggestMealForm, url: url };
   const response = await axios(config)
   if( response.status >= 200 && response.status < 300){
