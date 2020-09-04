@@ -3,15 +3,12 @@ import TextField from "@material-ui/core/TextField";
 import ChipInput from "material-ui-chip-input";
 import Chip from "@material-ui/core/Chip";
 import Autocomplete from "@material-ui/lab/Autocomplete"; // createFilterOptions,
-// import axios from 'axios';
-import axios from '../util/Api';
+import axios from 'axios';
 import { Row, Col } from "react-bootstrap";
 import Button from '@material-ui/core/Button';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 import {Dialog, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
-import { connect } from 'react-redux';
-import { withRouter } from "react-router-dom";
 
 class SuggestMeal extends Component {
   products = [];
@@ -24,7 +21,7 @@ class SuggestMeal extends Component {
     this.state = {
       mealLabel: "",
       intro: "",
-      servings: "",
+      servings: 0,
       currentIngredient: "",
       currentIngredientMeasurement: "",
       currentIngredientQuantity: "",
@@ -63,11 +60,17 @@ class SuggestMeal extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
-    var url = "/get-all-products";
-      axios.get(url).then((body) => {
-        var productsList = body.data;
+    var url = "./api/get-all-products";
+
+    fetch(url, {
+      method: "GET",
+    })
+      .then((res) => res.text())
+      .then((body) => {
+        var productsList = JSON.parse(body);
         if (productsList && productsList.data.length !== 0) {
           console.log("returns GET ALL PRODUCTS ");
+
           for (var i = 0; i < productsList.data.length; i++) {
             this.products.push(productsList.data[i].product_name);
             this.productsImg_path.push(productsList.data[i].product_image);
@@ -84,9 +87,15 @@ class SuggestMeal extends Component {
       });
 
     //----get category meals-------------------------
-    url = "/get-all-categories";
-    axios.get(url).then((body) => {        
-        var categoryList = body.data;
+    url = "./api/get-all-categories";
+    fetch(url, {
+      method: "GET",
+    })
+      .then((res) => res.text())
+      .then((body) => {
+        
+        var categoryList = JSON.parse(body);
+        console.log(categoryList);
         if (categoryList && categoryList.data.length !== 0) {
           console.log("returns GET of ALL Categories ");
 
@@ -160,6 +169,7 @@ class SuggestMeal extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   handleAddCategoryStep() {
+   console.log("FFFFFFFFFFFFFF+++++++++");
   }
   
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -374,11 +384,10 @@ class SuggestMeal extends Component {
 
     let productImg_paths = null;
     if(img_count1 !== 0){
-      var productImg_url = "/getProductImgURL/";
+      var productImg_url = "./api/getProductImgURL/";
       const productImg_config = {  method: 'POST',  data: productImgForm, url: productImg_url };
 
       const response = await axios(productImg_config)
-      console.log("UploadedImage_URL: ", response)
       productImg_paths = response.data.productImg_paths;
     }
 
@@ -424,7 +433,7 @@ class SuggestMeal extends Component {
 
     var instructionImg_paths = null;
     if(img_count !== 0){
-      var instructionImg_url = "/getInstructionImgURL/";
+      var instructionImg_url = "./api/getInstructionImgURL/";
       const instructionImg_config = {  method: 'POST',  data: instructionImgForm, url: instructionImg_url };
 
       const response = await axios(instructionImg_config)
@@ -455,7 +464,7 @@ class SuggestMeal extends Component {
     }
 
     //-------------to make ingredient data ------------------------------------------
-    var url = "addMealSuggestion/";
+    var url = "./api/addMealSuggestion/";
 
     let suggestMealForm = new FormData();
     suggestMealForm.append('mealLabel', mealLabel);
@@ -478,12 +487,7 @@ class SuggestMeal extends Component {
         this.setState({ open : true});
         console.log(response);
         console.log("Display Meal submitted successfully");   
-        // this.props.history.push("/SuggestMeal")  
-        this.setState({ ingredientGroupList: [], instructionGroupList:[], instructionImgData: null, instructionImgPath:"", categoryList:[] })
-        this.setState({ ingredientStrings: [], instructionsChip:[] })
-        this.setState({ mealLabel: "", intro:"", servings: "", currentIngredient:"", currentIngredientMeasurement:"", readTime: "0 mins read", cookTime: "10 mins cook time",categoryChips: ["snacks", "abc", "123"], productsPopulated: false})
-        this.setState({ imgSrc: null, loading_imgSrc:"", open:false, productImgSetting_flag: false, productImgSrc: null, productImg_path:"", product_ind: 0})
-
+        window.location.href = "/SuggestMeal"  
       } else {
         console.log("Somthing happened wrong");
       }
@@ -546,8 +550,8 @@ class SuggestMeal extends Component {
             <form noValidate autoComplete="off">
               <Row className="mb-3">
                 <Col md={4}>
-                  <TextField id="mealLabel" fullWidth onChange={this.onTextFieldChange} label="Meal Name" required variant="filled" className="mb-3" value={this.state.mealLabel}/>
-                  <TextField multiline id="intro" fullWidth onChange={this.onTextFieldChange} label="Intro"  variant="filled" className="mb-3 " value={this.state.intro}/>
+                  <TextField id="mealLabel" fullWidth onChange={this.onTextFieldChange} label="Meal Name" required variant="filled" className="mb-3" />
+                  <TextField multiline id="intro" fullWidth onChange={this.onTextFieldChange} label="Intro"  variant="filled" className="mb-3 " />
                 </Col>
                 <Col md={4} style={{  marginTop:"20px"}}>
                     <input accept="image/*" id="imgSrc" type="file" className="mb-2 pr-4" onChange={(ev)=>this.onTextFieldClick(ev)} /> 
@@ -637,7 +641,7 @@ class SuggestMeal extends Component {
                 </Row>
                 <Row className="mb-3">
                   <Col md={4}  style={{textAlign:"center", margin: "auto"}}> 
-                  <TextField id="servings" fullWidth type="number" onChange={this.onTextFieldChange} label="Servings"  variant="filled"  className="mb-2" placeholder="1 person, 2, 4 or 10 people" style={{marginTop:"10px"}} value={this.state.servings}/>
+                  <TextField id="servings" fullWidth type="number" onChange={this.onTextFieldChange} label="Servings"  variant="filled"  className="mb-2" placeholder="1 person, 2, 4 or 10 people" style={{marginTop:"10px"}}/>
                   </Col>   
                   <Col md={4}  style={{textAlign:"center", margin: "auto"}}> </Col>   
                   <Col md={4}  style={{textAlign:"center", margin: "auto"}}> </Col>   
@@ -663,10 +667,10 @@ class SuggestMeal extends Component {
                 </Row>
                 <Row className="mb-3">
                   <Col md={4}>
-                    <TextField id="readTime"  className="mb-2" type="number" fullWidth onChange={this.onTextFieldChange} label="ReadTime (mins)" variant="filled" required  value={this.state.readTime}/>
+                    <TextField id="readTime"  className="mb-2" type="number" fullWidth onChange={this.onTextFieldChange} label="ReadTime (mins)" variant="filled" required />
                   </Col>   
                   <Col md={4}>
-                    <TextField id="cookTime" className="mb-2" type="number" fullWidth onChange={this.onTextFieldChange} label="CookTime (mins)" variant="filled" required  value={this.state.cookTime}/>
+                    <TextField id="cookTime" className="mb-2" type="number" fullWidth onChange={this.onTextFieldChange} label="CookTime (mins)" variant="filled" required/>
                   </Col>   
                   <Col md={4}>
                     <Autocomplete
@@ -723,10 +727,4 @@ class SuggestMeal extends Component {
   }
 }
 
-const mapStateToProps = ({ auth, commonData }) => {
-  const { authUser, role, customer_id } = auth;
-  const {status }  = commonData;
-  return { authUser, role, customer_id, status }
-};
-
-export default connect(mapStateToProps, ()=>({}))(withRouter(SuggestMeal));
+export default SuggestMeal;

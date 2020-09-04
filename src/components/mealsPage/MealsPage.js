@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import MyModal from "./Mymodal";
 import WithScrollbar from "./product_slider/WithScrollbar";
-import "./MealsPage.scoped.scss";
-import { Modal, Col, Row } from 'react-bootstrap'
+import "./MealsPage.scss";
+import { Modal } from "react-bootstrap";
 
 class MealsPage extends Component {
   // Mongo
@@ -40,7 +40,10 @@ class MealsPage extends Component {
     fetch(url)
       .then(res => res.text())
       .then(body => {
+        // console.log("should print body");
+        // console.log(body);
         var productsList = JSON.parse(body);
+        // console.log(productsList);
         if(productsList && productsList.data.length !== 0){
           console.log("shows products does return");
           console.log(productsList.data.length);
@@ -49,6 +52,10 @@ class MealsPage extends Component {
             products.push(productsList.data[i]);
           }
           this.setState({ products: products})
+          // console.log(this.state.products);
+          // this.entries = Object.entries(this.products);
+          // console.log(entries);
+          // this.setState({product_fetched:true});
         }
         else{
           console.log("shows products do not return");
@@ -89,13 +96,15 @@ class MealsPage extends Component {
 
   //////////////////////////////////////////////////////////////////////////////////////////////
   update = () => {
+    // this.setState({  width: window.innerWidth });
+
     let col_count = 1;
     if (window.innerWidth > 1200) col_count = 4;
-    else if(window.innerWidth > 900 && window.innerWidth < 1200) col_count = 3;
-    else if(window.innerWidth > 500 && window.innerWidth < 900) col_count = 2;
+    else if(window.innerWidth > 1000 && window.innerWidth < 1200) col_count = 3;
+    else if(window.innerWidth > 800 && window.innerWidth < 1000) col_count = 2;
 
-    if(this.state.products === null && window.innerWidth > 500 && window.innerHeight > 500) col_count = 4;
-    // if(this.state.products.length < 4 && window.innerWidth > 500 && window.innerHeight > 500) col_count = 4; //Math.min(count, this.props.products.length);
+    if(this.state.products === null && window.innerWidth > 800 && window.innerHeight > 500) col_count = 4;
+    else if(this.state.products.length < 4 && window.innerWidth > 800 && window.innerHeight > 500) col_count = 4; //Math.min(count, this.props.products.length);
 
     this.setState({col_count: col_count});
   };
@@ -109,18 +118,20 @@ class MealsPage extends Component {
 
     if(this.state.products.length>0){
       //--------------------- first part -----------------------------------------
-      for (let i = 0; i< Math.min(count, this.state.firstPart_ind); i+= this.state.col_count) {
-        const tmp_item = []
-        for(let j = 0; j<this.state.col_count; j++)
-        {
-          if(i+j>= Math.min(count, this.state.firstPart_ind)) break;
-          const value = this.state.products[i+j];  
-          tmp_item.push(
-            <div key={i+j} className={`col-sm-${12/ this.state.col_count} mealContainer`} style={{ justifyContent:"center"}}>
-            <div className="meal-card" onClick={()=>this.onClickMealCard(i+j, this.state.col_count)}>
+      for (let i = 0; i< Math.min(count, this.state.firstPart_ind); i++) {
+        const value = this.state.products[i];       
+
+        items.push(
+          <div key={i} className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mealContainer" style={{justifyContent: "center"}}>
+            <div className="meal-card" onClick={()=>this.onClickMealCard(i, this.state.col_count)}>
               <div style={containerStyle}>
                 <div style={{ textAlign:"center" }}>
-                  <img src={value.mealImage} className="images" style={{ width: "200px", height: "200px" }} alt="/"></img>
+                  <img
+                    src={value.mealImage}
+                    className="images"
+                    style={{ width: "200px", height: "200px" }}
+                    alt="/"
+                  ></img>
                 </div>
                 <div>
                   <span style={{ color: "orange" }} >{value.label}</span> <br></br>
@@ -128,76 +139,61 @@ class MealsPage extends Component {
                   <span style={{ color: "black" }}></span>
                 </div>              
               </div>
+
             </div>
           </div>
-          )
-        }
-
-        items.push(
-          <Row key={i}> {tmp_item}</Row>
-        )
+        );
       }
 
       if(selectedCard_mealData && this.state.slider_flag){
         items.push(
-          <Row key={Math.min(count, this.state.firstPart_ind)}>
-            <div className="col-sm-12" style={{background:"#ffffff"}} key="1000001">
-              <div style={{width: "95%", margin:"auto"}}>
-                <div className ="detail-card-explain" id={selectedCard_mealData._id} >
-                    <div style={{fontSize:"18px", paddingTop:"20px", paddingBottom:"20px"}}>{selectedCard_mealData.intro}
-                    </div>
-                  </div>
-
-                  <div id={selectedCard_mealData._id + "products"}>                  
-                    <WithScrollbar products={selectedCard_mealData.product_slider} col_count={this.state.col_count}/>
-                  </div>
-
-                  <MyModal 
-                    value={selectedCard_mealData}
-                    mealPrep={selectedCard_mealData.instructions}
-                    ingredientsList={selectedCard_mealData.newer_ingredient_format }
-                    func_setMealFlag = {this.setMealSliderModal}
-                    func_removeMealFlag = {this.removeMealSliderModal}
-                  />
+          <div className="col-sm-12" style={{background:"#ffffff"}} key="1000001">
+            <div style={{width: "95%", margin:"auto"}}>
+              <div className ="detail-card-explain" id={selectedCard_mealData._id} >
+                  <div style={{fontSize:"18px", paddingTop:"20px", paddingBottom:"20px"}}>{selectedCard_mealData.intro}</div>
                 </div>
-            </div>
-          </Row>
+
+                <div id={selectedCard_mealData._id + "products"}>                  
+                  <WithScrollbar products={selectedCard_mealData.product_slider} col_count={this.state.col_count}/>
+                </div>
+
+                <MyModal 
+                  value={selectedCard_mealData}
+                  mealPrep={selectedCard_mealData.instructions}
+                  ingredientsList={selectedCard_mealData.newer_ingredient_format }
+                  func_setMealFlag = {this.setMealSliderModal}
+                  func_removeMealFlag = {this.removeMealSliderModal}
+                />
+              </div>
+          </div>
         )
       }
      
       //--------------------- second part -----------------------------------------
-      for (let i = Math.min(count, this.state.firstPart_ind); i< count; i+=this.state.col_count) {
-        const tmp_item = []
-        for(let j = 0; j<this.state.col_count; j++)
-        {
-          if(i+j>= count) break;
-            const value = this.state.products[i+j];   
-            tmp_item.push(
-              <div key={i+j} className={`col-sm-${12/ this.state.col_count} mealContainer`} style={{ justifyContent:"center"}}>
-                <div className="meal-card" onClick={()=>this.onClickMealCard(i+j, this.state.col_count)}>
-                  <div style={containerStyle}>
-                    <div style={{ textAlign:"center" }}>
-                      <img
-                        src={value.mealImage}
-                        className="images"
-                        style={{ width: "200px", height: "200px" }}
-                        alt="/"
-                      ></img>
-                    </div>
-                    <div>
-                      <span style={{ color: "orange" }} >{value.label}</span> <br></br>
-                      <span style={{ color: "grey" }}>View Details | {value.cookTime}  mins to prepare</span>
-                      <span style={{ color: "black" }}></span>
-                    </div>              
-                  </div>
+      for (let i = Math.min(count, this.state.firstPart_ind); i< count; i++) {
+        const value = this.state.products[i];       
 
-                </div>
-              </div>
-            )
-        }
-       
         items.push(
-          <Row key={i+1}>{tmp_item}</Row>
+          <div key={i} className="col-sm-12 col-md-6 col-lg-4 col-xl-3 mealContainer" style={{justifyContent: "center"}}>
+            <div className="meal-card" onClick={()=>this.onClickMealCard(i, this.state.col_count)}>
+              <div style={containerStyle}>
+                <div style={{ textAlign:"center" }}>
+                  <img
+                    src={value.mealImage}
+                    className="images"
+                    style={{ width: "200px", height: "200px" }}
+                    alt="/"
+                  ></img>
+                </div>
+                <div>
+                  <span style={{ color: "orange" }} >{value.label}</span> <br></br>
+                  <span style={{ color: "grey" }}>View Details | {value.cookTime}  mins to prepare</span>
+                  <span style={{ color: "black" }}></span>
+                </div>              
+              </div>
+
+            </div>
+          </div>
         );
       }
     }

@@ -11,12 +11,9 @@ import ChipInput from "material-ui-chip-input";
 import Autocomplete from "@material-ui/lab/Autocomplete"; 
 import { createMuiTheme, withStyles, ThemeProvider } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
-// import axios from 'axios';
-import axios from '../util/Api';
+import axios from 'axios';
 import { Row, Col } from "react-bootstrap";
 import Tooltip from '@material-ui/core/Tooltip';
-import { connect } from 'react-redux';
-import { withRouter } from "react-router-dom";
 
 // height of the TextField
 const columns = [
@@ -62,7 +59,7 @@ class ViewSuggestedMeals extends Component {
     this.state = {
       mealLabel: "",
       intro: "",
-      servings: "",
+      servings: 0,
       // currentIngredient: "Butter scotch",
       currentIngredient: "",
       currentIngredientMeasurement: "",
@@ -142,6 +139,7 @@ updateSuggestItem = (data, mealRole) => {
   this.setState({selected_id: data._id, instructionGroupList:tmp_instrutionData, suggestMealRole: mealRole, mealLabel: data.label, intro: data.intro, servings: data.servings, loading_imgSrc:  data.mealImage, formatted_ingredient:data.newer_ingredient_format});
   this.setState({open: true});
 
+  // this.setState({ currentIngredientMeasurement: last_ingredient.measurement, currentIngredientQuantity: last_ingredient.quantity, currentIngredient: last_ingredient.product });
   this.setState({ imgSrc: data.mealImage, readTime:  data.readTime,  cookTime:  data.cookTime, product_slider:  data.product_slider, productImgSetting_flag: false});
 
   const last_slider = data.product_slider[data.product_slider.length-1];
@@ -170,10 +168,14 @@ updateSuggestItem = (data, mealRole) => {
 
     temp.push(properIngredientStringSyntax);
     
+    // const tmp_data = {imgSrc:null, path_flag: data.product_slider[i].flag, path: data.product_slider[i].image};
+    // tmp_ingredientData.push(tmp_data);
   }
 
   this.setState({ ingredientGroupList: tmp_inst_groupList});
   this.setState({ ingredientStrings: temp });  
+  // this.setState({ ingredientData: tmp_ingredientData }); 
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -201,7 +203,7 @@ handleUpdateSubmit= async() => {
 
   let productImg_paths = null;
   if(img_count1 !== 0){
-    var productImg_url = "/getProductImgURL/";
+    var productImg_url = "./api/getProductImgURL/";
     const productImg_config = {  method: 'POST',  data: productImgForm, url: productImg_url };
 
     const response = await axios(productImg_config)
@@ -252,7 +254,7 @@ handleUpdateSubmit= async() => {
 
   let instructionImg_paths = null;
   if(img_count !== 0){
-    var instructionImg_url = "/getInstructionImgURL/";
+    var instructionImg_url = "./api/getInstructionImgURL/";
     const instructionImg_config = {  method: 'POST',  data: instructionImgForm, url: instructionImg_url };
 
     const response = await axios(instructionImg_config)
@@ -310,14 +312,26 @@ handleUpdateSubmit= async() => {
     suggestMealForm.set('img_change_flag', "false");     
   }
 
+  // console.log("KKKKKKKKKKK: ", ingredientData);
+  // for(var i=0; i< ingredientData.length; i++)
+  // {
+  //   if(ingredientData[i].imgSrc==null){
+  //     ingredient_list.push(null);
+  //   }else{
+  //     ingredient_list.push({path_flag:ingredientData[i].path_flag,  path: ingredientData[i].path});
+  //     if(ingredientData[i].path_flag){
+  //       suggestMealForm.append('imgSrc', ingredientData[i].imgSrc);
+  //     } 
+  //   }    
+  // }  
+  // suggestMealForm.append('ingredient_list', JSON.stringify(ingredient_list));
   
-  var url = "/updateSuggestItem";
+  var url = "./api/updateSuggestItem";
   const config = {  method: 'POST',  data: suggestMealForm, url: url };
   const response = await axios(config)
   if( response.status >= 200 && response.status < 300){
-    console.log("Updated Meal submitted successfully");  
-    this.handleClose();
-    return; //(window.location.href = "/ViewSuggestedMeals");
+    console.log("Updated Meal submitted successfully");        
+    return (window.location.href = "/ViewSuggestedMeals");
   }else
   {
     console.log("Somthing happened wrong");
@@ -326,10 +340,11 @@ handleUpdateSubmit= async() => {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 componentDidMount() {
-  var url = "/get-all-products";
-  axios.get(url)
+  var url = "./api/get-all-products";
+  fetch(url, { method: "GET"})
+    .then((res) => res.text())
     .then((body) => {
-      var productsList = body.data;
+      var productsList = JSON.parse(body);
       if (productsList && productsList.data.length !== 0) {
 
         console.log("returns GET ALL PRODUCTS ");
@@ -346,9 +361,9 @@ componentDidMount() {
 
   console.log("Comes in meal pages component did mount");
 
-  var url1 = "/get-suggested-meals"
-  axios.get(url1).then(body => {
-      var productsList = body.data;
+  var url1 = "./api/get-suggested-meals"
+  fetch(url1).then(res => res.text()).then(body => {
+      var productsList = JSON.parse(body);
 
       if(productsList && productsList.data.length !== 0){
         console.log("shows products does return");
@@ -358,9 +373,14 @@ componentDidMount() {
     }).catch(err => {console.log(err);});
 
  //----get category meals-------------------------
- url = "/get-all-categories";
- axios.get(url).then((body) => {     
-     var categoryList = body.data;
+ url = "./api/get-all-categories";
+ fetch(url, {
+   method: "GET",
+ })
+   .then((res) => res.text())
+   .then((body) => {
+     
+     var categoryList = JSON.parse(body);
      console.log(categoryList);
      if (categoryList && categoryList.data.length !== 0) {
        console.log("returns GET of ALL Categories ");
@@ -441,6 +461,11 @@ onHandleInstructionItem = (ind) =>{
 
 ///////////////////////////////////////////////////////////////////////////////////////
 onUpdateIngredientImg= (event, ind) =>{
+  // if (event.target.files[0] === null || this.state.ingredientData.length<= ind) return;
+  // const tmp_ingredientData = this.state.ingredientData;
+  // const tmp = {imgSrc:event.target.files[0], path_flag: true, path:URL.createObjectURL(event.target.files[0])}
+  // tmp_ingredientData[ind] = tmp;
+  // this.setState({ingredientData: tmp_ingredientData});
   if (event.target.files[0] === null || this.state.ingredientGroupList.length<= ind) return;
   const tmp_ingredientData = this.state.ingredientGroupList;
   const tmp_ingredientItem = tmp_ingredientData[ind];
@@ -491,6 +516,16 @@ handleDeleteCategoryChip(chip, index) {
   console.log("handleDeleteCategoryChip:", index)
 }
 
+// ////////////////////////////////////////////////////////////////////////////
+// handleDeleteCategoryChip(chip) {
+//   console.log("removing chop input");
+//   var array = [...this.state.categoryChips]; // make a separate copy of the array
+//   var index = array.indexOf(chip);
+//   if (index !== -1) {
+//     array.splice(index, 1);
+//     this.setState({ categoryChips: array });
+//   }
+// }
 
 ////////////////////////////////////////////////////////////////////////////
 handleDeleteInstructionsStep(chip) {
@@ -608,6 +643,19 @@ addIngredientToMeal(event) {
   }
   this.handleAddIngredientChip(properIngredientStringSyntax);
 
+  // if(this.state.productImgSetting_flag ){
+  //   const tmp_data = {imgSrc:this.state.productImgSrc, path_flag: true, path:""}
+  //   this.setState({ ingredientData: [...this.state.ingredientData, tmp_data] });  
+  // }else{
+  //   const tmp_data = {imgSrc:[], path_flag: false, path:this.productsImg_path[this.state.product_ind]}
+  //   this.setState({ ingredientData: [...this.state.ingredientData, tmp_data] });
+  // }
+
+  // this.setState({ formatted_ingredient: [ ...this.state.formatted_ingredient, currIngredientObject, ], 
+  //   productImg_path:null,
+  //   product_slider: [...this.state.product_slider, null],
+  // });
+
   this.setState({ ingredientGroupList: [ ...this.state.ingredientGroupList,  currProductObject ]});
   this.setState({ productImgSrc: null, productImg_path:"" });
   
@@ -625,21 +673,14 @@ handleChangeRowsPerPage = (event) => {
 };
 
 ////////////////////////////////////////////////////////////////////////////
-handleDeleteMealItem = (data, index) => {
+handleDeleteMealItem = (data) => {
   var url = `./api/removeSeggestItem/${data._id}`;
   fetch(url).then((res) => {
     return res.json();
   })
     .then((response) => {           
       console.log("Delets item");
-
-      const tmp_suggestedMeal = this.state.mealData_list;
-      tmp_suggestedMeal.splice(index, 1);
-      this.setState({mealData_list: tmp_suggestedMeal})
-
-      // this.props.history.push("/ViewSuggestedMeals")
-      return;
-      // return (window.location.href = "/ViewSuggestedMeals");
+      return (window.location.href = "/ViewSuggestedMeals");
     })
     .catch((err) => {
       console.log("unDelets item");
@@ -688,7 +729,42 @@ handleClickOpen = (data, mealRole) => {
     tmp_ingredientData.push(null)
   }
   this.setState({ ingredientStrings: temp });  
-  this.setState({ ingredientData: tmp_ingredientData });   
+  this.setState({ ingredientData: tmp_ingredientData }); 
+
+
+  // this.setState({open: true});
+  // this.setState({ suggestMealRole: mealRole, mealLabel: data.label, intro: data.intro, servings: data.servings, formatted_ingredient:data.newer_ingredient_format   });
+  
+  // const last_ingredient = data.newer_ingredient_format[data.newer_ingredient_format.length-1];
+  // this.setState({ currentIngredientMeasurement: last_ingredient.measurement, currentIngredientQuantity: last_ingredient.quantity, currentIngredient: last_ingredient.product });
+  // this.setState({ instructionsChip:  data.instructions, readTime:  data.readTime, cookTime:  data.cookTime, loading_imgSrc:  data.mealImage, product_slider:  data.product_slider});
+  // const last_slider = data.product_slider[data.product_slider.length-1];
+  // if(!last_slider.flag) {
+  //   this.setState({productImg_path: "public/products/"+last_slider.image});
+  // }else{
+  //   this.setState({productImg_path: last_slider.image});
+  // }
+  // this.setState({productImgSetting_flag: false});
+
+  // let temp = [];
+  // for(let i=0; i<data.newer_ingredient_format.length; i++)
+  // {
+  //   const last_ingredient = data.newer_ingredient_format[i];
+  //   var properIngredientStringSyntax;
+
+  //   if (last_ingredient.quantity === 0) {
+  //     properIngredientStringSyntax = last_ingredient.product;
+  //   } 
+  //   else if (last_ingredient.measurement === null ) 
+  //   { 
+  //     properIngredientStringSyntax ="" + last_ingredient.quantity + " " +  last_ingredient.product;
+  //   } 
+  //   else {
+  //     properIngredientStringSyntax ="" + last_ingredient.quantity + " " +  last_ingredient.measurement+" of " + last_ingredient.product;
+  //   }
+  //   temp.push(properIngredientStringSyntax);
+  // }
+  // this.setState({ ingredientStrings: temp });     
 };
 
 ////////////////////////////////////////////////////////////////////////////
@@ -815,8 +891,7 @@ handleClick = (event, id) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              { 
-              mealData_list&&
+              { mealData_list&&
               mealData_list.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
                 const isSelected = (id) => this.state.selected.indexOf(id) !== -1;
                 const isItemSelected = isSelected(row._id);
@@ -856,7 +931,7 @@ handleClick = (event, id) => {
                           </LightTooltip>
 
                           <LightTooltip title="  Delete  " placement="top">
-                            <IconButton color="secondary" aria-label="upload picture" component="span"  onClick ={()=>this.handleDeleteMealItem(row, index)}>
+                            <IconButton color="secondary" aria-label="upload picture" component="span"  onClick ={()=>this.handleDeleteMealItem(row)}>
                               <DeleteIcon />
                             </IconButton>
                           </LightTooltip>
@@ -996,6 +1071,30 @@ handleClick = (event, id) => {
 
                  {
                    comp_instructions
+                    // this.state.instructionGroupList.length > 0 &&
+                    // this.state.instructionGroupList.map((data, index)=>(
+                    //   <div key={index}  className="mb-3" style={{margin:"10px", padding:"10px", backgroundColor:"white",  boxShadow: "1px 1px 4px 2px #00000030"}}>
+                    //     <Row style={{justifyContent: "flex-end"}}> 
+                    //       <i className="fa fa-remove" style={{fontSize:"50%", marginTop: "0px", marginRight: "15px"}} onClick={()=>this.onHandleInstructionItem(index)}></i>
+                    //     </Row>                        
+                    //     <Row >
+                    //       <Col md={4}  className="mb-2" style={{overflowWrap: "break-word"}}>
+                    //         <ol className="mdc-list">
+                    //           {data.step.map((chip, index1) => (
+                    //             <li className="mdc-list-item" tabIndex="0" key={index1}>
+                    //               <span className="mdc-list-item__text">{chip}</span>
+                    //             </li>
+                    //           ))}
+                    //         </ol>
+                    //       </Col>
+                    //       <Col md={4}  className="mb-2" style={{textAlign: "center"}}>
+                    //         <img className="mb-2" src={data.image} width="auto" height="150px" alt=""/>
+                    //         <input accept="image/*" id="imgSrc1" type="file" className="mb-2, ml-3" onChange={(ev)=>this.onUpdateInstructionImg(ev, index)} />
+                    //       </Col>
+                    //       <Col md={4}  className="mb-2"></Col>
+                    //     </Row>
+                    //   </div>
+                    // ))
                   }
 
                   <Row className="mb-3">
@@ -1021,6 +1120,20 @@ handleClick = (event, id) => {
                     <TextField id="cookTime" className="mb-2" type="number" fullWidth onChange={this.onTextFieldChange} label="CookTime (mins)" variant="filled" required value={cookTime}/>
                   </Col>   
                   <Col md={4}>
+                    {/* <Autocomplete 
+                        multiple 
+                        limitTags={5}
+                        id="tags-filled" 
+                        className="mb-2" 
+                        fullWidth 
+                        options={this.categories.map((option) => option)} 
+                        onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
+                        freeSolo
+                        renderInput={(params) => (<TextField {...params} variant="filled" label="Categories" placeholder="Suggest categories for this meal.." fullWidth/>)} 
+                        // onDelete={(chip, index) =>this.handleDeleteCategoryChip(chip, index)}
+                        value = { categories }
+                        /> */}
+
                     <Autocomplete
                       multiple
                       id="tags-standard"
@@ -1063,11 +1176,4 @@ handleClick = (event, id) => {
     );
   }
 }
-
-const mapStateToProps = ({ auth, commonData }) => {
-  const { authUser, role, customer_id } = auth;
-  const {status }  = commonData;
-  return { authUser, role, customer_id, status }
-};
-
-export default connect(mapStateToProps, ()=>({}))(withRouter(withStyles(styles)(ViewSuggestedMeals)));
+export default withStyles(styles)(ViewSuggestedMeals);

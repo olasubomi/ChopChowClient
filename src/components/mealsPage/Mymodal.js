@@ -10,7 +10,7 @@ import { Modal } from "react-bootstrap";
 import TextSlider from "../../text_slide";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
-import "./Mymodal.scoped.scss";
+import "./Mymodal.scss";
 import "../../App.css";
 
 const content = [1, 2];
@@ -75,10 +75,12 @@ class MyModal extends Component {
           <Modal.Body style={{ padding: "0px" }}> 
             <div className="container">
               <div className="row" style={{ width: "100%"}}>
+                {/* <div className="col-md-5 col-xs-12" style={{background: "white", paddingLeft: "0px",paddingRight: "0px"  }} >
+                 */}
                 <div className="detail-firstCol col-md-5 col-sm-12" >
                   <Carousel showThumbs={false} infiniteLoop={false} style={{width:"96%" }}>
                     {content.map(index => (
-                      <img style={{ height: "250px" }} alt="pp" key={index} src={value.mealImage} />
+                      <img style={{ height: "300px" }} alt="pp" key={index} src={value.mealImage} />
                     ))}                    
                   </Carousel>
                   <br />
@@ -86,6 +88,7 @@ class MyModal extends Component {
                     <h3> {value.label}</h3>
                     <div>
                       {value.readTime} mins read | {value.cookTime} mins to prepare
+                      {/* <HeartCheckbox checked={checked} onClick={this.onClick} /> */}
                     </div>
                     <div> 
                       <button  style={{ backgroundColor: "grey",color: "white"}} >
