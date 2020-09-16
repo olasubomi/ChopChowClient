@@ -61,11 +61,17 @@ class SuggestMeal extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
-    var url = "/get-all-products";
-      axios.get(url).then((body) => {
-        var productsList = body.data;
+    var url = "./api/get-all-products";
+
+    fetch(url, {
+      method: "GET",
+    })
+      .then((res) => res.text())
+      .then((body) => {
+        var productsList = JSON.parse(body);
         if (productsList && productsList.data.length !== 0) {
           console.log("returns GET ALL PRODUCTS ");
+
           for (var i = 0; i < productsList.data.length; i++) {
             this.products.push(productsList.data[i].product_name);
             this.productsImg_path.push(productsList.data[i].product_image);
@@ -82,9 +88,15 @@ class SuggestMeal extends Component {
       });
 
     //----get category meals-------------------------
-    url = "/get-all-categories";
-    axios.get(url).then((body) => {        
-        var categoryList = body.data;
+    url = "./api/get-all-categories";
+    fetch(url, {
+      method: "GET",
+    })
+      .then((res) => res.text())
+      .then((body) => {
+        
+        var categoryList = JSON.parse(body);
+        console.log(categoryList);
         if (categoryList && categoryList.data.length !== 0) {
           console.log("returns GET of ALL Categories ");
 
