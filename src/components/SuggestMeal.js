@@ -23,13 +23,6 @@ class SuggestMeal extends Component {
     this.state = {
       mealLabel: "",
       intro: "",
-<<<<<<< HEAD
-      servings: "",
-      currentIngredient: "",
-      currentIngredientMeasurement: "",
-      currentIngredientQuantity: "",
-=======
->>>>>>> 30ea5ce52be3497bf0e4593626cf5ff025c292c3
       servings: 0,
       currentIngredient: "Butter scotch",
       currentIngredientMeasurement: null,
@@ -100,8 +93,9 @@ class SuggestMeal extends Component {
     })
       .then((res) => res.text())
       .then((body) => {
-        console.log(body);
+        
         var categoryList = JSON.parse(body);
+        console.log(categoryList);
         if (categoryList && categoryList.data.length !== 0) {
           console.log("returns GET of ALL Categories ");
 
