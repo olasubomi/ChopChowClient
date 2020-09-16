@@ -3,13 +3,14 @@ import TextField from "@material-ui/core/TextField";
 import ChipInput from "material-ui-chip-input";
 import Chip from "@material-ui/core/Chip";
 import Autocomplete from "@material-ui/lab/Autocomplete"; // createFilterOptions,
-// import axios from 'axios';
-import axios from '../util/Api';
+import axios from 'axios';
 import { Row, Col } from "react-bootstrap";
 import Button from '@material-ui/core/Button';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 import {Dialog, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
+import { connect } from 'react-redux';
+import { withRouter } from "react-router-dom";
 
 class SuggestMeal extends Component {
   products = [];
@@ -22,10 +23,14 @@ class SuggestMeal extends Component {
     this.state = {
       mealLabel: "",
       intro: "",
-      servings: 0,
+      servings: "",
       currentIngredient: "",
       currentIngredientMeasurement: "",
       currentIngredientQuantity: "",
+      servings: 0,
+      currentIngredient: "Butter scotch",
+      currentIngredientMeasurement: null,
+      currentIngredientQuantity: 0,
       ingredientStrings: [],
       instructionsChip: [],      
       readTime: "0 mins read",
@@ -45,8 +50,6 @@ class SuggestMeal extends Component {
       instructionGroupList:[],
       instructionImgData: null,
       instructionImgPath: "",
-
-      categoryList:[],
     };
 
     this.handleIngredientDropdownChange = this.handleIngredientDropdownChange.bind(
@@ -61,11 +64,17 @@ class SuggestMeal extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
-    var url = "/get-all-products";
-      axios.get(url).then((body) => {
-        var productsList = body.data;
+    var url = "./api/get-all-products";
+
+    fetch(url, {
+      method: "GET",
+    })
+      .then((res) => res.text())
+      .then((body) => {
+        var productsList = JSON.parse(body);
         if (productsList && productsList.data.length !== 0) {
           console.log("returns GET ALL PRODUCTS ");
+
           for (var i = 0; i < productsList.data.length; i++) {
             this.products.push(productsList.data[i].product_name);
             this.productsImg_path.push(productsList.data[i].product_image);
@@ -82,14 +91,19 @@ class SuggestMeal extends Component {
       });
 
     //----get category meals-------------------------
-    url = "/get-all-categories";
-    axios.get(url).then((body) => {        
-        var categoryList = body.data;
+    url = "./api/get-all-categories";
+    fetch(url, {
+      method: "GET",
+    })
+      .then((res) => res.text())
+      .then((body) => {
+        console.log(body);
+        var categoryList = JSON.parse(body);
         if (categoryList && categoryList.data.length !== 0) {
           console.log("returns GET of ALL Categories ");
 
           for (var i = 0; i < categoryList.data.length; i++) {
-            this.categories.push(categoryList.data[i].category_name);
+            this.categories.push(categoryList.data[i]);
           }
           console.log("PRINTING UPDATED CATEGORIES LIST");
         } else {
@@ -155,10 +169,8 @@ class SuggestMeal extends Component {
     });
   }
 
-
   ///////////////////////////////////////////////////////////////////////////////////////
   handleAddCategoryStep() {
-   console.log("FFFFFFFFFFFFFF+++++++++");
   }
   
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -196,6 +208,10 @@ class SuggestMeal extends Component {
     };
     tmp_ingredientData[ind] = tmp1;
     this.setState({ingredientGroupList: tmp_ingredientData});
+
+    // const tmp = {imgSrc:event.target.files[0], path_flag: true, path:URL.createObjectURL(event.target.files[0])}
+    // tmp_ingredientItem[ind] = tmp;
+    // this.setState({ingredientData: tmp_ingredientItem});
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -213,7 +229,6 @@ class SuggestMeal extends Component {
     tmp_instructionData[ind] = tmp;
     this.setState({instructionGroupList: tmp_instructionData});
   }
-
   ///////////////////////////////////////////////////////////////////////////////////////
   handleDeleteIngredientChip(chip) {
     var array = this.state.ingredientStrings; // make a separate copy of the array
@@ -270,25 +285,19 @@ class SuggestMeal extends Component {
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////
-  handleProductName=(event, val)=>{
-    const searchResult = this.products.map(element=>element.toLowerCase().includes(val.toLowerCase()));
+  handleProductName=(event)=>{
+    if(event.target.value === 0) return;
+    const searchResult = this.products.map(element=>element.toLowerCase().includes(event.target.value.toLowerCase()));
     const flag = searchResult.find(element=>element === true);
-
+    
     if(flag !== true || flag ===null) {
       this.setState({productImgSetting_flag:true});
-      this.setState({ currentIngredient: val });
+      this.setState({ currentIngredient: event.target.value });
     }else{
       this.setState({productImgSetting_flag:false});
-      this.setState({ currentIngredient: val});
+      this.setState({ currentIngredient: event.target.value });
     }
   }
-
-
- ///////////////////////////////////////////////////////////////////////////////////////
-  handleCategoryDropdownChange=(val)=>{
-    this.setState({categoryList: val});
-  }
-
 
 ///////////////////////////////////////////////////////////////////////////////////////
   handleIngredientMeasurement(event) {
@@ -333,9 +342,34 @@ class SuggestMeal extends Component {
    
 
     this.handleAddIngredientChip(properIngredientStringSyntax);
-    this.setState({ ingredientGroupList: [ ...this.state.ingredientGroupList,  currProductObject ] });
+
+    // if(this.state.productImgSetting_flag ){
+    //   const tmp_data = {imgSrc:this.state.productImgSrc, path_flag: true, path:this.state.productImg_path}
+    //   this.setState({ ingredientData: [...this.state.ingredientData, tmp_data] });  
+    // }else{
+    //   const tmp_data = {imgSrc:[], path_flag: false, path:this.productsImg_path[this.state.product_ind]}
+    //   this.setState({ ingredientData: [...this.state.ingredientData, tmp_data] });
+    // }
+    
+    // console.log("ingredientData: ", this.state.ingredientData);
+
+    
+
+    // var currIngredientObject = { 
+    //   product: this.state.currentIngredient,  
+    //   quantity: this.state.currentIngredientQuantity,  
+    //   measurement: this.state.currentIngredientMeasurement, 
+    // };
+    this.setState({
+      // formatted_ingredient: [ ...this.state.formatted_ingredient,  currIngredientObject ],
+      // productImg_path:null,
+      // productImgSrc:null,
+      // productImg_flag:true,
+      ingredientGroupList: [ ...this.state.ingredientGroupList,  currProductObject ]
+    });
+
     this.setState({ productImgSrc: null, productImg_path:"" });
-    this.setState({ currentIngredient:"",  currentIngredientQuantity:"", currentIngredientMeasurement:""});
+    
 
   }
 
@@ -354,13 +388,17 @@ class SuggestMeal extends Component {
 
 ///////////////////////////////////////////////////////////////////////////////////////
   sendSuggestedMealToDB = async (e) => {
-    const { mealLabel, intro,servings,ingredientStrings,ingredientGroupList, instructionGroupList,imgSrc,readTime,cookTime,categoryList} = this.state;
+    const { mealLabel, intro,servings,ingredientStrings,ingredientGroupList, instructionGroupList,imgSrc,readTime,cookTime,categoryChips} = this.state;
 
     if (mealLabel === "") {  console.log("meal label blank"); return; }
     if (ingredientStrings.length === 0) {   window.alert( "Suggested meal requires adding at least one ingredient to submit" );   return;  }
     if (imgSrc === null) {   window.alert( "You didn't add suggested meal image" );   return;  }
 
     //------------- to get glabal path for instrution image ----------------------------------------
+
+    console.log("ingredientGroupList: ", ingredientGroupList);
+    
+
     let productImgForm = new FormData();
     let img_count1 = 0;
     for (var i = 0; i < ingredientGroupList.length; i++){
@@ -371,21 +409,21 @@ class SuggestMeal extends Component {
       }
     }
 
-    let productImg_paths = null;
+    const productImg_paths = null;
     if(img_count1 !== 0){
-      var productImg_url = "/getProductImgURL/";
+      var productImg_url = "./api/getProductImgURL/";
       const productImg_config = {  method: 'POST',  data: productImgForm, url: productImg_url };
 
       const response = await axios(productImg_config)
-      console.log("UploadedImage_URL: ", response)
       productImg_paths = response.data.productImg_paths;
     }
+    console.log("productImg_paths: ", productImg_paths);
 
     //-------------to make prodcut data ------------------------------------------
     const formatted_ingredient1 = [];
     const product_slider = [];
     let n1 = -1;
-    for (i = 0; i < ingredientGroupList.length; i++){
+    for (var i = 0; i < ingredientGroupList.length; i++){
       var tmp_ingredient = { 
         product: ingredientGroupList[i].product,  
         quantity: ingredientGroupList[i].quantity,  
@@ -394,7 +432,7 @@ class SuggestMeal extends Component {
       formatted_ingredient1.push(tmp_ingredient);
 
       //-----------------------------------------------
-     let image = "";
+     const image = "";
      if (ingredientGroupList[i].productImgData !== null)
      {   
        n1 ++; image = productImg_paths[n1]
@@ -413,7 +451,7 @@ class SuggestMeal extends Component {
     //------------- to get glabal path for instrution image ----------------------------------------
     let instructionImgForm = new FormData();
     let img_count = 0;
-    for ( i = 0; i < instructionGroupList.length; i++){
+    for (var i = 0; i < instructionGroupList.length; i++){
       if (instructionGroupList[i].imgdata !== null)
       {
         instructionImgForm.append('instructionImgs', instructionGroupList[i].imgdata);
@@ -421,9 +459,9 @@ class SuggestMeal extends Component {
       }
     }
 
-    var instructionImg_paths = null;
+    const instructionImg_paths = null;
     if(img_count !== 0){
-      var instructionImg_url = "./api/getInstructionImgURL/";
+      var instructionImg_url = "/getInstructionImgURL/";
       const instructionImg_config = {  method: 'POST',  data: instructionImgForm, url: instructionImg_url };
 
       const response = await axios(instructionImg_config)
@@ -433,8 +471,8 @@ class SuggestMeal extends Component {
     //-------------to make instruction data ------------------------------------------
     const instructionGroupData = [];
     let n = -1;
-    for ( i = 0; i < instructionGroupList.length; i++){
-      let image = null;
+    for (var i = 0; i < instructionGroupList.length; i++){
+      const image = null;
       if (instructionGroupList[i].imgdata !== null)
       {   n ++; image = instructionImg_paths[n] }
 
@@ -445,16 +483,8 @@ class SuggestMeal extends Component {
       instructionGroupData.push(tmp);
     }
 
-    //-------------to make new category data ------------------------------------------
-    let new_categories = [];
-    for(i =0; i< categoryList.length; i++)
-    {
-      let index = this.categories.indexOf(categoryList[i]);
-      if(index==-1) new_categories.push(categoryList[i])
-    }
-
     //-------------to make ingredient data ------------------------------------------
-    var url = "./api/addMealSuggestion/";
+    var url = "addMealSuggestion/";
 
     let suggestMealForm = new FormData();
     suggestMealForm.append('mealLabel', mealLabel);
@@ -466,9 +496,7 @@ class SuggestMeal extends Component {
     suggestMealForm.append('ingredientStrings', ingredientStrings);
     suggestMealForm.append('readTime', readTime);
     suggestMealForm.append('cookTime', cookTime);
-    suggestMealForm.append('categoryChips', JSON.stringify(categoryList));    
-    suggestMealForm.append('newCategories', JSON.stringify(new_categories)); 
-
+    suggestMealForm.append('categoryChips', JSON.stringify(categoryChips));    
     suggestMealForm.append('imgSrc', imgSrc);
     
     const config = {  method: 'POST',  data: suggestMealForm, url: url };
@@ -477,7 +505,11 @@ class SuggestMeal extends Component {
         this.setState({ open : true});
         console.log(response);
         console.log("Display Meal submitted successfully");   
-        window.location.href = "/SuggestMeal"  
+        // this.props.history.push("/SuggestMeal")  
+        this.setState({ ingredientGroupList: [], instructionGroupList:[], instructionImgData: null, instructionImgPath:"", categoryList:[] })
+        this.setState({ ingredientStrings: [], instructionsChip:[] })
+        this.setState({ mealLabel: "", intro:"", servings: "", currentIngredient:"", currentIngredientMeasurement:"", readTime: "0 mins read", cookTime: "10 mins cook time",categoryChips: ["snacks", "abc", "123"], productsPopulated: false})
+        this.setState({ imgSrc: null, loading_imgSrc:"", open:false, productImgSetting_flag: false, productImgSrc: null, productImg_path:"", product_ind: 0})
       } else {
         console.log("Somthing happened wrong");
       }
@@ -486,49 +518,23 @@ class SuggestMeal extends Component {
     });
   }
 
-
-
   ///////////////////////////////////////////////////////////////////////////////////////
   render() {
-    var comp_instructions = [];
-    var count_index = 1;
-    for (let i = 0; i < this.state.instructionGroupList.length ; i++) {
-      if(i !==0 ){
-        count_index += this.state.instructionGroupList[i-1].step.length;
-      }
-      
-      comp_instructions.push(
-        <div key={i}  className="mb-3" style={{margin:"10px", padding:"10px", backgroundColor:"white",  boxShadow: "1px 1px 4px 2px #00000030"}}>
-          <Row style={{justifyContent: "flex-end"}}> 
-            <i className="fa fa-remove" style={{fontSize:"50%", marginTop: "0px", marginRight: "15px"}} onClick={()=>this.onHandleInstructionItem(i)}></i>
-          </Row>                        
-          <Row >
-            <Col md={4}  className="mb-2" style={{overflowWrap: "break-word"}}>
-              <div className="mdc-list">
-                {this.state.instructionGroupList[i].step.map((chip, index1) => (
-                  <div className="mdc-list-item" key={index1}>
-                    <span className="mdc-list-item__text">{index1+count_index}. 
-                      <span className="mdc-list-item__text"> {chip}</span>
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </Col>
-            <Col md={4}  className="mb-2" style={{textAlign: "center"}}>
-              <img className="mb-2" src={this.state.instructionGroupList[i].imgpath} width="auto" height="150px" alt=""/>
-              <input accept="image/*" id="imgSrc1" type="file" className="mb-2, ml-3" onChange={(ev)=>this.onUpdateInstructionImg(ev, i)} />
-            </Col>
-            <Col md={4}  className="mb-2"></Col>
-          </Row>
-        </div>
-      )
-    }
+    var instructionSteps = (
+      <ol className="mdc-list">
+        {this.state.instructionsChip.map((chip, index) => (
+          <li className="mdc-list-item" tabIndex="0" key={index}>
+            <span className="mdc-list-item__text">{chip}</span>
+          </li>
+        ))}
+      </ol>
+    );
 
     const theme = createMuiTheme({
       palette: { primary: green, },
     });
   
-    const {loading_imgSrc, categoryList} = this.state;
+    const {loading_imgSrc} = this.state;
 
     return (
       <div>
@@ -540,8 +546,8 @@ class SuggestMeal extends Component {
             <form noValidate autoComplete="off">
               <Row className="mb-3">
                 <Col md={4}>
-                  <TextField id="mealLabel" fullWidth onChange={this.onTextFieldChange} label="Meal Name" required variant="filled" className="mb-3" />
-                  <TextField multiline id="intro" fullWidth onChange={this.onTextFieldChange} label="Intro"  variant="filled" className="mb-3 " />
+                  <TextField id="mealLabel" fullWidth onChange={this.onTextFieldChange} label="Meal Name" required variant="filled" className="mb-3" value={this.state.mealLabel}/>
+                  <TextField multiline id="intro" fullWidth onChange={this.onTextFieldChange} label="Intro"  variant="filled" className="mb-3 " value={this.state.intro}/>
                 </Col>
                 <Col md={4} style={{  marginTop:"20px"}}>
                     <input accept="image/*" id="imgSrc" type="file" className="mb-2 pr-4" onChange={(ev)=>this.onTextFieldClick(ev)} /> 
@@ -594,21 +600,20 @@ class SuggestMeal extends Component {
                   ))
                 }
 
+
                 <Row className="mb-1">
                   <Col md={4}>
                     <Autocomplete
                       id="currentIngredient"
                       options={this.products.map((option) => option)}
                       onChange={(ev,val)=>this.handleIngredientDropdownChange(ev,val)}
-                      onInputChange={(ev, val) => this.handleProductName(ev, val)}
+                      onInputChange={(ev)=>this.handleProductName(ev)}
                       freeSolo
                       renderInput={(params) => ( <TextField {...params} label="Ingredients" variant="filled"/>)}
                       fullWidth 
                       className="mb-3"
-                      value={this.state.currentIngredient}
                     />
-                   
-                    <TextField fullWidth id="currentIngredientQuantity" type="number"  onChange={this.onTextFieldChange}  label="Quantity" variant="filled" placeholder="1.."  className="mb-3" value={this.state.currentIngredientQuantity}/>
+                    <TextField fullWidth id="currentIngredientQuantity" type="number"  onChange={this.onTextFieldChange}  label="Quantity" variant="filled" placeholder="1.."  className="mb-3"/>
                   </Col>
 
                   <Col md={4}>
@@ -621,7 +626,6 @@ class SuggestMeal extends Component {
                     freeSolo
                     renderInput={(params) => ( <TextField {...params} label="Measurements" variant="filled"/>   )}
                     className="mb-3"
-                    value={this.state.currentIngredientMeasurement}
                     />
                   </Col>
 
@@ -631,14 +635,37 @@ class SuggestMeal extends Component {
                 </Row>
                 <Row className="mb-3">
                   <Col md={4}  style={{textAlign:"center", margin: "auto"}}> 
-                  <TextField id="servings" fullWidth type="number" onChange={this.onTextFieldChange} label="Servings"  variant="filled"  className="mb-2" placeholder="1 person, 2, 4 or 10 people" style={{marginTop:"10px"}}/>
+                  <TextField id="servings" fullWidth type="number" onChange={this.onTextFieldChange} label="Servings"  variant="filled"  className="mb-2" placeholder="1 person, 2, 4 or 10 people" style={{marginTop:"10px"}} value={this.state.servings}/>
                   </Col>   
                   <Col md={4}  style={{textAlign:"center", margin: "auto"}}> </Col>   
                   <Col md={4}  style={{textAlign:"center", margin: "auto"}}> </Col>   
                 </Row>
                 <hr/>
                 {
-                  comp_instructions    
+                  this.state.instructionGroupList.length > 0 &&
+                  this.state.instructionGroupList.map((data, index)=>(
+                    <div key={index}  className="mb-3" style={{margin:"10px", padding:"10px", backgroundColor:"white",  boxShadow: "1px 1px 4px 2px #00000030"}}>
+                      <Row style={{justifyContent: "flex-end"}}> 
+                        <i className="fa fa-remove" style={{fontSize:"50%", marginTop: "0px", marginRight: "15px"}} onClick={()=>this.onHandleInstructionItem(index)}></i>
+                      </Row>                        
+                      <Row >
+                        <Col md={4}  className="mb-2" style={{overflowWrap: "break-word"}}>
+                          <ol className="mdc-list">
+                            {data.step.map((chip, index1) => (
+                              <li className="mdc-list-item" tabIndex="0" key={index1}>
+                                <span className="mdc-list-item__text">{chip}</span>
+                              </li>
+                            ))}
+                          </ol>
+                        </Col>
+                        <Col md={4}  className="mb-2" style={{textAlign: "center"}}>
+                          <img className="mb-2" src={data.imgpath} width="auto" height="150px" alt=""/>
+                          <input accept="image/*" id="imgSrc1" type="file" className="mb-2, ml-3" onChange={(ev)=>this.onUpdateInstructionImg(ev, index)} />
+                        </Col>
+                        <Col md={4}  className="mb-2"></Col>
+                      </Row>
+                    </div>
+                  ))
                 }
                 <Row className="mb-3">
                   <Col md={12}>
@@ -657,36 +684,17 @@ class SuggestMeal extends Component {
                 </Row>
                 <Row className="mb-3">
                   <Col md={4}>
-                    <TextField id="readTime"  className="mb-2" type="number" fullWidth onChange={this.onTextFieldChange} label="ReadTime (mins)" variant="filled" required />
+                    <TextField id="readTime"  className="mb-2" type="number" fullWidth onChange={this.onTextFieldChange} label="ReadTime (mins)" variant="filled" required  value={this.state.readTime}/>
                   </Col>   
                   <Col md={4}>
-                    <TextField id="cookTime" className="mb-2" type="number" fullWidth onChange={this.onTextFieldChange} label="CookTime (mins)" variant="filled" required/>
+                    <TextField id="cookTime" className="mb-2" type="number" fullWidth onChange={this.onTextFieldChange} label="CookTime (mins)" variant="filled" required  value={this.state.cookTime}/>
                   </Col>   
                   <Col md={4}>
-                    <Autocomplete
-                        multiple
-                        id="tags-filled"
-                        className="mb-2" 
-                        freeSolo
-                        // filterSelectedOptions
-                        options={this.categories.map((option) => option)} 
-                        // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}
-                        onChange={(e, newValue) => this.handleCategoryDropdownChange(newValue)}
-                        // getOptionLabel={option => option}
-                        // renderTags={() => {}}
-                        value={categoryList}
-                        renderInput={params => (
-                          <TextField
-                            {...params}
-                            variant="filled"
-                            label="Categories"
-                            placeholder="Suggest categories for this meal.."
-                            fullWidth
-                          />
-                        )}
-                      />
-                    
-                  </Col>        
+                    <Autocomplete multiple id="tags-filled" className="mb-2" fullWidth options={this.categories.map((option) => option)} defaultValue={[this.categories[0]]}
+                      freeSolo
+                      renderTags={(value, getTagProps) => value.map((option, index) => (<Chip variant="outlined" label={option} {...getTagProps({ index })}/>))}
+                      renderInput={(params) => (<TextField {...params} variant="filled" label="Categories" placeholder="Suggest categories for this meal.."/>)} />
+                  </Col>                        
                 </Row>
 
                 <Row className="mb-5">
@@ -717,4 +725,10 @@ class SuggestMeal extends Component {
   }
 }
 
-export default SuggestMeal;
+const mapStateToProps = ({ auth, commonData }) => {
+  const { authUser, role, customer_id } = auth;
+  const {status }  = commonData;
+  return { authUser, role, customer_id, status }
+};
+
+export default connect(mapStateToProps, ()=>({}))(withRouter(SuggestMeal));
