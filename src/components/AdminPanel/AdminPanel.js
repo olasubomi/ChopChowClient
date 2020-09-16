@@ -4,6 +4,9 @@ import { Container, Col, Row } from "react-bootstrap";
 import img_oil from "../../assets/images/ola_ola_palm_oil.jpg";
 import img_logo from "../../assets/images/logo2.png";
 import {Dialog, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
+import { connect } from 'react-redux';
+import { withRouter } from "react-router-dom";
+import axios from '../../util/Api';
 
 //////////////////////////////////////////////////////////////////////
 class AdminPanel extends React.Component {
@@ -16,7 +19,8 @@ class AdminPanel extends React.Component {
 //////////////////////////////////////////////////////////////////////
   handleOnClickItems=(item, userRole)=>{
     if (item === "suggest" && userRole === "admin"){
-      return (window.location.href = "/ViewSuggestedMeals");
+      this.props.history.push("/ViewSuggestedMeals")
+      // return (window.location.href = "/ViewSuggestedMeals");
     }else{
       this.setState({open:true});
     }
@@ -77,4 +81,10 @@ class AdminPanel extends React.Component {
     );
   }
 }
-export default AdminPanel;
+const mapStateToProps = ({ auth, commonData }) => {
+  const { authUser, role, customer_id } = auth;
+  const {status }  = commonData;
+  return { authUser, role, customer_id, status }
+};
+
+export default connect(mapStateToProps, ()=>({}))(withRouter(AdminPanel));

@@ -8,8 +8,7 @@
     margin: auto;
     margin-top: 25%; }
   .meals-Page .mealPage-container .mealContainer {
-    width: 90%;
-    margin: auto; }
+    width: 90%; }
     .meals-Page .mealPage-container .mealContainer .meal-card {
       justify-content: center;
       padding: 26px 42px;
@@ -45,4 +44,7 @@
     width: 90% !important;
     max-width: 900px !important;
     margin: auto !important;
-    margin-top: 25% !important; } }
+    margin-top: 25% !important; }
+  .mealContainer {
+    width: 90%;
+    margin: auto; } }

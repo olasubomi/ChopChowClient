@@ -1,6 +1,11 @@
 .custom-card1 {
-  margin-top: 50px !important;
+  padding-right: 0px !important; }
+
+.custom-card1 .modal-content {
   border-radius: 30px !important; }
+
+.custom-card1 .text-center {
+  font-size: 18px; }
 
 .width100 {
   width: 100% !important; }
@@ -12,6 +17,10 @@
   border: solid #bbbbbb 2px !important;
   border-radius: 20px !important;
   background-color: #d6d6d6 !important; }
+
+.carousel .carousel-status {
+  color: #1d1d1d;
+  text-shadow: none; }
 
 .lbl_text {
   margin-left: 0px; }
@@ -47,11 +56,6 @@
 .right-panel {
   padding-right: 50px !important; }
 
-.modal-content {
-  border-radius: 30px !important;
-  /*<!-- HERE I AM!---*/
-  /* margin: auto;  */ }
-
 .modal-title {
   text-align: center !important;
   /*<!-- HERE I AM!---*/ }
@@ -67,8 +71,6 @@ button:focus {
   .custom-card1 {
     width: 98% !important;
     margin-left: 1% !important; }
-  .modal-content {
-    margin-left: 0px !important; }
   .fb-btn,
   .google-btn {
     width: 100% !important;
@@ -86,7 +88,6 @@ button:focus {
           margin: auto !important;
       }  */
   .custom-card1 .modal-content {
-    height: auto;
     overflow: overlay; } }
 
 @media screen and (max-height: 500px) and (max-width: 900px) {
@@ -96,6 +97,4 @@ button:focus {
           margin: auto !important;
       }  */
   .custom-card1 .modal-content {
-    height: auto;
     overflow: overlay; } }
-

@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { Carousel,  } from "react-bootstrap";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "./text_slider.css";
-import ReactShadowScroll from 'react-shadow-scroll';
 import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
+import no_mealImg from '../src/assets/images/no_meal_step_image.png';
 
 class TextSlider extends Component {
   constructor(props) {
@@ -40,16 +40,17 @@ class TextSlider extends Component {
   }
 
   render() {
-    const { instructionData, value } = this.props;
+    const { instructionData } = this.props;
  
-    const mealPrep1 = instructionData[0].step;
-    const meal_background = instructionData[0].image;
+    // const mealPrep1 = instructionData[0].step;
+    // const meal_background = instructionData[0].image;
     var carouselSlides = [];
     var i;
 
-    var count_index = 1
+    var count_index = 1;
     for (i = 0; i < instructionData.length ; i++) {
       const mealPrep1 = instructionData[i].step;
+
       if(i!==0){
         count_index += instructionData[i-1].step.length;
       }
@@ -61,14 +62,17 @@ class TextSlider extends Component {
                 <div className="ml-2">
                 {
                   mealPrep1.map((mealItem, index)=>(
-                    mealItem === ""? <div key={index} style={{color:"#5f9ea000"}}>. {mealItem} </div> : <div key={index}>{index+count_index}. {mealItem} </div>         
+                    <div key={index}>
+                      {index+count_index}. {mealItem} 
+                      <p></p> 
+                    </div>   
                   ))
                 }
                 </div>
                 <p/>
                  <img
                   className="img-responsive imageHeighgt"
-                  src={instructionData[i].image}
+                  src={instructionData[i].image !==null? instructionData[i].image: no_mealImg}
                   alt="First slide"
                   style ={{height:"auto", width:"80%", marginLeft:"10%"}}
                 />
