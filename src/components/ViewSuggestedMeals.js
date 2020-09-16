@@ -61,12 +61,10 @@ class ViewSuggestedMeals extends Component {
     this.state = {
       mealLabel: "",
       intro: "",
-      servings: "",
-      // currentIngredient: "Butter scotch",
-      currentIngredient: "",
-      currentIngredientMeasurement: "",
-      currentIngredientQuantity: "",
-
+      servings: 0,
+      currentIngredient: "Butter scotch",
+      currentIngredientMeasurement: null,
+      currentIngredientQuantity: 0,
       ingredientStrings: [],
       formatted_ingredient: [],
       instructionsChip: [],
@@ -139,7 +137,6 @@ updateSuggestItem = (data, mealRole) => {
 
   this.setState({selected_id: data._id, instructionGroupList:tmp_instrutionData, suggestMealRole: mealRole, mealLabel: data.label, intro: data.intro, servings: data.servings, loading_imgSrc:  data.mealImage, formatted_ingredient:data.newer_ingredient_format});
   this.setState({open: true});
-
 
   const last_ingredient = data.newer_ingredient_format[data.newer_ingredient_format.length-1];
   this.setState({ currentIngredientMeasurement: last_ingredient.measurement, currentIngredientQuantity: last_ingredient.quantity, currentIngredient: last_ingredient.product });

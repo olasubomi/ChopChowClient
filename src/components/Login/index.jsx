@@ -1,15 +1,6 @@
 import React from "react";
 import "./style.css";
 import { Form, Button, Container, Modal, Row, Col } from "react-bootstrap";
-<<<<<<< HEAD
-<<<<<<< HEAD
-import { connect } from 'react-redux';
-import { userSignIn } from '../../actions';
-import { withRouter } from "react-router-dom";
-=======
->>>>>>> 30ea5ce52be3497bf0e4593626cf5ff025c292c3
-=======
->>>>>>> 30ea5ce52be3497bf0e4593626cf5ff025c292c3
 
 // import { Link } from "react-router-dom";
 ///////////////////////////////////////////////////////////////////////////////////

@@ -23,10 +23,13 @@ class SuggestMeal extends Component {
     this.state = {
       mealLabel: "",
       intro: "",
+<<<<<<< HEAD
       servings: "",
       currentIngredient: "",
       currentIngredientMeasurement: "",
       currentIngredientQuantity: "",
+=======
+>>>>>>> 30ea5ce52be3497bf0e4593626cf5ff025c292c3
       servings: 0,
       currentIngredient: "Butter scotch",
       currentIngredientMeasurement: null,
@@ -169,10 +172,6 @@ class SuggestMeal extends Component {
     });
   }
 
-  ///////////////////////////////////////////////////////////////////////////////////////
-  handleAddCategoryStep() {
-  }
-  
   ///////////////////////////////////////////////////////////////////////////////////////
   onHandleIngredientItem = (ind) =>{
     var array = this.state.ingredientStrings; // make a separate copy of the array
@@ -504,12 +503,7 @@ class SuggestMeal extends Component {
       if (response.status >= 200 && response.status < 300) {
         this.setState({ open : true});
         console.log(response);
-        console.log("Display Meal submitted successfully");   
-        // this.props.history.push("/SuggestMeal")  
-        this.setState({ ingredientGroupList: [], instructionGroupList:[], instructionImgData: null, instructionImgPath:"", categoryList:[] })
-        this.setState({ ingredientStrings: [], instructionsChip:[] })
-        this.setState({ mealLabel: "", intro:"", servings: "", currentIngredient:"", currentIngredientMeasurement:"", readTime: "0 mins read", cookTime: "10 mins cook time",categoryChips: ["snacks", "abc", "123"], productsPopulated: false})
-        this.setState({ imgSrc: null, loading_imgSrc:"", open:false, productImgSetting_flag: false, productImgSrc: null, productImg_path:"", product_ind: 0})
+        console.log("Display Meal submitted successfully");        
       } else {
         console.log("Somthing happened wrong");
       }

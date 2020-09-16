@@ -78,8 +78,6 @@ button:focus {
     margin-bottom: 10px !important; }
   .right-panel {
     padding-right: 15px !important; } }
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 @media screen and (max-width: 900px) and (min-height: 500px) {
   /* .modal-90w{
@@ -100,7 +98,4 @@ button:focus {
   .custom-card1 .modal-content {
     height: auto;
     overflow: overlay; } }
-=======
->>>>>>> 30ea5ce52be3497bf0e4593626cf5ff025c292c3
-=======
->>>>>>> 30ea5ce52be3497bf0e4593626cf5ff025c292c3
+

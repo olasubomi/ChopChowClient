@@ -126,51 +126,6 @@ class App extends Component {
       <div>        
         <Header data = {this.state}/>    
         <Switch>
-<<<<<<< HEAD
-          <Route exact path="/login"
-            render={() => (<Login openFlag={true} />)}
-          />
-          <Route exact path="/admin" render={(props) => {
-            return ((customer_id !== undefined || customer_id !== 'null' ) && userRole==='admin' ? <AdminPanel {...props} /> : <Redirect to={{ pathname: "#" }} />)
-          }} />
-          <Route exact path="/signup" render={(props) => <SignUp {...props} />} />
-          <Route exact path="/resetpass" render={(props) => <ResetPassword {...props} />} />
-          <Route exact path="/forgotpass" render={(props) => <ForgotPassword {...props} />} />
-          <Route exact path="/" render={(props) => (
-            <div>
-              <div id="title"><b>Meals</b></div>
-              <div className="container">
-                <div className="row">{items}</div>
-              </div>
-            </div>
-          )}
-          />
-
-          <Route path="/home" render={() => (customer_id !== undefined || customer_id !== 'null' ) ? <HomePage /> : (<Redirect to={{ pathname: "#" }} />)} />
-          <Route path="/v2" render={() => <MealsPage />} />
-
-          <Route exact path="/grocery" render={() => {
-           
-            return ((customer_id !== undefined || customer_id !== 'null' ) ? <GroceryPage /> : <Redirect to={{ pathname: "#" }} />)
-          }}/>
-
-          <Route path="/products" render={(props) => {
-            return <ProductsSection />
-          }} />
-          <Route exact path="/SuggestMeal" render={(props) => 
-            {
-              return(
-                (customer_id !== undefined || customer_id !== 'null' ) ? <SuggestMeal /> : <Redirect to={{ pathname: "#" }} /> )
-            }}/>
-          <Route exact path="/ViewSuggestedMeals" render={(props) => {
-            console.log("ViewSuggestedMeals_customer_id: ", customer_id)
-            return((customer_id !== undefined || customer_id !== 'null' ) && (userRole === "admin") ? <ViewSuggestedMeals /> : <Redirect to={{ pathname: "#" }} />)}} 
-            />
-
-          <Route path="/product-detail/:customerId/:productId" render={(props) => (customer_id !== undefined || customer_id !== 'null' ) ? <ProductFullDetail /> : (<Redirect to={{ pathname: "#" }} />)} />
-          {/* <Route path="/product-detail/:customerId/:productId" component={ProductFullDetail} /> */}
-        </Switch>
-=======
             <Route exact path="/login"  
               render={() => (<Login updateLogInStatus={this.updateLogInStatus} openFlag={true}/>) }
             />
@@ -199,7 +154,6 @@ class App extends Component {
             <Route path="/product-detail/:customerId/:productId" render={(props) => (customerId !== undefined)? <ProductFullDetail/>:(<Redirect to={{pathname:"#"}}/>)}/>
             {/* <Route path="/product-detail/:customerId/:productId" component={ProductFullDetail} /> */}
           </Switch>    
->>>>>>> 30ea5ce52be3497bf0e4593626cf5ff025c292c3
         <Footer />
       </div>
     );
