@@ -423,7 +423,7 @@ class SuggestMeal extends Component {
 
     var instructionImg_paths = null;
     if(img_count !== 0){
-      var instructionImg_url = "./api/getInstructionImgURL/";
+      var instructionImg_url = "/getInstructionImgURL/";
       const instructionImg_config = {  method: 'POST',  data: instructionImgForm, url: instructionImg_url };
 
       const response = await axios(instructionImg_config)
@@ -454,7 +454,7 @@ class SuggestMeal extends Component {
     }
 
     //-------------to make ingredient data ------------------------------------------
-    var url = "./api/addMealSuggestion/";
+    var url = "/addMealSuggestion/";
 
     let suggestMealForm = new FormData();
     suggestMealForm.append('mealLabel', mealLabel);

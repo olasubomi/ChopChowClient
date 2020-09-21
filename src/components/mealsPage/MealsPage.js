@@ -3,6 +3,7 @@ import MyModal from "./Mymodal";
 import WithScrollbar from "./product_slider/WithScrollbar";
 import "./MealsPage.scoped.scss";
 import { Modal, Col, Row } from 'react-bootstrap'
+import axios from '../../util/Api';
 
 class MealsPage extends Component {
   // Mongo
@@ -35,12 +36,14 @@ class MealsPage extends Component {
 
     console.log("Comes in meal pages component did mount");
     // var url = "https://chopchowdev.herokuapp.com/api/get-meals";
-    var url = "./api/get-meals"
+    var url = "/get-meals"
 
-    fetch(url)
-      .then(res => res.text())
-      .then(body => {
-        var productsList = JSON.parse(body);
+    
+    // axios(url)
+    //   .then(res => res.text())
+    //   .then(body => {
+      axios.get(url).then((body) => {
+        var productsList = body.data;
         if(productsList && productsList.data.length !== 0){
           console.log("shows products does return");
           console.log(productsList.data.length);
