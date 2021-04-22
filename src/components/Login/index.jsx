@@ -29,7 +29,6 @@ class Login extends React.Component {
   componentWillReceiveProps(nextProps){
     const { openFlag } = nextProps;
     this.setState({dialogue_open_flag: openFlag});
-<<<<<<< HEAD
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
@@ -70,8 +69,6 @@ class Login extends React.Component {
             console.log(response.status);
 
             this.setState({ messageErr: "" });
-=======
->>>>>>> 2cf67f5bc8e046d58e5d4ec3789ebe248ddd1373
 
     if (nextProps.authUser && nextProps.customer_id) {
         this.props.history.push('/grocery');
@@ -108,22 +105,19 @@ class Login extends React.Component {
                         className="login__form__input" autoComplete="current-password"
                         />
                       <Form.Label className="lbl_text text-left" column md={12}><a className="forget" href="/forgotpass">Forget Password?</a></Form.Label>
-<<<<<<< HEAD
-                      <Button 
+                      {/* <Button 
                         variant="primary"
                         className="mb-1 float-left login-button"
                         onClick={this.handleLoginClick}
                       >Login</Button>
 
                       <Form.Label className="lbl_text mt-4 text-right pb-0" column md={12}>Do not have an account? <a className="signup" href="/signup">Sign Up</a></Form.Label>
-                      <Form.Label className="lbl_text text-right pt-0" column md={12}>or <a className="continue" href="/v2">continue as guest</a></Form.Label>
-=======
+                      <Form.Label className="lbl_text text-right pt-0" column md={12}>or <a className="continue" href="/v2">continue as guest</a></Form.Label> */}
                       <Button variant="primary" className="mb-1 float-left login-button" 
                         onClick={(ev) => {
                             ev.preventDefault();
                             this.props.userSignIn({ email: this.state.email, password: this.state.password });
                         }}>Login</Button>
->>>>>>> 2cf67f5bc8e046d58e5d4ec3789ebe248ddd1373
 
                       <Form.Label className="lbl_text mt-4 text-right pb-0" column md={12}>
                         Dont's have an account? <a className="signup" href="/signup">Sign Up</a>
