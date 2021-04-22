@@ -3,7 +3,9 @@ import { Link  } from "react-router-dom";
 import img_logo from "../../assets/images/logo2.png"
 import './header.scss';
 import Dropdown from 'react-bootstrap/Dropdown'
-
+import { connect } from 'react-redux';
+import { withRouter } from "react-router-dom";
+import axios from '../../util/Api';
 
 //////////////////////////////////////////////////////////////////////
 class Header extends Component {
@@ -36,14 +38,7 @@ class Header extends Component {
 
   //////////////////////////////////////////////////////////////////////
   CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-    <a
-      href="/"
-      ref={ref}
-      onClick={(e) => {
-        e.preventDefault();
-        onClick(e);
-      }}
-    >
+    <a href="/" ref={ref} onClick={(e) => { e.preventDefault();  onClick(e); }}>
       {children}
       &#x25bc;
     </a>
@@ -51,15 +46,14 @@ class Header extends Component {
 
   //////////////////////////////////////////////////////////////////////
   handleLogout(e) {
-    if(e === "5")
+    if(e === "6")
     {
       //clear cookie cache
       window.localStorage.setItem("userToken", null);
       window.localStorage.setItem("userRole", null);
 
       // var url = "/api/logout";
-      // var url = `http://localhost:5000/api/get-all-products`
-      var url = `https://chopchowdev.herokuapp.com/api/get-all-products`
+      var url = `https://chopchowdev.herokuapp.com/api/logout`;
 
       fetch(url, {
         method: "GET",
@@ -73,7 +67,6 @@ class Header extends Component {
             console.log("logout response is:");
             console.log(res);
             console.log("should print body");
-            // var bodyResponse = JSON.parse(res.body);
             console.log(res.data);
             if (res.data === "success") {
               console.log("comes to turn off authentication state");
@@ -91,15 +84,21 @@ class Header extends Component {
     }else if(e === "2"){
       return (window.location.href = "/products");
     }
+    else if(e === "4"){
+      this.props.history.push('/SuggestMeal');
+    }
   }
+
+
+  handleDashborad(){
+    this.props.history.push('/admin');
+  }
+
 
   //////////////////////////////////////////////////////////////////////
   render() {
-    // Render your page inside
-    // the layout provider
-    //const elements = ['one', 'two', 'three'];
-    //const popOverInfo = []
-    const { isAuthenticated, username,  } = this.props.data;
+    const username = this.props.authUser;
+    const isAuthenticated = this.props.status;
 
     /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
     function myFunction() {
@@ -119,72 +118,59 @@ class Header extends Component {
       login_on_desktop_navbar = (
         <li className="nav-item">
           <Dropdown alignRight>
-          <Dropdown.Toggle as={this.CustomToggle} id="dropdown-custom-components">
-              {username}
-          </Dropdown.Toggle>
-          <Dropdown.Menu >
-            <Dropdown.Item eventKey="1" onSelect={(ev, obj)=>this.handleLogout(ev)}>Profile</Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item eventKey="2" onSelect={(ev, obj)=>this.handleLogout(ev)}> Dashboard/orders</Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item eventKey="3" onSelect={(ev, obj)=>this.handleLogout(ev)}>Support</Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item eventKey="4" onSelect={(ev, obj)=>this.handleLogout(ev)}>Switch to driver mode</Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item eventKey="5" onSelect={(ev, obj)=>this.handleLogout(ev)}>Log out</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
+            <Dropdown.Toggle as={this.CustomToggle} id="dropdown-custom-components">
+                {username}
+            </Dropdown.Toggle>
+            <Dropdown.Menu >
+              <Dropdown.Item eventKey="1" onSelect={(ev, obj)=>this.handleDashborad()}>Profile</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item eventKey="2" onSelect={(ev, obj)=>this.handleDashborad()}> Dashboard/orders</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item eventKey="3" onSelect={(ev, obj)=>this.handleDashborad()}>Support</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item eventKey="4" onSelect={(ev, obj)=>this.handleLogout(ev)}>Suggest Meal</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item eventKey="5" onSelect={(ev, obj)=>this.handleDashborad()}>Switch to driver mode</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item eventKey="6" onSelect={(ev, obj)=>this.handleLogout(ev)}>Log out</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </li>
       );
 
       login_on_burger_navbar = (
-        // <li className="nav-item" style={{ padding: "14px 16px" }}>
-        //   <button
-        //     to="/login"
-        //     className="nav-link px-2"
-        //     style={{ color: "#FFFFFF" }}
-        //     onClick={this.handleLogout}
-        //   >
-        //     Logout
-        //   </button>
-        // </li>
         <li className="nav-item">
           <Dropdown>
-          <Dropdown.Toggle className="user-item" as={this.CustomToggle} id="dropdown-custom-components">
-              {username}
-          </Dropdown.Toggle>
-          <Dropdown.Menu >
-            <Dropdown.Item eventKey="1" onSelect={(ev, obj)=>this.handleLogout(ev)}>Profile</Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item eventKey="2" onSelect={(ev, obj)=>this.handleLogout(ev)}>Dashboard/orders</Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item eventKey="3" onSelect={(ev, obj)=>this.handleLogout(ev)}>Support</Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item eventKey="4" onSelect={(ev, obj)=>this.handleLogout(ev)}>Switch to driver mode</Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item eventKey="5" onSelect={(ev, obj)=>this.handleLogout(ev)}>Log out</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
+            <Dropdown.Toggle className="user-item" as={this.CustomToggle} id="dropdown-custom-components">
+                {username}
+            </Dropdown.Toggle>
+            <Dropdown.Menu >
+              <Dropdown.Item eventKey="1" onSelect={(ev, obj)=>this.handleDashborad()}>Profile</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item eventKey="2" onSelect={(ev, obj)=>this.handleDashborad()}> Dashboard/orders</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item eventKey="3" onSelect={(ev, obj)=>this.handleDashborad()}>Support</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item eventKey="4" onSelect={(ev, obj)=>this.handleLogout(ev)}>Suggest Meal</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item eventKey="5" onSelect={(ev, obj)=>this.handleDashborad()}>Switch to driver mode</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item eventKey="6" onSelect={(ev, obj)=>this.handleLogout(ev)}>Log out</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </li>
       );
 
     } else {
       login_on_desktop_navbar = (
         <li className="nav-item">
-          <Link to="/login" className="nav-link px-2">
-            Log In / Register
-          </Link>
+          <Link to="/login" className="nav-link px-2">Log In / Register </Link>
         </li>
       );
+
       login_on_burger_navbar = (
         <li className="nav-item" style={{ padding: "14px 16px" }}>
-          <Link
-            to="/login"
-            className="nav-link px-2"
-            style={{ color: "#FFFFFF" }}
-          >
-            Log In / Register
-          </Link>
+          <Link to="/login" className="nav-link px-2"  style={{ color: "#FFFFFF" }} >Log In / Register</Link>
         </li>
       );
     }
@@ -193,9 +179,7 @@ class Header extends Component {
       <div className="header-wraper">
         <nav
           className="navbar navbar-expand-md fixed-top-sm justify-content-start flex-nowrap navbar-light"
-          style={{
-            backgroundColor: "#FFFFFF", borderBottom: "1px solid #fd7e14"
-          }}
+          style={{backgroundColor: "#FFFFFF", borderBottom: "1px solid #fd7e14"}}
         >
           {/* Desktop Navbar */}
           <div className="header-panel w-100">
@@ -205,19 +189,9 @@ class Header extends Component {
               </Link>
               <div className=" form-inline navbar-first" style={{ padding: "14px 16px"}}>
                 <div className="input-group " >
-                  <input
-                    className="form-control "
-                    placeholder="Search meal or category"
-                  />
+                  <input className="form-control " placeholder="Search meal or category"/>
                   <span className="input-group-append">
-                    <button
-                      className="btn btn-outline-secondary"
-                      type="button"
-                      style={{
-                        backgroundColor: "#fd7e14",
-                        borderColor: "#fd7e14",
-                      }}
-                    >
+                    <button className="btn btn-outline-secondary" type="button" style={{ backgroundColor: "#fd7e14", borderColor: "#fd7e14", }} >
                       <i className="fa fa-search" style={{ color: "#FFFFFF" }}></i>
                     </button>
                   </span>
@@ -228,9 +202,7 @@ class Header extends Component {
             <div className="header-right navbar-first">
               <ul className="navbar-nav flex-row">
                 <li className="nav-item">
-                  <Link to="/grocery" className="nav-link px-3">
-                    Grocery List
-                    </Link>
+                  <Link to="/grocery" className="nav-link px-3">Grocery List</Link>
                 </li>
                 <li className="nav-item">
                   <Link to="#" className="nav-link px-3">
@@ -258,67 +230,22 @@ class Header extends Component {
             </span>
 
             <ul className="navbar-nav">
-              <li style={{ padding: "5px 16px", borderBottom: "1px solid #FFFFFF" }}>
-              
-              <div className='search_bar'>
-                <form >
-                  <input
-                    className='form-control'
-                    placeholder='Search meal or category'
-                    style={{
-                      backgroundColor: "#fd7e14",
-                      border: "1px solid #FFFFFF",
-                    }}
-                  />
-                   <span className="search_bar__icon">
-                        <div className="btn btn-outline-secondary" style={{
-                          backgroundColor: "#FFFFFF",
-                          borderColor: "#fd7e14",
-                        }}>
+              <li style={{ padding: "5px 16px", borderBottom: "1px solid #FFFFFF" }}>              
+                <div className='search_bar'>
+                  <form >
+                    <input className='form-control' placeholder='Search meal or category' style={{backgroundColor: "#fd7e14", border: "1px solid #FFFFFF", }}/>
+                    <span className="search_bar__icon">
+                      <div className="btn btn-outline-secondary" style={{backgroundColor: "#FFFFFF", borderColor: "#fd7e14", }}>
                         <i className="fa fa-search " style={{ color: "#fd7e14"}} ></i>
-                        </div>
-                    </span>
-                </form>
-              </div>
-
-              {/* <form className="form-inline" style={{ padding: "14px 0px" }}>
-                <div className="input-group">
-                  <input
-                    className="form-control"
-                    placeholder="Search meal or category"
-                    style={{
-                      backgroundColor: "#fd7e14",
-                      border: "1px solid #FFFFFF",
-                      width: "150px",
-                    }}
-                  />
-                  <span className="input-group-append">
-                      <div className="btn btn-outline-secondary" style={{
-                        backgroundColor: "#FFFFFF",
-                        borderColor: "#fd7e14",
-                      }}>
-                      <i className="fa fa-search " style={{ color: "#fd7e14"}} ></i>
                       </div>
-                  </span>
-                </div>                  
-              </form> */}
+                    </span>
+                  </form>
+                </div>
               </li>
+
               {login_on_burger_navbar}
-
-              {/* <li className="nav-item" style={{ padding: "14px 16px" }}>
-                <button className="nav-link px-2" style={{ color: "#FFFFFF" }}>
-                  Cart Page
-                  </button>
-              </li> */}
-
               <li className="nav-item" style={{ padding: "14px 16px" }}>
-                <Link
-                  to="/grocery"
-                  className="nav-link px-2"
-                  style={{ color: "#FFFFFF" }}
-                >
-                  Grocery List
-                  </Link>
+                <Link to="/grocery" className="nav-link px-2" style={{ color: "#FFFFFF" }}>Grocery List</Link>
               </li>
 
               <li
@@ -333,26 +260,14 @@ class Header extends Component {
                   className="nav-link px-2"
                   style={{ color: "#FFFFFF" }}
                 >
-                  Shoping Cart
+                  Shopping Cart
                   </Link>
               </li>
               <li className="nav-item" style={{ padding: "14px 16px" }}>
-                <Link
-                  to="/v2"
-                  className="nav-link px-2"
-                  style={{ color: "#FFFFFF" }}
-                >
-                    Home
-                  </Link>
+                <Link to="/v2" className="nav-link px-2" style={{ color: "#FFFFFF" }}>Home</Link>
               </li>              
               <li className="nav-item" style={{ padding: "14px 16px" }}>
-                <Link
-                  to="/products"
-                  className="nav-link px-2"
-                  style={{ color: "#FFFFFF" }}
-                >
-                  Stores
-                  </Link>
+                <Link to="/products" className="nav-link px-2" style={{ color: "#FFFFFF" }} > Products </Link>
               </li>
               <li className="nav-item" style={{ padding: "14px 16px" }}>
                 <Link
@@ -363,87 +278,34 @@ class Header extends Component {
                   Receipes
                   </Link>
               </li>
-              {/* <li
-                className="nav-item"
-                style={{
-                  padding: "14px 16px",
-                  borderBottom: "1px solid #FFFFFF",
-                }}
-              >
-                <button className="nav-link px-2" style={{ color: "#FFFFFF" }}>
-                  Stats
-                  </button>
-              </li> */}
             </ul>
           </div>
         </div>
-        <nav
-          className="navbar navbar-expand-md  navbar-light navbar-second"
-          style={{ backgroundColor: "#EEEEEE" }}
-        >
+
+        <nav className="navbar navbar-expand-md  navbar-light navbar-second" style={{ backgroundColor: "#EEEEEE" }}>
           <div className="navbar-collapse collapse pt-2 pt-md-0" id="navbar2">
             <ul className="navbar-nav">
               <li className="nav-item active" style={{ marginRight: "50%" }}>
-                <Link to="/v2" className="nav-link px-2">
-                  Home
-                  </Link>
+                <Link to="/v2" className="nav-link px-2"> Home </Link>
               </li>
               <li className="nav-item" style={{ marginRight: "50%" }}>
-                <Link to="/products" className="nav-link px-2">
-                  Stores
-                  </Link>
+                <Link to="/products" className="nav-link px-2"> Products </Link>
               </li>
               <li className="nav-item" style={{ marginRight: "50%" }}>
-                <Link to="/v2" className="nav-link px-2">
-                  Receipes
-                  </Link>
+                <Link to="/v2" className="nav-link px-2"> Receipes </Link>
               </li>
             </ul>
           </div>
         </nav>
-
-        {/* <Switch>
-          <Route exact path="/login"  
-            render={() => (
-              <Login updateLogInStatus={this.updateLogInStatus}/>
-            )}
-          />
-
-          <Route exact path="/signup" render={(props) => <SignUp {...props} />} />
-          <Route exact path="/resetpass" render={(props) => <ResetPassword {...props} />} />
-          <Route exact path="/forgotpass" render={(props) => <ForgotPassword {...props} />}/>
-          <Route exact path="/" render={(props) => (
-              <div>
-                <div id="title"><b>Meals</b></div>
-                <div className="container">
-                  <div className="row">{items}</div>
-                </div>
-              </div>
-            )}
-          />
-
-          <Route path="/home" render={() => <HomePage />} />
-          <Route path="/v2" render={() => <MealsPage />} />
-          <Route exact path="/grocery"
-            render={() => (
-              <GroceryPage
-                auth={isAuthenticated}
-                dataTypeaheadProps={itemTypeahead}
-                customerId={customerId}
-              />
-            )}
-          />
-
-          <Route path="/products" render={(props) => <ProductsSection />} />
-          <Route exact path="/SuggestMeal" render={(props) => <SuggestMeal />}/>
-          <Route exact path="/ViewSuggestedMeals" render={(props) => <ViewSuggestedMeals />}/>
-          <Route path="/product-detail/:customerId/:productId" component={ProductFullDetail} />
-
-        </Switch> */}
       </div>
     );
   }
 }
 
+const mapStateToProps = ({ auth, commonData }) => {
+  const { authUser, role, customer_id } = auth;
+  const {status }  = commonData;
+  return { authUser, role, customer_id, status }
+};
 
-export default Header;
+export default connect(mapStateToProps, ()=>({}))(withRouter(Header));

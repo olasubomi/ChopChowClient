@@ -3,7 +3,8 @@ import TextField from "@material-ui/core/TextField";
 import ChipInput from "material-ui-chip-input";
 import Chip from "@material-ui/core/Chip";
 import Autocomplete from "@material-ui/lab/Autocomplete"; // createFilterOptions,
-import axios from 'axios';
+// import axios from 'axios';
+import axios from '../util/Api';
 import { Row, Col } from "react-bootstrap";
 import Button from '@material-ui/core/Button';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -60,17 +61,11 @@ class SuggestMeal extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
-    var url = "./api/get-all-products";
-
-    fetch(url, {
-      method: "GET",
-    })
-      .then((res) => res.text())
-      .then((body) => {
-        var productsList = JSON.parse(body);
+    var url = "/get-all-products";
+      axios.get(url).then((body) => {
+        var productsList = body.data;
         if (productsList && productsList.data.length !== 0) {
           console.log("returns GET ALL PRODUCTS ");
-
           for (var i = 0; i < productsList.data.length; i++) {
             this.products.push(productsList.data[i].product_name);
             this.productsImg_path.push(productsList.data[i].product_image);
@@ -87,15 +82,9 @@ class SuggestMeal extends Component {
       });
 
     //----get category meals-------------------------
-    url = "./api/get-all-categories";
-    fetch(url, {
-      method: "GET",
-    })
-      .then((res) => res.text())
-      .then((body) => {
-        
-        var categoryList = JSON.parse(body);
-        console.log(categoryList);
+    url = "/get-all-categories";
+    axios.get(url).then((body) => {        
+        var categoryList = body.data;
         if (categoryList && categoryList.data.length !== 0) {
           console.log("returns GET of ALL Categories ");
 
@@ -384,10 +373,11 @@ class SuggestMeal extends Component {
 
     let productImg_paths = null;
     if(img_count1 !== 0){
-      var productImg_url = "./api/getProductImgURL/";
+      var productImg_url = "/getProductImgURL/";
       const productImg_config = {  method: 'POST',  data: productImgForm, url: productImg_url };
 
       const response = await axios(productImg_config)
+      console.log("UploadedImage_URL: ", response)
       productImg_paths = response.data.productImg_paths;
     }
 
@@ -433,7 +423,7 @@ class SuggestMeal extends Component {
 
     var instructionImg_paths = null;
     if(img_count !== 0){
-      var instructionImg_url = "./api/getInstructionImgURL/";
+      var instructionImg_url = "/getInstructionImgURL/";
       const instructionImg_config = {  method: 'POST',  data: instructionImgForm, url: instructionImg_url };
 
       const response = await axios(instructionImg_config)
@@ -464,7 +454,7 @@ class SuggestMeal extends Component {
     }
 
     //-------------to make ingredient data ------------------------------------------
-    var url = "./api/addMealSuggestion/";
+    var url = "/addMealSuggestion/";
 
     let suggestMealForm = new FormData();
     suggestMealForm.append('mealLabel', mealLabel);

@@ -11,7 +11,8 @@ import ChipInput from "material-ui-chip-input";
 import Autocomplete from "@material-ui/lab/Autocomplete"; 
 import { createMuiTheme, withStyles, ThemeProvider } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
-import axios from 'axios';
+// import axios from 'axios';
+import axios from '../util/Api';
 import { Row, Col } from "react-bootstrap";
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -203,7 +204,7 @@ handleUpdateSubmit= async() => {
 
   let productImg_paths = null;
   if(img_count1 !== 0){
-    var productImg_url = "./api/getProductImgURL/";
+    var productImg_url = "/getProductImgURL/";
     const productImg_config = {  method: 'POST',  data: productImgForm, url: productImg_url };
 
     const response = await axios(productImg_config)
@@ -254,7 +255,7 @@ handleUpdateSubmit= async() => {
 
   let instructionImg_paths = null;
   if(img_count !== 0){
-    var instructionImg_url = "./api/getInstructionImgURL/";
+    var instructionImg_url = "/getInstructionImgURL/";
     const instructionImg_config = {  method: 'POST',  data: instructionImgForm, url: instructionImg_url };
 
     const response = await axios(instructionImg_config)
@@ -327,7 +328,7 @@ handleUpdateSubmit= async() => {
   // }  
   // suggestMealForm.append('ingredient_list', JSON.stringify(ingredient_list));
   
-  var url = "./api/updateSuggestItem";
+  var url = "/updateSuggestItem";
   const config = {  method: 'POST',  data: suggestMealForm, url: url };
   const response = await axios(config)
   if( response.status >= 200 && response.status < 300){
@@ -341,11 +342,10 @@ handleUpdateSubmit= async() => {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 componentDidMount() {
-  var url = "./api/get-all-products";
-  fetch(url, { method: "GET"})
-    .then((res) => res.text())
+  var url = "/get-all-products";
+  axios.get(url)
     .then((body) => {
-      var productsList = JSON.parse(body);
+      var productsList = body.data;
       if (productsList && productsList.data.length !== 0) {
 
         console.log("returns GET ALL PRODUCTS ");
@@ -362,9 +362,9 @@ componentDidMount() {
 
   console.log("Comes in meal pages component did mount");
 
-  var url1 = "./api/get-suggested-meals"
-  fetch(url1).then(res => res.text()).then(body => {
-      var productsList = JSON.parse(body);
+  var url1 = "/get-suggested-meals"
+  axios.get(url1).then(body => {
+      var productsList = body.data;
 
       if(productsList && productsList.data.length !== 0){
         console.log("shows products does return");
@@ -374,14 +374,9 @@ componentDidMount() {
     }).catch(err => {console.log(err);});
 
  //----get category meals-------------------------
- url = "./api/get-all-categories";
- fetch(url, {
-   method: "GET",
- })
-   .then((res) => res.text())
-   .then((body) => {
-     
-     var categoryList = JSON.parse(body);
+ url = "/get-all-categories";
+ axios.get(url).then((body) => {     
+     var categoryList = body.data;
      console.log(categoryList);
      if (categoryList && categoryList.data.length !== 0) {
        console.log("returns GET of ALL Categories ");
