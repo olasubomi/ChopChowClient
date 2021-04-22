@@ -73,7 +73,7 @@ class Login extends React.Component {
     if (nextProps.authUser && nextProps.customer_id) {
         this.props.history.push('/grocery');
     }
-  }
+  }})}}
 
   //////////////////////////////////////////////////////////////////////////////
   render() {
