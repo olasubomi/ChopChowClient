@@ -36,13 +36,14 @@ export default class Login extends React.Component {
 
     // const { email, password } = this.state;
     if (email && password) {
-      var url = `https://chopchowsd.herokuapp.com/api/login`;
+      // var url = `https://chopchowsd.herokuapp.com/api/login`;
+      var url = `https://chopchowdev.herokuapp.com/api/login`;
       // var url = `/api/login`;
       // var url = `http://localhost:5000/api/login`
 
       fetch(url, {
         method: "POST",
-        credentials: "include",
+        // credentials: "include",
         mode: 'cors',
         headers: {
           "Content-Type": "application/json",
@@ -162,7 +163,7 @@ export default class Login extends React.Component {
                         onClick={this.handleLoginClick}
                       >Login</Button>
 
-                      <Form.Label className="lbl_text mt-4 text-right pb-0" column md={12}>Dont's have an account? <a className="signup" href="/signup">Sign Up</a></Form.Label>
+                      <Form.Label className="lbl_text mt-4 text-right pb-0" column md={12}>Do not have an account? <a className="signup" href="/signup">Sign Up</a></Form.Label>
                       <Form.Label className="lbl_text text-right pt-0" column md={12}>or <a className="continue" href="/v2">continue as guest</a></Form.Label>
 
                     </Form>

@@ -90,7 +90,7 @@ export default class GroceryPage extends React.Component {
   //////////////////////////////////////////////////////////////////////
   getCustomerList = (customerId) => {
     var localToken = window.localStorage.getItem("userToken");
-    console.log("customder id  iss: " + customerId);
+    console.log("customer id is: " + customerId);
     var url = `https://chopchowsd/api/getCustomerGroceryList/${customerId}`
     // var url = `http://localhost:5000/api/getCustomerGroceryList/${customerId}`
 

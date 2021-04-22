@@ -57,7 +57,10 @@ class Header extends Component {
       window.localStorage.setItem("userToken", null);
       window.localStorage.setItem("userRole", null);
 
-      var url = "/api/logout";
+      // var url = "/api/logout";
+      // var url = `http://localhost:5000/api/get-all-products`
+      var url = `https://chopchowdev.herokuapp.com/api/get-all-products`
+
       fetch(url, {
         method: "GET",
         credentials: "same-origin",
@@ -86,7 +89,7 @@ class Header extends Component {
       this.setState({ isAuthenticated: false });
       window.location.reload(false);
     }else if(e === "2"){
-      return (window.location.href = "/admin");
+      return (window.location.href = "/products");
     }
   }
 
@@ -230,7 +233,7 @@ class Header extends Component {
                     </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/products" className="nav-link px-3">
+                  <Link to="#" className="nav-link px-3">
                     Cart
                     </Link>
                 </li>
@@ -326,7 +329,7 @@ class Header extends Component {
                 }}
               >
                 <Link
-                  to="/products"
+                  to="#"
                   className="nav-link px-2"
                   style={{ color: "#FFFFFF" }}
                 >
@@ -353,7 +356,7 @@ class Header extends Component {
               </li>
               <li className="nav-item" style={{ padding: "14px 16px" }}>
                 <Link
-                  to="/products"
+                  to="/v2"
                   className="nav-link px-2"
                   style={{ color: "#FFFFFF" }}
                 >

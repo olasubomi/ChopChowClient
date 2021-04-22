@@ -49,7 +49,9 @@ button.detail-step-btn {
 @media screen and (max-height: 500px) and (max-width: 900px) {
   .modal-90w {
     width: 90% !important;
-    height: 100vh; }
+    height: 100vh;
+    margin: auto !important;
+  }
   .modal-content {
     height: 90vh;
     overflow: overlay; } }

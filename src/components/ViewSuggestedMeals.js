@@ -258,6 +258,7 @@ handleUpdateSubmit= async() => {
     const instructionImg_config = {  method: 'POST',  data: instructionImgForm, url: instructionImg_url };
 
     const response = await axios(instructionImg_config)
+    // setting img paths from folder, instead of from database.
     instructionImg_paths = response.data.instrutionImg_paths;
   }
 

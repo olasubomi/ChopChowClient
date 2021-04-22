@@ -44,24 +44,33 @@ export default class SignUp extends React.Component {
   submitForm = () => {
     console.log("state,", this.state);
 
-    fetch('/api/signupuser', {
+    // var url = 'api/signupuser';
+    var url = `http://chopchowdev.herokuapp.com/api/signupuser`;
+
+    fetch(url, {
       method: 'POST',
-      credentials: 'include',
+      //credentials: 'include',
       headers: {
         'Content-type': 'application/json',
       },
       body: JSON.stringify(this.state),
     }).then(response => {
         if (response.status === 400 || response.status === 404) {
-          this.setState({ messageErr: 'Bad Request , Check username or password ... !!' });
+          this.setState({ messageErr: 'Bad Request , Check username or password ...' });
         } else if (response.status === 401) {
           this.setState({ messageErr: 'you are UnAuthorized' });
         } else if (response.status >= 500) {
           this.setState({ messageErr: 'Sorry , Internal Server ERROR' })
         } else {
-          this.setState({ messageErr: '', isAuthenticated: true, messageSuccess: 'You are sign up!!! ' });
-          this.handleClose(5000);
+          console.log("Print something");
+          console.log(response);
+          this.setState({ messageErr: '', isAuthenticated: true, messageSuccess: 'You are signed up!!! ' });
+          // this.handleClose(5000);
         }
+      })
+      .catch( err =>{
+        console.log("Fails to post sign up ot server");
+        console.log(err)
       })
   };
 

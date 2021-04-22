@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer";
-
 import { Route, Switch, Redirect } from "react-router-dom";
 import HomePage from "./components/HomePage";
 import MealsPage from "./components/mealsPage/MealsPage";
@@ -34,8 +33,8 @@ class App extends Component {
     console.log("updates log in status before");
     this.setState({ isAuthenticated: true });
     this.setState({ customerId: customerId });
-
     console.log("updates log in status after");
+
   }
 
   //////////////////////////////////////////////////////////////////////
@@ -48,9 +47,9 @@ class App extends Component {
   authenticateUser() {
     var localToken = window.localStorage.getItem("userToken");
     // api authenticate user calls authenticationVerify,isAuthenticated
-    // var url = `https://chopchowdev.herokuapp.com/api/authenticate-grocery-page`;
-    var url = `/api/authenticate-app-page`;
-    // var url = `http://localhost:5000/api/authenticate-grocery-page`
+    var url = `https://chopchowsd.herokuapp.com/api/authenticate-app-page`;
+    // var url = `/api/authenticate-app-page`;
+    // var url = `http://localhost:5000/api/authenticate-app-page`
     fetch(url, {
       method: "GET",
       credentials: "same-origin",
@@ -97,6 +96,7 @@ class App extends Component {
           if (res.data === "success") {
             console.log("comes to turn off authentication state");
             this.setState({ isAuthenticated: false });
+            this.setState({ customerId: false });
           }
         });
       })
@@ -124,12 +124,12 @@ class App extends Component {
 
     return (
       <div>        
-        <Header data = {this.state}/>    
-        <Switch>
+        <Header data = {this.state}/>
+          <Switch>
             <Route exact path="/login"  
               render={() => (<Login updateLogInStatus={this.updateLogInStatus} openFlag={true}/>) }
             />
-            <Route exact path="/admin" render={(props) => ( (customerId !== undefined ) && (userRole==="admin"))? <AdminPanel {...props} />:(<Redirect to={{pathname:"#"}}/>)} />
+            <Route exact path="/admin" render={(props) => ( (customerId !== null ) && (userRole==="admin"))? <AdminPanel {...props} />:(<Redirect to={{pathname:"#"}}/>)} />
             <Route exact path="/signup" render={(props) => <SignUp {...props} />} />
             <Route exact path="/resetpass" render={(props) => <ResetPassword {...props} />} />
             <Route exact path="/forgotpass" render={(props) => <ForgotPassword {...props} />}/>
@@ -143,15 +143,15 @@ class App extends Component {
               )}
             />
 
-            <Route path="/home" render={() => (customerId !== undefined)?<HomePage />:(<Redirect to={{pathname:"#"}}/>)} />
+            <Route path="/home" render={() => (customerId !== null)?<HomePage />:(<Redirect to={{pathname:"#"}}/>)} />
             <Route path="/v2" render={() =>  <MealsPage />}/>
-            <Route exact path="/grocery" render={() => (customerId !== undefined)?(<GroceryPage auth={userToken} dataTypeaheadProps={itemTypeahead} customerId={customerId}/>):(<Redirect to={{pathname:"#"}}/>)}/>
+            <Route exact path="/grocery" render={() => (customerId !== null)?(<GroceryPage auth={userToken} dataTypeaheadProps={itemTypeahead} customerId={customerId}/>):(<Redirect to={{pathname:"#"}}/>)}/>
             <Route path="/products" render={(props) => {
               return <ProductsSection/>
             }} />
-            <Route exact path="/SuggestMeal" render={(props) => (customerId !== undefined)? (<SuggestMeal />):(<Redirect to={{pathname:"#"}}/>)}/>
-            <Route exact path="/ViewSuggestedMeals" render={(props) => ( (customerId !== undefined) && (userRole==="admin"))? <ViewSuggestedMeals/> :(<Redirect to={{pathname:"#"}}/>)}/>
-            <Route path="/product-detail/:customerId/:productId" render={(props) => (customerId !== undefined)? <ProductFullDetail/>:(<Redirect to={{pathname:"#"}}/>)}/>
+            <Route exact path="/SuggestMeal" render={(props) => (<SuggestMeal />)}/>
+            <Route exact path="/ViewSuggestedMeals" render={(props) => ( (customerId !== null) && (userRole==="admin"))? <ViewSuggestedMeals/> :(<Redirect to={{pathname:"#"}}/>)}/>
+            <Route path="/product-detail/:customerId/:productId" render={(props) => (customerId !== null)? <ProductFullDetail/>:(<Redirect to={{pathname:"#"}}/>)}/>
             {/* <Route path="/product-detail/:customerId/:productId" component={ProductFullDetail} /> */}
           </Switch>    
         <Footer />

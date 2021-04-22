@@ -542,6 +542,8 @@ class SuggestMeal extends Component {
 
     return (
       <div>
+                <h1>Suggest A Meal</h1>    
+
         <div style={{ width:"85%" , margin:"auto", backgroundColor: "#f4f4f4"}}>
           <div style={{ padding:"20px", boxShadow: "1px 1px 4px 2px #00000030"}}>
             <div id="title" style={{  marginTop:"20px", marginBottom:"20px", }}>
