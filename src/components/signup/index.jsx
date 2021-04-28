@@ -64,8 +64,8 @@ export default class SignUp extends React.Component {
   
   submitForm = () => {
     console.log("state,", this.state);
-
-    fetch('https://chopchowdev.herokuappp.com/api/signupuser', {
+    var url = 'https://chopchowdev.herokuappp.com/api/signupuser';
+    fetch(url, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -76,7 +76,7 @@ export default class SignUp extends React.Component {
         if (response.status === 400 || response.status === 404) {
           this.setState({ messageErr: 'Bad Request , Check username or password ...' });
         } else if (response.status === 401) {
-          this.setState({ messageErr: 'you are UnAuthorized' });
+          this.setState({ messageErr: 'You are unauthorized' });
         } else if (response.status >= 500) {
           this.setState({ messageErr: 'Sorry , Internal Server ERROR' })
         } else {
