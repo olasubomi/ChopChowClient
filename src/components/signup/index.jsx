@@ -64,7 +64,7 @@ export default class SignUp extends React.Component {
   
   submitForm = () => {
     console.log("state,", this.state);
-    var url = 'https://chopchowdev.herokuappp.com/api/signupuser';
+    var url = 'https://chopchowdev.herokuapp.com/api/signupuser';
     fetch(url, {
       method: 'POST',
       credentials: 'include',
