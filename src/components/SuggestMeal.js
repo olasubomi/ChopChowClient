@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import ChipInput from "material-ui-chip-input";
-import Chip from "@material-ui/core/Chip";
+// import Chip from "@material-ui/core/Chip";
 import Autocomplete from "@material-ui/lab/Autocomplete"; // createFilterOptions,
 // import axios from 'axios';
 import axios from '../util/Api';
@@ -450,7 +450,7 @@ class SuggestMeal extends Component {
     for(i =0; i< categoryList.length; i++)
     {
       let index = this.categories.indexOf(categoryList[i]);
-      if(index==-1) new_categories.push(categoryList[i])
+      if(index===-1) new_categories.push(categoryList[i])
     }
 
     //-------------to make ingredient data ------------------------------------------

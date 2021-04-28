@@ -6,7 +6,7 @@ import img_logo from "../../assets/images/logo2.png";
 import {Dialog, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
 import { connect } from 'react-redux';
 import { withRouter } from "react-router-dom";
-import axios from '../../util/Api';
+// import axios from '../../util/Api';
 
 //////////////////////////////////////////////////////////////////////
 class AdminPanel extends React.Component {

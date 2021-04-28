@@ -86,10 +86,10 @@ class App extends Component {
   }
 
   render() {
-    const { itemTypeahead, customer_id } = this.props;
+    const { customer_id } = this.props;
     const items = [];
     var userRole = window.localStorage.getItem("userRole");
-    var userToken = window.localStorage.getItem("userToken");
+    // var userToken = window.localStorage.getItem("userToken");
 
     return (
       <div>

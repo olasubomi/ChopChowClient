@@ -5,7 +5,7 @@ import './header.scss';
 import Dropdown from 'react-bootstrap/Dropdown'
 import { connect } from 'react-redux';
 import { withRouter } from "react-router-dom";
-import axios from '../../util/Api';
+// import axios from '../../util/Api';
 
 //////////////////////////////////////////////////////////////////////
 class Header extends Component {

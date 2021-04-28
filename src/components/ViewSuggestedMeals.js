@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Table,TableBody, TableCell,TableContainer,TableHead, TablePagination, TableRow,Checkbox, Typography,Toolbar, Dialog,DialogContent,DialogTitle,Button,IconButton,TextField, Chip  } from '@material-ui/core';
+import {Table,TableBody, TableCell,TableContainer,TableHead, TablePagination, TableRow,Checkbox, Typography,Toolbar, Dialog,DialogContent,DialogTitle,Button,IconButton,TextField  } from '@material-ui/core';
 import clsx from "clsx";
 
 import EditIcon from '@material-ui/icons/Edit';
@@ -287,7 +287,7 @@ handleUpdateSubmit= async() => {
   for(i =0; i< categoryList.length; i++)
   {
     let index = this.categories.indexOf(categoryList[i]);
-    if(index == -1) new_categories.push(categoryList[i])
+    if(index === -1) new_categories.push(categoryList[i])
   }
 
   let suggestMealForm = new FormData();
@@ -843,7 +843,7 @@ handleClick = (event, id) => {
 
     const { classes } = this.props;
     const {mealData_list, page, rowsPerPage, open, suggestMealRole, loading_imgSrc, categoryList} = this.state;
-    const {mealLabel, intro, currentIngredient, currentIngredientQuantity, currentIngredientMeasurement, readTime, cookTime, servings, categories} = this.state;
+    const {mealLabel, intro, currentIngredient, currentIngredientQuantity, currentIngredientMeasurement, readTime, cookTime, servings} = this.state;
 
     const theme = createMuiTheme({
       palette: { primary: green,  },
