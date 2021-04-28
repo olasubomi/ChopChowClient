@@ -64,7 +64,7 @@ class Login extends React.Component {
                         onChange={this.handleChange}
                         className="login__form__input" autoComplete="current-password"
                         />
-                      <Form.Label className="lbl_text text-left" column md={12}><a className="forget" href="/forgotpass">Forget Password?</a></Form.Label>
+                      <Form.Label className="lbl_text text-left" column md={12}><a className="forget" href="/forgotpass">Forgot Password?</a></Form.Label>
                       <Button variant="primary" className="mb-1 float-left login-button" 
                         onClick={(ev) => {
                             ev.preventDefault();
@@ -72,7 +72,7 @@ class Login extends React.Component {
                         }}>Login</Button>
 
                       <Form.Label className="lbl_text mt-4 text-right pb-0" column md={12}>
-                        Dont's have an account? <a className="signup" href="/signup">Sign Up</a>
+                        Don't have an account? <a className="signup" href="/signup">Sign Up</a>
                       </Form.Label>
                       <Form.Label className="lbl_text text-right pt-0" column md={12}>
                         or <a className="continue" href="/v2">continue as guest</a>
