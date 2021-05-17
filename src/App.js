@@ -114,7 +114,9 @@ class App extends Component {
           )}
           />
 
-          <Route path="/home" render={() => (customer_id !== undefined) ? <HomePage /> : (<Redirect to={{ pathname: "#" }} />)} />
+          {/* <Route path="/home" render={() => (customer_id !== undefined) ? <HomePage /> : (<Redirect to={{ pathname: "#" }} />)} /> */}
+          <Route path="/home" render={(props) => <HomePage {...props} />} />
+
           <Route path="/v2" render={() => <MealsPage />} />
 
           <Route exact path="/grocery" render={() => {           

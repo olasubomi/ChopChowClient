@@ -263,7 +263,7 @@ class Header extends Component {
           <div className="navbar-collapse collapse pt-2 pt-md-0" id="navbar2">
             <ul className="navbar-nav">
               <li className="nav-item active" style={{ marginRight: "50%" }}>
-                <Link to="/v2" className="nav-link px-2"> Home </Link>
+                <Link to="/home" className="nav-link px-2"> Home </Link>
               </li>
               <li className="nav-item" style={{ marginRight: "50%" }}>
                 <Link to="/products" className="nav-link px-2"> Products </Link>
