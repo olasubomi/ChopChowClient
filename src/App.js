@@ -104,7 +104,7 @@ class App extends Component {
           <Route exact path="/signup" render={(props) => <SignUp {...props} />} />
           <Route exact path="/resetpass" render={(props) => <ResetPassword {...props} />} />
           <Route exact path="/forgotpass" render={(props) => <ForgotPassword {...props} />} />
-          <Route exact path="/" render={(props) => (
+          {/* <Route exact path="/" render={(props) => (
             <div>
               <div id="title"><b>Meals</b></div>
               <div className="container">
@@ -112,7 +112,7 @@ class App extends Component {
               </div>
             </div>
           )}
-          />
+          /> */}
           <Route exact path="/" render={(props) => <HomePage {...props} />} />
 
           {/* <Route path="/home" render={() => (customer_id !== undefined) ? <HomePage /> : (<Redirect to={{ pathname: "#" }} />)} /> */}
