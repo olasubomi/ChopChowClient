@@ -22,7 +22,7 @@ export default class ResetPassword extends React.Component {
 
   handleClose = (delay) => {
     setTimeout(() => {
-      this.props.history.push('/grocery');
+      this.props.history.push('/');
     }, delay || 0);
   };
 
