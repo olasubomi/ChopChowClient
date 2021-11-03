@@ -596,6 +596,9 @@ onhandleSendData=()=>{
       if(response.status === 200 ){
         return (window.location.href = "/ViewSuggestedMeals");
       }
+    })
+    .catch(error => {
+      console.log(error);
     });
 }
 

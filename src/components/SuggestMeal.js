@@ -304,6 +304,7 @@ class SuggestMeal extends Component {
     event.preventDefault();
     var properIngredientStringSyntax;
     if (document.getElementById("currentIngredient").value === "") {   window.alert("Enter an ingredient to add to meal");   return;  }
+    // update ingredient string syntax for no quantity or no measurement.
     if (this.state.currentIngredientQuantity === 0) {
       properIngredientStringSyntax = document.getElementById("currentIngredient").value;
     } else if (  document.getElementById("currentIngredientMeasurement").value === null  ) {
@@ -535,7 +536,7 @@ class SuggestMeal extends Component {
         <div style={{ width:"85%" , margin:"auto", backgroundColor: "#f4f4f4"}}>
           <div style={{ padding:"20px", boxShadow: "1px 1px 4px 2px #00000030"}}>
             <div id="title" style={{  marginTop:"20px", marginBottom:"20px", }}>
-              <b>Suggestions</b>
+              <b>Suggest Meal</b>
             </div>
             <form noValidate autoComplete="off">
               <Row className="mb-3">
@@ -552,47 +553,16 @@ class SuggestMeal extends Component {
               </Row>
 
               <hr/>             
-              <Row className="mb-2">
-                  <Col md={12}>
-                    <ChipInput
-                      label="IngredientsList"
-                      value={this.state.ingredientStrings}
-                      onAdd={(chip) => this.handleAddIngredientChip(chip)}
-                      placeholder="e.g 1 Onion, 2 Cups of Water, etc"
-                      onDelete={(chip, index) =>this.handleDeleteIngredientChip(chip, index)}
-                      variant="filled"
-                      fullWidth 
-                      className="mb-2"
-                    />
-                  </Col>
-                </Row>           
+        
 
-                {
-                  this.state.ingredientGroupList &&
-                  this.state.ingredientGroupList.map((data, index)=>(
-                    <div key={index}  className="mb-3" style={{margin:"10px", padding:"10px", backgroundColor:"white",  boxShadow: "1px 1px 4px 2px #00000030"}}>
-                      <Row style={{justifyContent: "flex-end"}}> 
-                        <i className="fa fa-remove" style={{fontSize:"50%", marginTop: "0px", marginRight: "15px"}} onClick={()=>this.onHandleIngredientItem(index)}></i>
-                      </Row>                        
-                      <Row >
-                        <Col md={5}  className="mb-2" style={{overflowWrap: "break-word"}}>
-                          <div className="card-ingredient-content">
-                            <div><span style={{fontWeight:"600"}}>1. Product &emsp;&emsp;&nbsp; :</span> {data.product}</div>
-                            <div><span style={{fontWeight:"600"}}>2. Quantity&emsp;&emsp; :</span> {data.quantity}</div>
-                            <div><span style={{fontWeight:"600"}}>3. Measurement:</span> {data.measurement}</div>
-
-                            <input accept="image/*" id="imgSrc1" type="file" className="mb-2 ml-3 mt-3 " onChange={(ev)=>this.onUpdateIngredientImg(ev, index)} />
-                          </div>
-                        </Col>
-                        <Col md={4}  className="mb-2" style={{textAlign: "center"}}>
-                          <img className="mb-2" src={ data.productImgPath} width="auto" height="150px" alt=""/>
-                          
-                        </Col>
-                        <Col md={3}  className="mb-2"></Col>
-                      </Row>
-                    </div>
-                  ))
-                }
+                {/* Servings */}
+                <Row className="mb-3">
+                  <Col md={4}  style={{textAlign:"center", margin: "auto"}}> 
+                  <TextField id="servings" fullWidth type="number" onChange={this.onTextFieldChange} label="Servings"  variant="filled"  className="mb-2" placeholder="1 person, 2, 4 or 10 people" style={{marginTop:"10px"}}/>
+                  </Col>   
+                  <Col md={4}  style={{textAlign:"center", margin: "auto"}}> </Col>   
+                  <Col md={4}  style={{textAlign:"center", margin: "auto"}}> </Col>   
+                </Row>
 
                 <Row className="mb-1">
                   <Col md={4}>
@@ -629,13 +599,47 @@ class SuggestMeal extends Component {
                     <Button variant="contained" color="primary" disableRipple onClick={this.addIngredientToMeal} style={{color:"white", width:"80%"}}  className="mb-3" > Add Ingredient</Button>
                   </Col>            
                 </Row>
-                <Row className="mb-3">
-                  <Col md={4}  style={{textAlign:"center", margin: "auto"}}> 
-                  <TextField id="servings" fullWidth type="number" onChange={this.onTextFieldChange} label="Servings"  variant="filled"  className="mb-2" placeholder="1 person, 2, 4 or 10 people" style={{marginTop:"10px"}}/>
-                  </Col>   
-                  <Col md={4}  style={{textAlign:"center", margin: "auto"}}> </Col>   
-                  <Col md={4}  style={{textAlign:"center", margin: "auto"}}> </Col>   
-                </Row>
+                <Row className="mb-2">
+                  <Col md={12}>
+                    <ChipInput
+                      label="IngredientsList"
+                      value={this.state.ingredientStrings}
+                      onAdd={(chip) => this.handleAddIngredientChip(chip)}
+                      placeholder="e.g 1 Onion, 2 Cups of Water, etc"
+                      onDelete={(chip, index) =>this.handleDeleteIngredientChip(chip, index)}
+                      variant="filled"
+                      fullWidth 
+                      className="mb-2"
+                    />
+                  </Col>
+                </Row>   
+                {
+                  this.state.ingredientGroupList &&
+                  this.state.ingredientGroupList.map((data, index)=>(
+                    <div key={index}  className="mb-3" style={{margin:"10px", padding:"10px", backgroundColor:"white",  boxShadow: "1px 1px 4px 2px #00000030"}}>
+                      <Row style={{justifyContent: "flex-end"}}> 
+                        <i className="fa fa-remove" style={{fontSize:"50%", marginTop: "0px", marginRight: "15px"}} onClick={()=>this.onHandleIngredientItem(index)}></i>
+                      </Row>                        
+                      <Row >
+                        <Col md={5}  className="mb-2" style={{overflowWrap: "break-word"}}>
+                          <div className="card-ingredient-content">
+                            <div><span style={{fontWeight:"600"}}>1. Product &emsp;&emsp;&nbsp; :</span> {data.product}</div>
+                            <div><span style={{fontWeight:"600"}}>2. Quantity&emsp;&emsp; :</span> {data.quantity}</div>
+                            <div><span style={{fontWeight:"600"}}>3. Measurement:</span> {data.measurement}</div>
+
+                            <input accept="image/*" id="imgSrc1" type="file" className="mb-2 ml-3 mt-3 " onChange={(ev)=>this.onUpdateIngredientImg(ev, index)} />
+                          </div>
+                        </Col>
+                        <Col md={4}  className="mb-2" style={{textAlign: "center"}}>
+                          <img className="mb-2" src={ data.productImgPath} width="auto" height="150px" alt=""/>
+                          
+                        </Col>
+                        <Col md={3}  className="mb-2"></Col>
+                      </Row>
+                    </div>
+                  ))
+                }
+
                 <hr/>
                 {
                   comp_instructions    

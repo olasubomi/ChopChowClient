@@ -13,6 +13,7 @@ import SignUp from "./components/signup";
 import ForgotPassword from "./components/forgotpassword";
 import ResetPassword from "./components/resetpassword";
 import SuggestMeal from "./components/SuggestMeal";
+import SuggestProduct from "./components/SuggestProduct";
 import ViewSuggestedMeals from "./components/ViewSuggestedMeals";
 import AdminPanel from "./components/AdminPanel/AdminPanel";
 import { setInitUrl, getUser } from "./actions";
@@ -127,13 +128,23 @@ class App extends Component {
           <Route path="/products" render={(props) => {
             return <ProductsSection />
           }} />
+          <Route exact path="/SuggestProduct" render={(props) => 
+            {
+              console.log("Customer Id:", customer_id)
+              return(
+                <SuggestProduct/> 
+              )
+            }}/>
           <Route exact path="/SuggestMeal" render={(props) => 
             {
-              console.log("oooooooooooo:", customer_id)
+              console.log("Customer Id:", customer_id)
               return(
-              (customer_id !== undefined) ? <SuggestMeal /> : <Redirect to={{ pathname: "#" }} /> )
+                <SuggestMeal /> 
+              // (customer_id !== undefined) ? <SuggestMeal /> : <Redirect to={{ pathname: "#" }} /> )
+              )
             }}/>
-          <Route exact path="/ViewSuggestedMeals" render={(props) => ((customer_id !== undefined) && (userRole === "admin")) ? <ViewSuggestedMeals /> : (<Redirect to={{ pathname: "#" }} />)} />
+          {/* <Route exact path="/ViewSuggestedMeals" render={(props) => ((customer_id !== undefined) && (userRole === "admin")) ? <ViewSuggestedMeals /> : (<Redirect to={{ pathname: "#" }} />)} /> */}
+          <Route exact path="/ViewSuggestedMeals" render={(props) =>  <ViewSuggestedMeals /> } />
           <Route path="/product-detail/:customerId/:productId" render={(props) => (customer_id !== undefined) ? <ProductFullDetail /> : (<Redirect to={{ pathname: "#" }} />)} />
           {/* <Route path="/product-detail/:customerId/:productId" component={ProductFullDetail} /> */}
         </Switch>

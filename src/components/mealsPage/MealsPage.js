@@ -111,7 +111,7 @@ class MealsPage extends Component {
     let count = Math.min(this.state.products.length, this.state.currentMealCount);
 
     if(this.state.products.length>0){
-      //--------------------- first part -----------------------------------------
+      // Meal Cards displayed before selected card
       for (let i = 0; i< Math.min(count, this.state.firstPart_ind); i+= this.state.col_count) {
         const tmp_item = []
         for(let j = 0; j<this.state.col_count; j++)
@@ -141,6 +141,7 @@ class MealsPage extends Component {
         )
       }
 
+      // Meal card for selected card ONLY including Selected Card ingredient images on display
       if(selectedCard_mealData && this.state.slider_flag){
         items.push(
           <Row key={Math.min(count, this.state.firstPart_ind)}>
@@ -168,7 +169,7 @@ class MealsPage extends Component {
         )
       }
      
-      //--------------------- second part -----------------------------------------
+      // Meal Cards displayed after selected card
       for (let i = Math.min(count, this.state.firstPart_ind); i< count; i+=this.state.col_count) {
         const tmp_item = []
         for(let j = 0; j<this.state.col_count; j++)
