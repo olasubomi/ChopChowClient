@@ -164,9 +164,9 @@ class App extends Component {
             {
               console.log("oooooooooooo:", customer_id)
               return(
-              (customer_id !== undefined) ? <SuggestMeal /> : <Redirect to={{ pathname: "#" }} /> )
+              <SuggestMeal />  )
             }}/>
-          <Route exact path="/ViewSuggestedMeals" render={(props) => ((customer_id !== undefined) && (userRole === "admin")) ? <ViewSuggestedMeals /> : (<Redirect to={{ pathname: "#" }} />)} />
+          <Route exact path="/ViewSuggestedMeals" render={(props) =>  <ViewSuggestedMeals  />} />
           <Route path="/product-detail/:customerId/:productId" render={(props) => (customer_id !== undefined) ? <ProductFullDetail /> : (<Redirect to={{ pathname: "#" }} />)} />
           {/* <Route path="/product-detail/:customerId/:productId" component={ProductFullDetail} /> */}
         </Switch>

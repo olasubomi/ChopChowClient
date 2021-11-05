@@ -70,9 +70,9 @@ class Login extends React.Component {
 
             this.setState({ messageErr: "" });
 
-    if (nextProps.authUser && nextProps.customer_id) {
-        this.props.history.push('/grocery');
-    }
+    // if (nextProps.authUser && nextProps.customer_id) {
+    //     this.props.history.push('/grocery');
+    // }
   }})}}
 
   //////////////////////////////////////////////////////////////////////////////
