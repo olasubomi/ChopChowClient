@@ -34,7 +34,7 @@ class Banner2 extends Component {
                             <b>
                                 HOME COOK<br></br>
                                 INTERNATIONAL FOODS<br></br>
-                                <button class="banner2_button">
+                                <button className="banner2_button">
                                      <Link to="/products" className="nav-link px-2">SEE RECIPES</Link>
                                 </button>
                             </b>

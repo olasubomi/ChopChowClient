@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import MyModal from "./Mymodal";
 import WithScrollbar from "./product_slider/WithScrollbar";
-import "./MealsPage.scoped.scss";
+// import "./MealsPage.scoped.scss";
 import { Row } from 'react-bootstrap'
 import axios from '../../util/Api';
 

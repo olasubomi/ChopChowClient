@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link  } from "react-router-dom";
-import img_logo from "../../assets/images/logo2.png"
-import './header.scss';
+import img_logo from "../../assets/images/CC_Logo_no_bg.png"
+import './header.css';
 import Dropdown from 'react-bootstrap/Dropdown'
 import { connect } from 'react-redux';
 import { withRouter } from "react-router-dom";
@@ -244,13 +244,13 @@ class Header extends Component {
                 <Link to="/grocery" className="nav-link px-2" style={{ color: "#FFFFFF" }}>Grocery List</Link>
               </li>
               <li className="nav-item" style={{padding: "14px 16px", borderBottom: "1px solid #FFFFFF", }}>
-                <Link to="/products" className="nav-link px-2" style={{ color: "#FFFFFF" }}>Shoping Cart</Link>
+                <Link to="/SuggestMeal" className="nav-link px-2" style={{ color: "#FFFFFF" }}>Suggest Meal</Link>
               </li>
               <li className="nav-item" style={{ padding: "14px 16px" }}>
                 <Link to="/v2" className="nav-link px-2" style={{ color: "#FFFFFF" }}>Home</Link>
               </li>              
               <li className="nav-item" style={{ padding: "14px 16px" }}>
-                <Link to="/products" className="nav-link px-2" style={{ color: "#FFFFFF" }} > Products </Link>
+                <Link to="/products" className="nav-link px-2" style={{ color: "#FFFFFF" }} > Stores </Link>
               </li>
               <li className="nav-item" style={{ padding: "14px 16px" }}>
                 <Link to="/products"  className="nav-link px-2"  style={{ color: "#FFFFFF" }}>Receipes</Link>
@@ -266,7 +266,7 @@ class Header extends Component {
                 <Link to="/home" className="nav-link px-2"> Home </Link>
               </li>
               <li className="nav-item" style={{ marginRight: "50%" }}>
-                <Link to="/products" className="nav-link px-2"> Products </Link>
+                <Link to="/products" className="nav-link px-2"> Stores </Link>
               </li>
               <li className="nav-item" style={{ marginRight: "50%" }}>
                 <Link to="/v2" className="nav-link px-2"> Receipes </Link>
