@@ -5,6 +5,7 @@
 /.pnp
 .pnp.js
 .icloud
+.env
 
 package-lock.json
 

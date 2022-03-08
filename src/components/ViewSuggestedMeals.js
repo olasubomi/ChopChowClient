@@ -700,7 +700,7 @@ class ViewSuggestedMeals extends Component {
     console.log("Trying to call image to display ");
     //get meal image from gridfs
     // var url = "http://chopchowdev/getOneMongoFileImage/"+data.mealImage;
-    let url = 'http://localhost:5000/getOneMongoFileImage/' + data.mealImageName;
+    let url = 'https://chopchowdev.herokuapp.com/getOneMongoFileImage/' + data.mealImageName;
     this.setState({ imgSrc: url })
     // let stepData = this.getDataFromS3(parsed_instructionData[0].instructionChunk.dataName, 0);
     //  let urldata = URL.createObjectURL(stepData);

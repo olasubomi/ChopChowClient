@@ -163,7 +163,7 @@ class SuggestMeal extends Component {
 
     // can redux resolve this for us by checking if we recently called this in cache or from another page ??
     // var url = "/get-all-products";
-    url = "http://localhost:3000/get-all-products";
+    url = "http://chopchowdev.herokuapp.com/get-all-products";
 
     // axios.get(url).then((body) => {
     //   this.productsList = body.data;
