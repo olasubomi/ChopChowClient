@@ -163,7 +163,7 @@ class SuggestMeal extends Component {
 
     // can redux resolve this for us by checking if we recently called this in cache or from another page ??
     // var url = "/get-all-products";
-    url = "http://chopchowdev.herokuapp.com/get-all-products";
+    url = "https://chopchowdev.herokuapp.com/get-all-products";
 
     // axios.get(url).then((body) => {
     //   this.productsList = body.data;
@@ -189,7 +189,7 @@ class SuggestMeal extends Component {
         console.log("returns GET of ALL Categories ");
 
         for (var i = 0; i < categoriesFromDBList.data.length; i++) {
-          this.categories.push(categoriesFromDBList.data[i].category_name);
+          this.props.categories.push(categoriesFromDBList.data[i].category_name);
         }
         console.log("PRINTING UPDATED CATEGORIES LIST");
       } else {
@@ -784,7 +784,7 @@ class SuggestMeal extends Component {
       // if we are able to get this ingredient id then we can pass its image
       // index in products list is different from that of ingredients group list
 
-      currIngredientObject.productImgPath = this.productImageLink[this.state.currProductIndexInDBsProductsList];
+      // currIngredientObject.productImgPath = this.productImageLink[this.state.currProductIndexInDBsProductsList];
       console.log("DOES NOT ADD to new _product_ingredients");
 
     }
@@ -805,13 +805,12 @@ class SuggestMeal extends Component {
 
       // this.setState({ new_product_ingredients: updatedProductList })
       this.setState({ new_product_ingredients: [...this.state.new_product_ingredients, currIngredientObject] });
-
     }
 
     this.setState({ ingredientGroupList: [...this.state.ingredientGroupList, currIngredientObject] });
     // after adding product to ingredient group list
     // reset current product img src and path to null, and same for current ingredient inputs
-    this.setState({ currentProductImgSrc: null, productImg_path: "" });
+    // this.setState({ currentProductImgSrc: null, productImg_path: "" });
     this.setState({ currentIngredient: "null", currentIngredientQuantity: '', currentIngredientMeasurement: "null" });
     this.setState({ currentIngredient: "", currentIngredientMeasurement: "" });
     this.handleAddIngredientChip(properIngredientStringSyntax);
@@ -906,7 +905,7 @@ class SuggestMeal extends Component {
     for (i = 0; i < suggestedCategories.length; i++) {
       // check if categories already exist, only add new categories to db,
       // though all will still be attached to meal, as mentioned
-      let index = this.categories.indexOf(suggestedCategories[i]);
+      let index = this.props.categories.indexOf(suggestedCategories[i]);
       if (index === -1) new_categories.push(suggestedCategories[i]);
     }
 
@@ -1100,6 +1099,7 @@ class SuggestMeal extends Component {
 
     //---------------------------------------------Submit Meal to Mongo---------------------------------------------------
     var url = "/addMealSuggestion/";
+    // var url = "http://localhost:5000/api/addMealSuggestion/";
 
     const config = {
       method: 'POST', data: suggestMealForm, url: url,

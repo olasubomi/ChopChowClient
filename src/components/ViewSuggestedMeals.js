@@ -671,7 +671,9 @@ class ViewSuggestedMeals extends Component {
 
   ////////////////////////////////////////////////////////////////////////////
   handleDeleteMealItem = (data) => {
-    var url = `./api/removeSeggestItem/${data._id}`;
+    // var url = `./api/removeSeggestItem/${data._id}`;
+    var url = `https://chopchowdev.herokuapp.com/api/removeSeggestItem/${data._id}`;
+
     fetch(url).then((res) => {
       return res.json();
     })

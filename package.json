@@ -39,7 +39,7 @@
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start-js": "react-scripts start",
-    "start": "npm-run-all -p watch-css start-js",
+    "start": "npm-run-all -p  start-js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
