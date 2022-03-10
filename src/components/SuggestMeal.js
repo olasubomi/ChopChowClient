@@ -1225,7 +1225,6 @@ class SuggestMeal extends Component {
                     freeSolo
                     renderInput={(params) => (<TextField {...params} id="currentIngredient" label="ingredients"
                       value={this.state.currentIngredient} variant="filled" type="text"
-                      onChange={this.onTextFieldChange}
                     />)}
                     fullWidth
                     className="mb-3"
@@ -1250,7 +1249,7 @@ class SuggestMeal extends Component {
                     freeSolo
                     renderInput={(params) => (<TextField {...params}
                       value={this.state.currentIngredientMeasurement} id="currentIngredientMeasurement"
-                      label="Measurements" variant="filled" type="text" onChange={this.onTextFieldChange} />)}
+                      label="Measurements" variant="filled" type="text"  />)}
                     className="mb-3"
                   />
                 </Col>
