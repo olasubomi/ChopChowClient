@@ -1,4 +1,4 @@
-import { FETCH_ERROR, FETCH_START, FETCH_SUCCESS, HIDE_MESSAGE, SHOW_MESSAGE, EMAIL_VERIFICATION_MESSAGE } from '../constants/ActionTypes'
+import { FETCH_ERROR, FETCH_START, FETCH_SUCCESS } from '../constants/ActionTypes'
 
 const INIT_STATE = {
     loading: false,

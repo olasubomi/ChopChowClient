@@ -112,7 +112,6 @@ class App extends Component {
 
   render() {
     const { customer_id } = this.props;
-    const items = [];
     var userRole = window.localStorage.getItem("userRole");
     // var userToken = window.localStorage.getItem("userToken");
 
@@ -147,7 +146,7 @@ class App extends Component {
           <Route path="/v3" render={() => <VSMealsPage />} />
 
           <Route exact path="/grocery" render={() => {           
-            return ((customer_id !== undefined || customer_id !== 'null' ) ? <GroceryPage /> : <Redirect to={{ pathname: "#" }} />)
+            return ((customer_id !== undefined || customer_id !== 'null' ) ? <GroceryPage productNames={this.productNames} /> : <Redirect to={{ pathname: "#" }} />)
           }}/>
 
           <Route path="/products" render={(props) => {

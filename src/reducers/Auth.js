@@ -1,4 +1,4 @@
-import { INIT_URL, SIGNOUT_USER_SUCCESS, USER_DATA, USER_TOKEN_SET, USER_ROLE, CUSTOMER_ID,EMAIL_VERIFICATION_MESSAGE } from "../constants/ActionTypes";
+import { INIT_URL, SIGNOUT_USER_SUCCESS, USER_DATA, USER_TOKEN_SET, USER_ROLE, CUSTOMER_ID } from "../constants/ActionTypes";
 
 const INIT_STATE = {
     token: JSON.parse(localStorage.getItem('token')),

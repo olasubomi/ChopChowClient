@@ -30,6 +30,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.1",
     "react-shadow-scroll": "^2.0.0",
+    "react-to-print": "^2.14.4",
     "reactjs-popup": "^1.5.0",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",

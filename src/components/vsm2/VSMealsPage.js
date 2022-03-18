@@ -3,7 +3,7 @@ import MyModal from "./Mymodal";
 import WithScrollbar from "./product_slider/WithScrollbar";
 // import "./MealsPage.scoped.scss";
 import { Row } from 'react-bootstrap';
-import axios from '../../util/Api';
+// import axios from '../../util/Api';
 import { S3Client, ListObjectsCommand } from "@aws-sdk/client-s3";
 
 //No need to Initialize the Amazon Cognito credentials provider
@@ -237,7 +237,6 @@ const listMeals = async () => {
       if(productsList && numberOfsuggestedMealsToDisplay !== 0){
         console.log("suggested meals do return with length of:");
         console.log(numberOfsuggestedMealsToDisplay);
-        let products = [];
 
         var href = "https://s3." + REGION + ".amazonaws.com/";
         var bucketUrl = href + albumBucketName + "/";

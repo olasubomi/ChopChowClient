@@ -35,8 +35,10 @@ class MealsPage extends Component {
     this.update();
 
     console.log("Comes in meal pages component did mount");
-    // var url = "https://chopchowdev.herokuapp.com/api/get-meals";
-    var url = "/get-meals"
+    var url = "https://chopchowdev.herokuapp.com/api/get-meals";
+        // var url = "http://localhost:5000/api/get-meals";
+
+    // var url = "/get-meals"
 
     
     // axios(url)

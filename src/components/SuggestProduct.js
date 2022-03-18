@@ -157,7 +157,6 @@ class SuggestProduct extends Component {
       array3.splice(ind, 1);
       this.setState({ ingredientStrings: array,ingredientGroupList: array3});
     }
-
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////

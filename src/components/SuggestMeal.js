@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import ChipInput from "material-ui-chip-input";
 // import Chip from "@material-ui/core/Chip";
@@ -10,13 +10,12 @@ import Button from '@material-ui/core/Button';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
-import PreviewMealsPage from "./mealsPage/PreviewMealsPage";
+import MealPageModal from "./mealsPage/MealPageModal";
 
 // import ProductsPageModal from "./ProductsPageModal";
 var FormData = require('form-data');
 
 // var fs = require('fs');
-
 
 class SuggestMeal extends Component {
   ingredientsQuantityMeasurements = [];
@@ -27,6 +26,7 @@ class SuggestMeal extends Component {
       mealName: "",
       mealImage: "",
       mealImageName: "",
+      mealImageFile: "",
       intro: "",
 
       ingredientNames: [],
@@ -120,6 +120,9 @@ class SuggestMeal extends Component {
       tips: [],
 
       booleanOfDisplayOfDialogBoxConfirmation: false,
+
+      //mealsModal controller
+      openModal: false
     };
 
     this.handleIngredientMeasurement = this.handleIngredientMeasurement.bind(this);
@@ -131,8 +134,9 @@ class SuggestMeal extends Component {
     this.handleInstructionTitle = this.handleInstructionTitle.bind(this);
 
     this.handleUtensilsDropdownChange = this.handleUtensilsDropdownChange.bind(this);
-    // this.openProductDetailsModal = this.openProductDetailsModal.bind(this);
+    this.openMealDetailsModal = this.openMealDetailsModal.bind(this);
     this.handleProductNameInput = this.handleProductNameInput.bind(this);
+    this.closeModal = this.closeModal.bind(this);
     // this.handleStoreNameInput = this.handleStoreNameInput.bind(this);
 
     // this.getProductIndex = this.getProductIndex.bind(this);
@@ -202,14 +206,14 @@ class SuggestMeal extends Component {
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////
-  handleClose = () => {
+  handleCloseOfMealSubmissinoDialogMessage = () => {
     this.setState({ booleanOfDisplayOfDialogBoxConfirmation: false });
     // close out of state tracker..
     // productDisplayBooleansOutOfState[index] = false;
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////////
-  openProductDetailsModal = (index) => {
+  openMealDetailsModal = (index) => {
     // toggle products page visibility for product to be Edited.
     // this.productDisplayBooleansOutOfState[this.state.ingredientGroupList.length] = false;
     // this.productDisplayBooleansOutOfState[index] = true;
@@ -223,12 +227,20 @@ class SuggestMeal extends Component {
     var individualProductDisplay = document.getElementById("ProductAdditionalDataDisplayed");
     console.log(individualProductDisplay);
 
-    if (individualProductDisplay.style.display === "block") {
-      individualProductDisplay.style.display = "none";
-    }
-    else {
-      individualProductDisplay.style.display = "block";
-    }
+    // if (individualProductDisplay.style.display === "block") {
+    //   individualProductDisplay.style.display = "none";
+    // }
+    // else {
+    //   individualProductDisplay.style.display = "block";
+    // }
+    this.setState({openModal: true});
+  }
+
+
+  closeModal() {
+    this.setState({ openModal: false });
+    // this.props.openModal = false;
+    // this.props.func_removeMealFlag();
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -250,7 +262,9 @@ class SuggestMeal extends Component {
   ///////////////////////////////////////////////////////////////////////////////////////
   onUpdateMealImage = (event) => {
     if (event.target.files[0] === undefined) return;
-    this.setState({ mealImage: event.target.files[0], mealImageName: event.target.files[0].name });
+    this.setState({ mealImage: event.target.files[0], 
+      mealImageName: event.target.files[0].name,
+    mealImageData:  URL.createObjectURL(event.target.files[0]) });
 
     // Allowing file type
     var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
@@ -371,7 +385,6 @@ class SuggestMeal extends Component {
   ///////////////////////////////////////////////////////////////////////////////////////
   updateTip(chip) {
     // var mealTip = document.getElementById("tips").value;
-    let tipsList = this.state.tips;
     this.setState({ tips: [...this.state.tips, chip] })
   }
 
@@ -825,7 +838,7 @@ class SuggestMeal extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   sendSuggestedMealToDB = async (e) => {
-    const { mealName, prepTime, cookTime, mealImage, mealImageName, intro, servings, chef, new_product_ingredients, ingredientStrings, ingredientGroupList, suggestedCategories, tips, suggestedUtensils, } = this.state;
+    const { mealName, prepTime, cookTime, mealImage, mealImageName, intro, servings, chef, new_product_ingredients, ingredientGroupList, suggestedCategories, tips, suggestedUtensils, } = this.state;
 
     // handle edge case meal name, ingredienrs or image upload required to submit form
     if (mealName === "") { console.log("meal label blank"); return; }
@@ -844,7 +857,6 @@ class SuggestMeal extends Component {
 
     const all_ingredients_formatted = [];
     const product_slider = [];
-    const new_products = [];
     let i = 0;
     for (i = 0; i < new_product_ingredients.length; i++) {
       // store ingredient format to submit ingredient product objects
@@ -981,7 +993,7 @@ class SuggestMeal extends Component {
       }
 
       // do not include and submite a step zero..
-      if (i != 0) {
+      if (i !== 0) {
         let submitable_recipe_chunk = {
           step: i,
           // title is defined in instruction chunk
@@ -1005,8 +1017,6 @@ class SuggestMeal extends Component {
 
     //-------------Submit remainder data of meal to Mongo ------------------------------------------
     let suggestMealForm = new FormData();
-    let s3Form = new FormData();
-
     suggestMealForm.append('mealName', mealName);
     suggestMealForm.append('mealImage', mealImage);
     suggestMealForm.append('mealImageName', mealImageName);
@@ -1150,15 +1160,8 @@ class SuggestMeal extends Component {
     const theme = createMuiTheme({
       palette: { primary: green },
     });
-    const theme2 = createMuiTheme({
-      palette: { primary: green },
-    });
 
-    const { categoryList, availableLocations, suggested_stores, new_product_ingredients, ingredientGroupList } = this.state;
-
-    {/* // add product object slider with option to include images and available locations*/ }
-
-    var preview = <PreviewMealsPage />
+    const { ingredientGroupList } = this.state;
 
     return (
       <div>
@@ -1497,10 +1500,20 @@ availableLocations,
 
                 </Col>
               </Row>
-              <u onClick={this.openProductDetailsModal}> Show Preview +</u>
+              <u onClick={this.openMealDetailsModal}> Show Preview +</u>
               <br /><br />
               <div id="ProductAdditionalDataDisplayed" >
-                {/* <PreviewMealsPage mealData="Passed in meal name" mealPrep = {this.state.instructionGroupData}/> */}
+                <MealPageModal openModal={this.state.openModal} closeModal={this.closeModal}
+                 mealName={this.state.mealName} mealImage={this.state.mealImage}
+                 categories={this.state.suggestedCategories}
+                  prepTime={this.state.prepTime} cookTime={this.state.cookTime}
+                  serves={this.state.servings}
+                  ingredientsList = {this.state.ingredientStrings} utensilsList={this.state.suggestedUtensils}
+                  instructionChunk1={this.state.instructionChunk1} instructionChunk2={this.state.instructionChunk2}
+                  instructionChunk3={this.state.instructionChunk3} instructionChunk4={this.state.instructionChunk4}
+                  instructionChunk5={this.state.instructionChunk5} instructionChunk6={this.state.instructionChunk6}
+                  tips={this.state.tips} mealImageData={this.state.mealImageData}
+                 />
               </div>
               <Row className="mb-5">
                 <Col md={12}>
@@ -1508,14 +1521,14 @@ availableLocations,
                     <Button variant="contained" className="mb-2" color="primary" style={{ color: "white", width: "100%" }} onClick={() => this.sendSuggestedMealToDB()}> Add Meal</Button>
                   </ThemeProvider>
                 </Col>
-                <TextField>View privacy policy <sup>i</sup></TextField>
+                <u>View privacy policy <sup>i</sup></u>
               </Row>
             </form>
           </div>
         </div>
         <Dialog
           open={this.state.booleanOfDisplayOfDialogBoxConfirmation}
-          onClose={this.handleClose}
+          onClose={this.handleCloseOfMealSubmissinoDialogMessage}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
           maxWidth="xs"
