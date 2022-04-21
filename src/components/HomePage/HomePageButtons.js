@@ -19,10 +19,7 @@ class HomePageButtons extends Component {
 
 <div className="row">
         <button className="homepage_button" onClick={"./v2"}>
-          <Link to="/v2" className="nav-link px-2">RECIPES</Link>
-          </button>
-        <button className="homepage_button">
-          <Link to="/products" className="nav-link px-2">PRODUCTS</Link>
+          <Link to="/SuggestMeal" className="nav-link px-2">Suggest A Meal</Link>
           </button>
       </div>
       </div>

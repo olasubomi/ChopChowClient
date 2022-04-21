@@ -13,9 +13,22 @@ code {
     monospace;
 }
 
+.suggestedProductsContainer{
+  display: flex;
+  /* justify-content: space-around; */
+
+  /* width: 100%;
+  background-color: #D3D3D3;
+  padding:5px;
+  padding-bottom: 0; */
+}
+
+
+
+/* We possibly would need to create separate container styling sheets for Suggest Meal and Meals PAge Modal */
 .container{
   display: flex;
-  justify-content: space-around;
+  /* justify-content: space-around; */
 
   /* width: 100%;
   background-color: #D3D3D3;

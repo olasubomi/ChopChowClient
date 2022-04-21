@@ -5,10 +5,12 @@ import Footer from "./components/Footer";
 import { Route, Switch, Redirect } from "react-router-dom";
 import HomePage from "./components/HomePage";
 import MealsPage from "./components/mealsPage/MealsPage";
+import VSMealsPage from "./components/vsm2/VSMealsPage";
+
 import ProductsSection from "./components/productsPage/ProductsPage";
 import Login from "./components/Login";
 import GroceryPage from "./components/GroceryPage";
-import ProductFullDetail from "./components/ProductFullDetail/ProductFullDetail";
+// import ProductFullDetail from "./components/ProductFullDetail/ProductFullDetail";
 import SignUp from "./components/signup";
 import ForgotPassword from "./components/forgotpassword";
 import ResetPassword from "./components/resetpassword";
@@ -19,8 +21,30 @@ import AdminPanel from "./components/AdminPanel/AdminPanel";
 import { setInitUrl, getUser } from "./actions";
 import { connect } from 'react-redux';
 import axios from './util/Api';
+require("dotenv").config();
+
+
+
 
 class App extends Component {
+  allMealNames = [];
+  productNames = ["Spinach", "Brown Beans", "Ijebu Garri", "Honey Beans", "Kale", "Water",
+    "Squash Potatoes", "Oregano", "Cashews", "Palm Oil", "Pineapple", "Onions", "Flour",
+    "Butter", "Sugar", "Hawaiian Bread", "Avocados", "Tomatoes"];
+  productImageLink = [];
+  categories = ["Baking", "Cooking", "Home", "Ethiopian", "Quick-Meal"];
+  measurements = ["mL", "oz", "L", "cup(s)", "Tbsp", "tsp", "pt", "lb", "g", "kg", "lb", "qt",
+    "gallon", "dash/pinch", "Leaves", "cloves", "cubes", "Large", "medium", "small"];
+  kitchenUtensils = ["Baking Sheet", "Colander", "Cooking Oil", "Cutting Board",
+    "Fridge", "Knife Set", "Mixing Bowls", "Pot", "Pan", "Peeler", "Thermometer",
+    "Wire Mesh", "Zester"];
+  // productDisplayBooleansOutOfState = [];
+  availableLocations = ["African Carribean Market", "Abule", "Scotch Bonnet Restaurant", "Ralphs", "Target", "Walmart", "Vons"];
+
+
+  groceryList = [];
+  locationAddressComponent = [];
+
   constructor(props) {
     super(props);
     this.handleLogout = this.handleLogout.bind(this);
@@ -88,7 +112,6 @@ class App extends Component {
 
   render() {
     const { customer_id } = this.props;
-    const items = [];
     var userRole = window.localStorage.getItem("userRole");
     // var userToken = window.localStorage.getItem("userToken");
 
@@ -120,9 +143,10 @@ class App extends Component {
           <Route path="/home" render={(props) => <HomePage {...props} />} />
 
           <Route path="/v2" render={() => <MealsPage />} />
+          <Route path="/v3" render={() => <VSMealsPage />} />
 
           <Route exact path="/grocery" render={() => {           
-            return ((customer_id !== undefined || customer_id !== 'null' ) ? <GroceryPage /> : <Redirect to={{ pathname: "#" }} />)
+            return ((customer_id !== undefined || customer_id !== 'null' ) ? <GroceryPage productNames={this.productNames} /> : <Redirect to={{ pathname: "#" }} />)
           }}/>
 
           <Route path="/products" render={(props) => {
@@ -139,13 +163,15 @@ class App extends Component {
             {
               console.log("Customer Id:", customer_id)
               return(
-                <SuggestMeal /> 
+                <SuggestMeal productNames={this.productNames} allMealNames={this.allMealNames} 
+                measurements={this.measurements} kitchenUtensils={this.kitchenUtensils} 
+                categories={this.categories}/> 
               // (customer_id !== undefined) ? <SuggestMeal /> : <Redirect to={{ pathname: "#" }} /> )
               )
             }}/>
           {/* <Route exact path="/ViewSuggestedMeals" render={(props) => ((customer_id !== undefined) && (userRole === "admin")) ? <ViewSuggestedMeals /> : (<Redirect to={{ pathname: "#" }} />)} /> */}
           <Route exact path="/ViewSuggestedMeals" render={(props) =>  <ViewSuggestedMeals /> } />
-          <Route path="/product-detail/:customerId/:productId" render={(props) => (customer_id !== undefined) ? <ProductFullDetail /> : (<Redirect to={{ pathname: "#" }} />)} />
+          {/* <Route path="/product-detail/:customerId/:productId" render={(props) => (customer_id !== undefined) ? <ProductFullDetail /> : (<Redirect to={{ pathname: "#" }} />)} /> */}
           {/* <Route path="/product-detail/:customerId/:productId" component={ProductFullDetail} /> */}
         </Switch>
         <Footer />

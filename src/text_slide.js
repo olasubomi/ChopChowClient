@@ -48,6 +48,7 @@ class TextSlider extends Component {
     var i;
 
     var count_index = 1;
+    
     for (i = 0; i < instructionData.length ; i++) {
       const mealPrep1 = instructionData[i].step;
 

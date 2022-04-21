@@ -1,5 +1,5 @@
 import React from 'react';
-import './ProductFullDetail.scss';
+// import './ProductFullDetail.scss';
 import {  Row, Col } from "react-bootstrap";
 
 class ProductFullDetail extends React.Component {

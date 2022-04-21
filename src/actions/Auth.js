@@ -1,13 +1,13 @@
 import {
-    FETCH_ERROR,
-    FETCH_START,
-    FETCH_SUCCESS,
     INIT_URL,
-    SIGNOUT_USER_SUCCESS,
     USER_DATA,
     USER_TOKEN_SET,
     USER_ROLE,
     CUSTOMER_ID,
+    FETCH_START,
+    FETCH_SUCCESS,
+    FETCH_ERROR,
+    SIGNOUT_USER_SUCCESS
 } from "../constants/ActionTypes";
 import axios from '../util/Api';
 

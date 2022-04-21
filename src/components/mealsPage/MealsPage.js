@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import MyModal from "./Mymodal";
 import WithScrollbar from "./product_slider/WithScrollbar";
-import "./MealsPage.scoped.scss";
+// import "./MealsPage.scoped.scss";
 import { Row } from 'react-bootstrap'
 import axios from '../../util/Api';
 
@@ -35,8 +35,10 @@ class MealsPage extends Component {
     this.update();
 
     console.log("Comes in meal pages component did mount");
-    // var url = "https://chopchowdev.herokuapp.com/api/get-meals";
-    var url = "/get-meals"
+    var url = "https://chopchowdev.herokuapp.com/api/get-meals";
+        // var url = "http://localhost:5000/api/get-meals";
+
+    // var url = "/get-meals"
 
     
     // axios(url)
