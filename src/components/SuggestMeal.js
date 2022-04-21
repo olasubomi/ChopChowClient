@@ -69,8 +69,6 @@ class SuggestMeal extends Component {
       cookTime: 0,
       prepTime: 0,
 
-      stepSlides: [],
-
       instructionChunk6: {
         title: "",
         instructionSteps: [],
@@ -944,15 +942,21 @@ class SuggestMeal extends Component {
         console.log("Comes in here to send individual content");
         console.log(this.state.instructionimagesAndVideos[i]);
         // contentNameToContentImageOrVideoMapForS3.append( "mealContentName" , contentKey);
-        contentNameToContentImageOrVideoMapForS3.append(contentKey, this.state.instructionimagesAndVideos[i]);
-        // var fsReadStream = fs.createReadStream(this.state.instructionimagesAndVideos[i])
+        contentNameToContentImageOrVideoMapForS3.append(contentKey, 
+          this.state.instructionimagesAndVideos[i]);
+        // var fsReadStream = fs.createReadStream(
+          //this.state.instructionimagesAndVideos[i])
         // console.log(fsReadStream);
-        // contentNameToContentImageOrVideoMapForS3.append( "Content", fs.readFile(contentKey, this.state.instructionimagesAndVideos[i],  function(err, data){
+        // contentNameToContentImageOrVideoMapForS3.append( "Content", 
+        // fs.readFile(contentKey, this.state.instructionimagesAndVideos[i],
+        // function(err, data){
         //   // Display the file content
         //   console.log(data);
         // }));
-        // contentNameToContentImageOrVideoMapForS3.append( "Content", fs.createReadStream(URL.createObjectURL(this.state.instructionimagesAndVideos[i])));
-        // contentNameToContentImageOrVideoMapForS3.append( "mealContent", this.state.instructionimagesAndVideos[i]);
+        // contentNameToContentImageOrVideoMapForS3.append( "Content",
+        // fs.createReadStream(URL.createObjectURL(this.state.instructionimagesAndVideos[i])));
+        // contentNameToContentImageOrVideoMapForS3.append( "mealContent",
+        // this.state.instructionimagesAndVideos[i]);
         console.log(contentNameToContentImageOrVideoMapForS3);
         //pass json as object rather than as file in json
         // const jsonFormattedMap = Object.fromEntries(contentNameToContentImageOrVideoMapForS3);
@@ -1023,8 +1027,8 @@ class SuggestMeal extends Component {
 
     suggestMealForm.append('prepTime', prepTime);
     suggestMealForm.append('cookTime', cookTime);
-
     suggestMealForm.append('intro', intro);
+
     suggestMealForm.append('mealTip', tips);
     suggestMealForm.append('chef', chef);
     suggestMealForm.append('servings', servings);
@@ -1052,20 +1056,8 @@ class SuggestMeal extends Component {
 
     // suggestMealForm.append('instructionsGroupList', instructionGroupData);
     console.log(this.state.chunk1Content);
-    suggestMealForm.append('instructionData1Name', this.state.chunk1Content.filename);
-    suggestMealForm.append('instructionData2Name', this.state.chunk2Content.filename);
-    suggestMealForm.append('instructionData3Name', this.state.chunk3Content.filename);
-    suggestMealForm.append('instructionData4Name', this.state.chunk4Content.filename);
-    suggestMealForm.append('instructionData5Name', this.state.chunk5Content.filename);
-    suggestMealForm.append('instructionData6Name', this.state.chunk6Content.filename);
 
-
-    suggestMealForm.append('instructionChunkContent1', this.state.chunk1Content);
-    suggestMealForm.append('instructionChunkContent2', this.state.chunk2Content);
-    suggestMealForm.append('instructionChunkContent3', this.state.chunk3Content);
-    suggestMealForm.append('instructionChunkContent4', this.state.chunk4Content);
-    suggestMealForm.append('instructionChunkContent5', this.state.chunk5Content);
-    suggestMealForm.append('instructionChunkContent6', this.state.chunk6Content);
+    // chunk content should be passed as file
 
     // -------------Save Instruction Content chunks to server ------------------------------------------
     // var url = "https://chopchowdev.herokuapp.com/api/addMealInstructionContent/";
@@ -1534,9 +1526,10 @@ availableLocations,
           maxWidth="xs"
           fullWidth
         >
-          <DialogTitle id="alert-dialog-title">Information</DialogTitle>
+          <DialogTitle id="alert-dialog-title">Meal Submitted Successfully!</DialogTitle>
           <DialogContent>
-            <DialogContentText>Successfully added to database</DialogContentText>
+            <DialogContentText>
+              Thanks for your submission. Your recipe may be published to our meals page upon admin review. You can use our Preview and Print option to create a hard copy of this meal.</DialogContentText>
           </DialogContent>
         </Dialog>
       </div>
