@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link  } from "react-router-dom";
 import img_logo from "../../assets/images/logo2.png"
-import './header.scss';
+import './header.css';
 import Dropdown from 'react-bootstrap/Dropdown'
 
 
