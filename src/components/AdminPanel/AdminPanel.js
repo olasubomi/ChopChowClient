@@ -1,5 +1,5 @@
 import React from "react";
-import "./AdminPanel.scss";
+import "./AdminPanel.css";
 import { Container, Col, Row } from "react-bootstrap";
 import img_oil from "../../assets/images/ola_ola_palm_oil.jpg";
 import img_logo from "../../assets/images/logo2.png";

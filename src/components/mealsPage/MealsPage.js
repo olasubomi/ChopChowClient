@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import MyModal from "./Mymodal";
 import WithScrollbar from "./product_slider/WithScrollbar";
-import "./MealsPage.scoped.scss";
+import "./MealsPage.scoped.css";
 import { Modal } from "react-bootstrap";
 
 class MealsPage extends Component {

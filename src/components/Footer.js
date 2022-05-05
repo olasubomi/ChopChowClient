@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import img_logo from "../assets/images/logo2.png";
-import './Footer.scss';
+import './Footer.css';
 
 const FooterPagePro = () => {
   return (
