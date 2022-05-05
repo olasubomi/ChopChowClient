@@ -79,6 +79,8 @@ class GroceryPage extends React.Component {
     }
     if(this.props.customerId){
       this.getCustomerList(this.props.customer_id);
+    }else if(localStorage.getItem("customerList")){
+      this.setState({customerList: JSON.parse(localStorage.getItem("customerList"))})
     }
   }
 
@@ -91,6 +93,8 @@ class GroceryPage extends React.Component {
     if (authUser !== null) {
       this.setState({ customerId: customer_id });
       this.getCustomerList(customer_id);
+    }else if(localStorage.getItem("customerList")){
+      this.setState({customerList: JSON.parse(localStorage.getItem("customerList"))})
     }
   }
 
@@ -156,6 +160,8 @@ class GroceryPage extends React.Component {
             // do we need catch sttmnt for filter
             (item) => item.id !== deletedItemId
           );
+          console.log(newValueData)
+          localStorage.setItem("customerList", JSON.stringify(newValueData))
           return { customerList: newValueData };
         });
         console.log("Deletse item");
@@ -184,6 +190,8 @@ class GroceryPage extends React.Component {
           // do we need catch sttmnt for filter
           (item) => item.product_name !== product_name
         );
+        console.log(newValueData)
+        localStorage.setItem("customerList", JSON.stringify(newValueData))
         return { customerList: newValueData };
       });
       // remove from customer List variable
@@ -191,7 +199,8 @@ class GroceryPage extends React.Component {
       let index = temp_list.indexOf(product_name);
       if (index !== -1) {
         temp_list.splice(index, 1);
-        this.setState({ customerList: temp_list });
+        this.setState({ customerList: JSON.stringify(temp_list) });
+        localStorage.setItem("customerList", temp_list)
       }
       // remove from selected list state
 
@@ -231,6 +240,7 @@ class GroceryPage extends React.Component {
         );
 
         this.setState({ customerList: [] });
+        localStorage.removeItem("customerList")
         this.componentDidMount();
         console.log("deletes list");
         return response.json();
@@ -252,6 +262,7 @@ class GroceryPage extends React.Component {
             
     }
     else{
+      localStorage.removeItem("customerList")
       this.setState({customerList: []})
     }
   };
@@ -316,10 +327,12 @@ class GroceryPage extends React.Component {
 
     if(this.state.customerList == null){
       this.setState({customerList: [mealObject]})
+      localStorage.setItem("customerList", JSON.stringify([mealObject]))
     }
     else{
       let temp_list = this.state.customerList
       temp_list.push(mealObject);
+      localStorage.setItem("customerList", JSON.stringify(temp_list))
       this.setState({customerList: temp_list})
     }
 
