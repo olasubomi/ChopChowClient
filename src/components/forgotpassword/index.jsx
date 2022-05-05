@@ -22,7 +22,7 @@ export default class ResetPassword extends React.Component {
 
   handleClose = (delay) => {
     setTimeout(() => {
-      this.props.history.push('/grocery');
+      this.props.history.push('/');
     }, delay || 0);
   };
 
@@ -36,7 +36,7 @@ export default class ResetPassword extends React.Component {
   };
 
   submitForm = () => {
-    fetch('/api/forgotpass', {
+    fetch('https://chopchowdev.herokuapp.com/api/forgotpass', {
       method: 'POST',
       credentials: 'include',
       headers: {

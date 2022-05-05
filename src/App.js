@@ -5,21 +5,48 @@ import Footer from "./components/Footer";
 import { Route, Switch, Redirect } from "react-router-dom";
 import HomePage from "./components/HomePage";
 import MealsPage from "./components/mealsPage/MealsPage";
+import VSMealsPage from "./components/vsm2/VSMealsPage";
+
 import ProductsSection from "./components/productsPage/ProductsPage";
 import Login from "./components/Login";
 import GroceryPage from "./components/GroceryPage";
-import ProductFullDetail from "./components/ProductFullDetail/ProductFullDetail";
+// import ProductFullDetail from "./components/ProductFullDetail/ProductFullDetail";
 import SignUp from "./components/signup";
 import ForgotPassword from "./components/forgotpassword";
 import ResetPassword from "./components/resetpassword";
 import SuggestMeal from "./components/SuggestMeal";
+import SuggestProduct from "./components/SuggestProduct";
 import ViewSuggestedMeals from "./components/ViewSuggestedMeals";
 import AdminPanel from "./components/AdminPanel/AdminPanel";
+import { setInitUrl, getUser } from "./actions";
+import { connect } from 'react-redux';
+import axios from './util/Api';
+require("dotenv").config();
+
+
+
 
 class App extends Component {
+  allMealNames = [];
+  productNames = ["Spinach", "Brown Beans", "Ijebu Garri", "Honey Beans", "Kale", "Water",
+    "Squash Potatoes", "Oregano", "Cashews", "Palm Oil", "Pineapple", "Onions", "Flour",
+    "Butter", "Sugar", "Hawaiian Bread", "Avocados", "Tomatoes"];
+  productImageLink = [];
+  categories = ["Baking", "Cooking", "Home", "Ethiopian", "Quick-Meal"];
+  measurements = ["mL", "oz", "L", "cup(s)", "Tbsp", "tsp", "pt", "lb", "g", "kg", "lb", "qt",
+    "gallon", "dash/pinch", "Leaves", "cloves", "cubes", "Large", "medium", "small"];
+  kitchenUtensils = ["Baking Sheet", "Colander", "Cooking Oil", "Cutting Board",
+    "Fridge", "Knife Set", "Mixing Bowls", "Pot", "Pan", "Peeler", "Thermometer",
+    "Wire Mesh", "Zester"];
+  // productDisplayBooleansOutOfState = [];
+  availableLocations = ["African Carribean Market", "Abule", "Scotch Bonnet Restaurant", "Ralphs", "Target", "Walmart", "Vons"];
+
+
+  groceryList = [];
+  locationAddressComponent = [];
+
   constructor(props) {
     super(props);
-    this.updateLogInStatus = this.updateLogInStatus.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
 
     this.state = {
@@ -29,58 +56,32 @@ class App extends Component {
     };
   }
 
- 
-  updateLogInStatus(customerId) {
-    console.log("updates log in status before");
-    this.setState({ isAuthenticated: true });
-    this.setState({ customerId: customerId });
 
-    console.log("updates log in status after");
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.token) {
+      axios.defaults.headers.common['Authorization'] = "Bearer " + nextProps.token;
+    }
+
+    if (nextProps.token && !nextProps.authUser) {
+      this.props.getUser();
+    }
+    
   }
 
   //////////////////////////////////////////////////////////////////////
   componentDidMount() {
     console.log("Comes in app.js's component did mount");
-    this.authenticateUser();
+    var userToken = window.localStorage.getItem("userToken");
+
+    if (userToken === "null" || userToken==="") return;
+
+    if (userToken) {
+      axios.defaults.headers.common['Authorization'] = "Bearer " + userToken;
+      this.props.getUser();
+    }
   }
 
-  //////////////////////////////////////////////////////////////////////
-  authenticateUser() {
-    var localToken = window.localStorage.getItem("userToken");
-    // api authenticate user calls authenticationVerify,isAuthenticated
-    // var url = `https://chopchowdev.herokuapp.com/api/authenticate-grocery-page`;
-    var url = `/api/authenticate-app-page`;
-    // var url = `http://localhost:5000/api/authenticate-grocery-page`
-    fetch(url, {
-      method: "GET",
-      credentials: "same-origin",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: "Bearer " + localToken,
-      },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((response) => {
-        console.log("api/ authenticate (app page) response:");
-
-        if (response.success && response.data) {
-          this.setState({ isAuthenticated: true });
-        } else { this.setState({ isAuthenticated: false }); }
-
-
-        this.setState({ customerId: response.data, username: response.username });
-
-        console.log("*************response.data ****: ", this.state.customerId);
-        console.log("-----------------isAuthenticated ----: ",  this.state.isAuthenticated);
-      })
-      .catch((err) => {
-        console.log("fails to authenticate app page");
-        console.log(err);
-      });
-  }
-
+ 
   handleLogout() {
     //clear cookie cache
     window.localStorage.setItem("userToken", null);
@@ -110,53 +111,80 @@ class App extends Component {
   }
 
   render() {
-    // Render your page inside
-    // the layout provider
-    const { itemTypeahead, customerId } = this.state;
-
-    console.log("Login_customerId:", customerId);
-
-    const items = [];
+    const { customer_id } = this.props;
     var userRole = window.localStorage.getItem("userRole");
-    var userToken = window.localStorage.getItem("userToken");
-
-    console.log("***** userToken: ", userToken);
+    // var userToken = window.localStorage.getItem("userToken");
 
     return (
-      <div>        
-        <Header data = {this.state}/>    
+      <div>
+        <Header />
         <Switch>
-            <Route exact path="/login"  
-              render={() => (<Login updateLogInStatus={this.updateLogInStatus} openFlag={true}/>) }
-            />
-            <Route exact path="/admin" render={(props) => ( (customerId !== undefined ) && (userRole==="admin"))? <AdminPanel {...props} />:(<Redirect to={{pathname:"#"}}/>)} />
-            <Route exact path="/signup" render={(props) => <SignUp {...props} />} />
-            <Route exact path="/resetpass" render={(props) => <ResetPassword {...props} />} />
-            <Route exact path="/forgotpass" render={(props) => <ForgotPassword {...props} />}/>
-            <Route exact path="/" render={(props) => (
-                <div>
-                  <div id="title"><b>Meals</b></div>
-                  <div className="container">
-                    <div className="row">{items}</div>
-                  </div>
-                </div>
-              )}
-            />
+          <Route exact path="/login"
+            render={() => (<Login openFlag={true} />)}
+          />
+          <Route exact path="/admin" render={(props) => {
+            return ((customer_id !== undefined) && userRole==='admin' ? <AdminPanel {...props} /> : <Redirect to={{ pathname: "#" }} />)
+          }} />
+          <Route exact path="/signup" render={(props) => <SignUp {...props} />} />
+          <Route exact path="/resetpass" render={(props) => <ResetPassword {...props} />} />
+          <Route exact path="/forgotpass" render={(props) => <ForgotPassword {...props} />} />
+          {/* <Route exact path="/" render={(props) => (
+            <div>
+              <div id="title"><b>Meals</b></div>
+              <div className="container">
+                <div className="row">{items}</div>
+              </div>
+            </div>
+          )}
+          /> */}
+          <Route exact path="/" render={(props) => <HomePage {...props} />} />
 
-            <Route path="/home" render={() => (customerId !== undefined)?<HomePage />:(<Redirect to={{pathname:"#"}}/>)} />
-            <Route path="/v2" render={() =>  <MealsPage />}/>
-            <Route exact path="/grocery" render={() => (customerId !== undefined)?(<GroceryPage auth={userToken} dataTypeaheadProps={itemTypeahead} customerId={customerId}/>):(<Redirect to={{pathname:"#"}}/>)}/>
-            <Route path="/products" render={(props) => {
-              return <ProductsSection/>
-            }} />
-            <Route exact path="/SuggestMeal" render={(props) => (customerId !== undefined)? (<SuggestMeal />):(<Redirect to={{pathname:"#"}}/>)}/>
-            <Route exact path="/ViewSuggestedMeals" render={(props) => ( (customerId !== undefined) && (userRole==="admin"))? <ViewSuggestedMeals/> :(<Redirect to={{pathname:"#"}}/>)}/>
-            <Route path="/product-detail/:customerId/:productId" render={(props) => (customerId !== undefined)? <ProductFullDetail/>:(<Redirect to={{pathname:"#"}}/>)}/>
-            {/* <Route path="/product-detail/:customerId/:productId" component={ProductFullDetail} /> */}
-          </Switch>    
+          {/* <Route path="/home" render={() => (customer_id !== undefined) ? <HomePage /> : (<Redirect to={{ pathname: "#" }} />)} /> */}
+          <Route path="/home" render={(props) => <HomePage {...props} />} />
+
+          <Route path="/v2" render={() => <MealsPage />} />
+          <Route path="/v3" render={() => <VSMealsPage />} />
+
+          <Route exact path="/grocery" render={() => {           
+            return ((customer_id !== undefined || customer_id !== 'null' ) ? <GroceryPage productNames={this.productNames} /> : <Redirect to={{ pathname: "#" }} />)
+          }}/>
+
+          <Route path="/products" render={(props) => {
+            return <ProductsSection />
+          }} />
+          <Route exact path="/SuggestProduct" render={(props) => 
+            {
+              console.log("Customer Id:", customer_id)
+              return(
+                <SuggestProduct/> 
+              )
+            }}/>
+          <Route exact path="/SuggestMeal" render={(props) => 
+            {
+              console.log("Customer Id:", customer_id)
+              return(
+                <SuggestMeal productNames={this.productNames} allMealNames={this.allMealNames} 
+                measurements={this.measurements} kitchenUtensils={this.kitchenUtensils} 
+                categories={this.categories}/> 
+              // (customer_id !== undefined) ? <SuggestMeal /> : <Redirect to={{ pathname: "#" }} /> )
+              )
+            }}/>
+          {/* <Route exact path="/ViewSuggestedMeals" render={(props) => ((customer_id !== undefined) && (userRole === "admin")) ? <ViewSuggestedMeals /> : (<Redirect to={{ pathname: "#" }} />)} /> */}
+          <Route exact path="/ViewSuggestedMeals" render={(props) =>  <ViewSuggestedMeals /> } />
+          {/* <Route path="/product-detail/:customerId/:productId" render={(props) => (customer_id !== undefined) ? <ProductFullDetail /> : (<Redirect to={{ pathname: "#" }} />)} /> */}
+          {/* <Route path="/product-detail/:customerId/:productId" component={ProductFullDetail} /> */}
+        </Switch>
         <Footer />
       </div>
     );
   }
 }
-export default App;
+// export default App;
+
+const mapStateToProps = ({ auth }) => {
+  // const { authUser, token, initURL } = auth;
+  const { authUser, token, role, customer_id } = auth;
+  return { authUser, role, token, customer_id }
+};
+const mapDispatchToProps = { setInitUrl, getUser };
+export default connect(mapStateToProps, mapDispatchToProps)(App);
