@@ -170,7 +170,12 @@ class App extends Component {
               )
             }}/>
           {/* <Route exact path="/ViewSuggestedMeals" render={(props) => ((customer_id !== undefined) && (userRole === "admin")) ? <ViewSuggestedMeals /> : (<Redirect to={{ pathname: "#" }} />)} /> */}
-          <Route exact path="/ViewSuggestedMeals" render={(props) =>  <ViewSuggestedMeals /> } />
+          <Route exact path="/ViewSuggestedMeals"
+           render={(props) =>  <ViewSuggestedMeals 
+            kitchenUtensils={this.kitchenUtensils} 
+            categories={this.categories}
+            productNames={this.productNames}
+            measurements={this.measurements}/> } />
           {/* <Route path="/product-detail/:customerId/:productId" render={(props) => (customer_id !== undefined) ? <ProductFullDetail /> : (<Redirect to={{ pathname: "#" }} />)} /> */}
           {/* <Route path="/product-detail/:customerId/:productId" component={ProductFullDetail} /> */}
         </Switch>
