@@ -1,5 +1,5 @@
 import React from 'react';
-import './ProductModal.css';
+import './ProductModal.scss';
 import {  Row, Col} from "react-bootstrap";
 import { withRouter } from 'react-router-dom';
 

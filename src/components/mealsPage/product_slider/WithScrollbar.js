@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import no_mealImg from '../../../assets/images/no_meal_step_image.png';
-import "./WithScrollbar.css";
+import "./WithScrollbar.scss";
 
 export default class WithScrollbar extends Component {
   constructor() {
