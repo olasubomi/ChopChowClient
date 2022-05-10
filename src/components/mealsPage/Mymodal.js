@@ -10,7 +10,7 @@ import { Modal } from "react-bootstrap";
 import TextSlider from "../../text_slide";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
-import "./Mymodal.scoped.css";
+import "./Mymodal.scoped.scss";
 import "../../App.css";
 
 const content = [1, 2];
