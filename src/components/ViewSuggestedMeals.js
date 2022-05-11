@@ -70,6 +70,7 @@ class ViewSuggestedMeals extends Component {
 
     this.state = {
       mealLabel: "",
+      previousMealLabel: "",
       intro: "",
       servings: 0,
       // currentIngredient: "Butter scotch",
@@ -112,20 +113,14 @@ class ViewSuggestedMeals extends Component {
       tips: [],
       suggestedUtensils: [],
 
-      chunk1Content: "",
-      chunk2Content: "",
-      chunk3Content: "",
-      chunk4Content: "",
-      chunk5Content: "",
-      chunk6Content: "",
+      instructionChunkContent1: "",
+      instructionChunkContent2: "",
+      instructionChunkContent3: "",
+      instructionChunkContent4: "",
+      instructionChunkContent5: "",
+      instructionChunkContent6: "",
     };
 
-    this.handleIngredientDropdownChange = this.handleIngredientDropdownChange.bind(
-      this
-    );
-    this.handleProductName = this.handleProductName.bind(this);
-    this.handleIngredientMeasurement = this.handleIngredientMeasurement.bind(this);
-    this.handleIngredientQuantity = this.handleIngredientQuantity.bind(this);
     this.addIngredientToMeal = this.addIngredientToMeal.bind(this);
   }
 
@@ -239,21 +234,6 @@ class ViewSuggestedMeals extends Component {
   }
 
   ////////////////////////////////////////////////////////////////////////////
-  handleIngredientDropdownChange = (event, value) => {
-    var array = this.props.productNames;
-    var index = array.indexOf(value);
-    if (index !== -1) {
-      this.setState({ product_ind: index });
-    }
-
-    if (event.target.value) {
-      this.setState({ currentIngredient: event.target.value });
-    } else {
-      this.setState({ currentIngredient: event.target.innerHTML });
-    }
-  }
-
-  ////////////////////////////////////////////////////////////////////////////
   handleDeleteIngredientChip(chip) {
     var array = this.state.ingredientStrings; // make a separate copy of the array
     var array3 = this.state.ingredientGroupList;
@@ -284,29 +264,7 @@ class ViewSuggestedMeals extends Component {
         console.log(err);
       });
   }
-  
-  ////////////////////////////////////////////////////////////////////////////
-  handleIngredientMeasurement(event) {
-    if (event.target.value) {
-      this.setState({ currentIngredientMeasurement: event.target.value });
-    } else {
-      this.setState({ currentIngredientMeasurement: event.target.innerHTML });
-    }
-  }
 
-  /////////////////////////////////////////////////////////////////////////////
-  handleProductName = (event, val) => {
-
-    const searchResult = this.props.productNames.map(element => element.toLowerCase().includes(val.toLowerCase()));
-    const flag = searchResult.find(element => element === true);
-    if (flag !== true || flag === null) {
-      this.setState({ productImgSetting_flag: true });
-      this.setState({ currentIngredient: val });
-    } else {
-      this.setState({ productImgSetting_flag: false });
-      this.setState({ currentIngredient: val });
-    }
-  }
 
   ////////////////////////////////////////////////////////////////////////////
   addIngredientToMeal(event) {
@@ -319,20 +277,21 @@ class ViewSuggestedMeals extends Component {
       return;
     }
 
-    if (this.state.currentIngredientQuantity === 0) {
+    if (document.getElementById('currentIngredientQuantity').value === 0 ) {
       properIngredientStringSyntax = document.getElementById("currentIngredient").value;
     } else if (
       document.getElementById("currentIngredientMeasurement").value === null
     ) {
-      properIngredientStringSyntax = "" + this.state.currentIngredientQuantity + " " + document.getElementById("currentIngredient").value;
+      properIngredientStringSyntax = "" + document.getElementById('currentIngredientQuantity').value + " " + document.getElementById("currentIngredient").value;
     } else {
-      properIngredientStringSyntax = "" + this.state.currentIngredientQuantity + " " + document.getElementById("currentIngredientMeasurement").value + " of " + document.getElementById("currentIngredient").value;
+      properIngredientStringSyntax = "" + document.getElementById('currentIngredientQuantity').value + " " + document.getElementById("currentIngredientMeasurement").value + " of " + document.getElementById("currentIngredient").value;
     }
 
     var currProductObject = {
-      productName: this.state.currentIngredient,
-      quantity: this.state.currentIngredientQuantity,
-      measurement: this.state.currentIngredientMeasurement,
+      productName: document.getElementById('currentIngredient').value,
+      quantity:  document.getElementById('currentIngredientQuantity').value,
+      measurement: document.getElementById('currentIngredientMeasurement').value,
+
       productImgData: this.state.productImgSrc,
       productImgPath: null,
       flag: this.state.productImgSetting_flag,
@@ -348,7 +307,7 @@ class ViewSuggestedMeals extends Component {
       currProductObject.flag = false;
     }
 
-    const searchResult = this.props.productNames.map(function callback(element) { if (element.toLowerCase() === (currProductObject.productName.toLowerCase())) { return true; } else { return false; } });
+    const searchResult = this.props.productNames.map(element=> { if (element.toLowerCase() === (currProductObject.productName.toLowerCase())) { return true; } else { return false; } });
     const tmpcurrProductIndexInDBsProductsList = searchResult.indexOf(true);
     console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrProductIndexInDBsProductsList);
 
@@ -365,10 +324,17 @@ class ViewSuggestedMeals extends Component {
       this.setState({ new_product_ingredients: [...this.state.new_product_ingredients, currProductObject] });
     }
 
+    // add to container display
+    let temp = this.state.ingredientGroupList;
+    temp.push(currProductObject);
+    this.setState({ ingredientGroupList: temp });
+
+
+    document.getElementById('currentIngredient').value = "";
+    document.getElementById('currentIngredientQuantity').value = 0;
+    document.getElementById('currentIngredientMeasurement').value = "";
     this.handleAddIngredientChip(properIngredientStringSyntax);
-    this.setState({ ingredientGroupList: [...this.state.ingredientGroupList, 
-      currProductObject] });
-    this.setState({ productImgSrc: null, productImg_path: "" });
+
   }
 
   handleInstructionTitle(event, chunkIndex) {
@@ -397,8 +363,8 @@ handleAddInstructionStep(chip, chunkIndex) {
 
   // set file name in step slide
   tmp_stepSlide.instructionSteps = 
-  [...this.state.stepSlides[chunkIndex-1].instructionSteps, chip];
-  tmp_stepSlides_data[chunkIndex-1] = tmp_stepSlide;
+  [...this.state.stepSlides[chunkIndex].instructionSteps, chip];
+  tmp_stepSlides_data[chunkIndex] = tmp_stepSlide;
   this.setState({ stepSlides: tmp_stepSlides_data });
 
 }
@@ -413,14 +379,14 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
   let arraySteps;
 
   const tmp_stepSlides_data = this.state.stepSlides;
-  let tmp_stepSlide = tmp_stepSlides_data[chunkIndex-1];
+  let tmp_stepSlide = tmp_stepSlides_data[chunkIndex];
   arraySteps = tmp_stepSlide.instructionSteps;
 
   index = arraySteps.indexOf(chip);
   if (index !== -1) {
     arraySteps.splice(index, 1);
     tmp_stepSlide.instructionSteps = arraySteps;
-    tmp_stepSlides_data[chunkIndex-1] = tmp_stepSlide;
+    tmp_stepSlides_data[chunkIndex] = tmp_stepSlide;
 
     console.log("new array : \n"+ tmp_stepSlide);
     this.setState({ stepSlides: tmp_stepSlides_data });
@@ -444,22 +410,22 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
 
     switch (ind) {
       case 1:
-        this.setState({ chunk1Content: event.target.files[0] });
+        this.setState({ instructionChunkContent1: event.target.files[0] });
         break;
       case 2:
-        this.setState({ chunk2Content: event.target.files[0] });
+        this.setState({ instructionChunkContent2: event.target.files[0] });
         break;
       case 3:
-        this.setState({ chunk3Content: event.target.files[0] });
+        this.setState({ instructionChunkContent3: event.target.files[0] });
         break;
       case 4:
-        this.setState({ chunk4Content: event.target.files[0] });
+        this.setState({ instructionChunkContent4: event.target.files[0] });
         break;
       case 5:
-        this.setState({ chunk5Content: event.target.files[0] });
+        this.setState({ instructionChunkContent5: event.target.files[0] });
         break;
       case 6:
-        this.setState({ chunk6Content: event.target.files[0] });
+        this.setState({ instructionChunkContent6: event.target.files[0] });
         break;
       default:
       // ..do nothing
@@ -617,6 +583,7 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
     this.setState({
       selected_id: data._id, stepSlides: tmp_stepSlides_data,
       suggestMealRole: mealRole, mealLabel: data.mealName, 
+      previousMealLabel: data.mealName, 
       intro: data.intro, servings: data.servings,
       mealImage: data.mealImage, mealImageName: data.mealImageName,
        formatted_ingredient: data.formatted_ingredient,
@@ -712,10 +679,12 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
   ////////////////////////////////////////////////////////////////////////////
   submitMealUpdate = async () => {
     const data = this.state;
-    const { selected_id, mealImage, mealLabel, mealImageName, intro, 
+    const { selected_id, mealImage, mealLabel, previousMealLabel, mealImageName, intro, 
       servings, stepSlides, ingredientGroupList, ingredientStrings,
        prepTime, cookTime, categoryList, tips, new_product_ingredients,
-       suggestedUtensils } = data;
+       suggestedUtensils, instructionChunkContent1,instructionChunkContent2,
+       instructionChunkContent3,instructionChunkContent4,
+       instructionChunkContent5,instructionChunkContent6 } = data;
 
     let productImgForm = new FormData();
     let img_count1 = 0;
@@ -796,8 +765,28 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
     let suggestMealForm = new FormData();
     suggestMealForm.append('id', selected_id);
     suggestMealForm.append('mealName', mealLabel);
-    suggestMealForm.append('mealImage', mealImage);
-    suggestMealForm.append('mealImageName', mealImageName);
+
+    // check for if we want to re-update/re-add meal image data or leave as-is
+    if(previousMealLabel != mealLabel){
+      suggestMealForm.append('mealImage', mealImage);
+      suggestMealForm.append('mealImageName', mealImageName);
+    }
+
+    // check if instruction content has been updated before passing to server
+    if(instructionChunkContent1!= ""){
+      suggestMealForm.append('instructionChunkContent1', instructionChunkContent1)
+    }
+    if(instructionChunkContent2!= ""){
+      suggestMealForm.append('instructionChunkContent2', instructionChunkContent2)
+    }    if(instructionChunkContent3!= ""){
+      suggestMealForm.append('instructionChunkContent3', instructionChunkContent3)
+    }    if(instructionChunkContent4!= ""){
+      suggestMealForm.append('instructionChunkContent4', instructionChunkContent4)
+    }    if(instructionChunkContent5!= ""){
+      suggestMealForm.append('instructionChunkContent5', instructionChunkContent5)
+    }    if(instructionChunkContent6!= ""){
+      suggestMealForm.append('instructionChunkContent6', instructionChunkContent6)
+    }
 
     suggestMealForm.append('prepTime', prepTime);
     suggestMealForm.append('cookTime', cookTime);
@@ -860,11 +849,16 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
         </video>
       }
       else if (allowedImageExtensions.exec(this.state.stepSlides[i].dataName)) {
-        instructionContent = <img id={"instructionImg" + i} src={'https://meal-chunk-images-and-videos.s3.us-west-1.amazonaws.com/' + this.state.stepSlides[i].dataName} alt={this.state.stepSlides[i].dataName} />
+        instructionContent = <img id={"instructionImg" + i}
+        src={'https://meal-chunk-images-and-videos.s3.us-west-1.amazonaws.com/' + this.state.stepSlides[i].dataName} 
+        alt={this.state.stepSlides[i].dataName} />
       }
       else {
         // use generic content
-        instructionContent = <img id={"instructionImg" + i} src={'public/images/meal_pics/chopchow_default_instruction.png'} alt="chop chow placeholder" />
+        instructionContent = <img id={"instructionImg" + i} 
+        src={'images/meal_pics/chopchow_default_instruction.png'} 
+        alt="chop chow placeholder" 
+        style={{width:"inherit"}}/>
       }
 
 
@@ -875,13 +869,20 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
 
           {/* Step Slide Title */}
           <Row >
-              <TextField id={chunkTitle} className="mb-2" onChange={(ev) => this.handleInstructionTitle(ev, i+1)} label={sectionTitle} defaultValue={this.state.stepSlides[i].title} variant="filled" />
+              <TextField id={chunkTitle}
+              className="mb-2" 
+              onChange={(ev) => this.handleInstructionTitle(ev, i)}
+               label={sectionTitle} defaultValue={this.state.stepSlides[i].title} variant="filled" />
           </Row>
           <Row >
             {/* // list all steps on each step slide  */}
             <Col md={4} className="mb-2" style={{ overflowWrap: "break-word" }}>
               <div className="mdc-list">
-              <ChipInput label="Instructions" className="mb-2" fullWidth value={this.state.stepSlides[i].instructionSteps} onAdd={(chip) => this.handleAddInstructionStep(chip, i+1)} onDelete={(chip) => this.handleDeleteInstructionsStep(chip, i+1)} variant="filled" />
+              <ChipInput label="Instructions" className="mb-2" fullWidth
+               value={this.state.stepSlides[i].instructionSteps} 
+               onAdd={(chip) => this.handleAddInstructionStep(chip, i)}
+               onDelete={(chip) => this.handleDeleteInstructionsStep(chip, i)}
+                variant="filled" />
                 {/* {this.state.stepSlides[i].instructionSteps.map((chip, index1) => (
                   <div className="mdc-list-item" key={index1}>
                     <span className="mdc-list-item__text"> {chip}</span>
@@ -1104,15 +1105,18 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
                     freeSolo
                     id="currentIngredient"
                     options={this.props.productNames.map((option) => option)}
-                    // onChange={(ev, val) => this.handleIngredientDropdownChange(ev, val)}
-                    // onInputChange={(ev, val) => this.handleProductName(ev, val)}
                     renderInput={(params) => (<TextField {...params} label="Ingredient.." variant="filled" />)}
                     fullWidth
                     className="mb-3"
-                    value={currentIngredient}
+                    // value={currentIngredient}
                     options={this.props.productNames.map((option) => option)}
                   />
-                  <TextField fullWidth id="currentIngredientQuantity" type="number" onChange={this.onTextFieldChange} label="Quantity" variant="filled" placeholder="1.." className="mb-3" value={currentIngredientQuantity} />
+                  <TextField fullWidth id="currentIngredientQuantity" 
+                  type="number" 
+                  // onChange={this.onTextFieldChange}
+                   label="Quantity" variant="filled"
+                    placeholder="1.." className="mb-3" 
+                     />
                 </Col>
 
                 <Col md={4}>
@@ -1124,8 +1128,7 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
                   <Autocomplete
                     id="currentIngredientMeasurement"
                     options={this.measurements.map((option) => option)}
-                    value={currentIngredientMeasurement}
-                    onChange={this.handleIngredientMeasurement}
+                    // value={currentIngredientMeasurement}
                     freeSolo
                     renderInput={(params) => (<TextField {...params} label="Measurement.." variant="filled" />)}
                     className="mb-3"
@@ -1250,7 +1253,11 @@ export default withStyles(styles)(ViewSuggestedMeals);
   
   //   <Row className="mb-3">
   //   <Col md={12}>
-  //     <ChipInput label="Instructions" className="mb-2" fullWidth value={this.state.instructionsChip} onAdd={(chip) => this.handleAddInstructionStep(chip)} onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, index)} variant="filled" />
+  //     <ChipInput label="Instructions" className="mb-2" 
+  //fullWidth value={this.state.instructionsChip} 
+  //onAdd={(chip) => this.handleAddInstructionStep(chip)} 
+  //onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, index)} 
+  // variant="filled" />
   //   </Col>
   // </Row>
 
