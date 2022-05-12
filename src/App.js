@@ -30,10 +30,11 @@ class App extends Component {
   allMealNames = [];
   productNames = ["Spinach", "Brown Beans", "Ijebu Garri", "Honey Beans", "Kale", "Water",
     "Squash Potatoes", "Oregano", "Cashews", "Palm Oil", "Pineapple", "Onions", "Flour",
-    "Butter", "Sugar", "Hawaiian Bread", "Avocados", "Tomatoes"];
+    "Butter", "Sugar", "Hawaiian Bread", "Avocados", "Tomatoes", "Beef", "Green Pepper",
+    "Garlic", "Ginger", "Vegetable Oil", "Lemon", "Rosemary Powder"];
   productImageLink = [];
   categories = ["Baking", "Cooking", "Home", "Ethiopian", "Quick-Meal"];
-  measurements = ["mL", "oz", "L", "cup(s)", "Tbsp", "tsp", "pt", "lb", "g", "kg", "lb", "qt",
+  measurements = ["mL", "oz", "L", "cup(s)", "Tbsp", "tsp", "pt", "g", "kg", "lb", "qt",
     "gallon", "dash/pinch", "Leaves", "cloves", "cubes", "Large", "medium", "small"];
   kitchenUtensils = ["Baking Sheet", "Colander", "Cooking Oil", "Cutting Board",
     "Fridge", "Knife Set", "Mixing Bowls", "Pot", "Pan", "Peeler", "Thermometer",

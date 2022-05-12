@@ -381,13 +381,11 @@ class SuggestMeal extends Component {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   updateTip(chip) {
-    // var mealTip = document.getElementById("tips").value;
     this.setState({ tips: [...this.state.tips, chip] })
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////
   deleteTip(chip) {
-    // var mealTip = document.getElementById("tips").value;
     let tipsList = this.state.tips;
 
     var index = tipsList.indexOf(chip);

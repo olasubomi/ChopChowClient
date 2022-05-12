@@ -70,7 +70,7 @@ class ViewSuggestedMeals extends Component {
 
     this.state = {
       mealLabel: "",
-      previousMealLabel: "",
+      previousMealImageName: "",
       intro: "",
       servings: 0,
       // currentIngredient: "Butter scotch",
@@ -85,6 +85,7 @@ class ViewSuggestedMeals extends Component {
       categoryChips: ["snacks", "abc", "123"],
       productsPopulated: false,
       meal_has_image: false,
+      chef: "",
 
       selected_id: "",
       mealData_list: [],
@@ -127,8 +128,8 @@ class ViewSuggestedMeals extends Component {
   ////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
 
-    var url1 = "/get-suggested-meals"
-    url1 = "http://localhost:5000/api/get-suggested-meals"
+    var url1 = "/get-suggested-meals";
+    // url1 = 'http://localhost:5000/api/get-suggested-meals';
 
     axios.get(url1).then(body => {
       var mealsList = body.data;
@@ -170,8 +171,8 @@ class ViewSuggestedMeals extends Component {
   };
 
   ////////////////////////////////////////////////////////////////////////////
-  onMealUploadButtonClick = (event) => {
-    this.setState({ mealImage: event.target.files[0] });
+  onMealImageUploadButtonClick = (event) => {
+    this.setState({ mealImage: event.target.files[0], mealImageName: event.target.files[0].name });
 
     if (this.state.mealImage !== null) {
       this.setState({ loading_imgSrc: URL.createObjectURL(event.target.files[0]) });
@@ -359,7 +360,7 @@ handleAddInstructionStep(chip, chunkIndex) {
   console.log("Chip is : " + chip);
 
   const tmp_stepSlides_data = this.state.stepSlides;
-  const tmp_stepSlide = tmp_stepSlides_data[chunkIndex-1];
+  const tmp_stepSlide = tmp_stepSlides_data[chunkIndex];
 
   // set file name in step slide
   tmp_stepSlide.instructionSteps = 
@@ -397,39 +398,49 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
 
   /////////////////////////////////////////////////////////////////////////////
   onUpdateInstructionImg = (event, ind) => {
+    console.log("Comes in update function with:");
+    console.log("ind: "+ ind+ "stepSlides length: "+ this.state.stepSlides.length);
     if (event.target.files[0] === null || 
       this.state.stepSlides.length <= ind) return;
     const tmp_stepSlides_data = this.state.stepSlides;
     const tmp_stepSlide = tmp_stepSlides_data[ind];
 
     // set file name in step slide
-    tmp_stepSlide.dataName = event.target.files[0].filename;
+    tmp_stepSlide.dataName = event.target.files[0].name;
     tmp_stepSlides_data[ind] = tmp_stepSlide;
+    console.log("Addded img name to step slides.. PRinting stepslides below");
+    console.log(event.target.files[0]);
+    console.log(event.target.files[0].name);
+    console.log(tmp_stepSlides_data[ind]);
+    console.log(tmp_stepSlides_data);
     this.setState({ stepSlides: tmp_stepSlides_data });
 
+    console.log("gets to switch case");
 
+    // we use index value 0-5 to match chunk contents 1-6
     switch (ind) {
-      case 1:
+      case 0:
         this.setState({ instructionChunkContent1: event.target.files[0] });
         break;
-      case 2:
+      case 1:
         this.setState({ instructionChunkContent2: event.target.files[0] });
         break;
-      case 3:
+      case 2:
         this.setState({ instructionChunkContent3: event.target.files[0] });
         break;
-      case 4:
+      case 3:
         this.setState({ instructionChunkContent4: event.target.files[0] });
         break;
-      case 5:
+      case 4:
         this.setState({ instructionChunkContent5: event.target.files[0] });
         break;
-      case 6:
+      case 5:
         this.setState({ instructionChunkContent6: event.target.files[0] });
         break;
       default:
       // ..do nothing
     }
+    console.log(this.state.stepSlides);
 
   }
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -473,13 +484,11 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
 
   /////////////////////////////////////////////////////////////////////////////
   updateTip(chip) {
-    // var mealTip = document.getElementById("tips").value;
     this.setState({ tips: [...this.state.tips, chip] })
   }
 
   ////////////////////////////////////////////////////////////////////////////
   deleteTip(chip) {
-    // var mealTip = document.getElementById("tips").value;
     let tipsList = this.state.tips;
 
     var index = tipsList.indexOf(chip);
@@ -583,10 +592,11 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
     this.setState({
       selected_id: data._id, stepSlides: tmp_stepSlides_data,
       suggestMealRole: mealRole, mealLabel: data.mealName, 
-      previousMealLabel: data.mealName, 
+      previousMealImageName: data.mealImageName, 
       intro: data.intro, servings: data.servings,
       mealImage: data.mealImage, mealImageName: data.mealImageName,
        formatted_ingredient: data.formatted_ingredient,
+       chef: data.chef
        
     });
     this.setState({ open: true });
@@ -594,8 +604,10 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
     const last_ingredient = 
     data.formatted_ingredient[(data.formatted_ingredient.length - 1)];
     let parsed_categories = JSON.parse(data.categories);
+    // let parsed_tips = data.tips;
+    // let parsed_utensils = data.kitchenUtensils;
     let parsed_tips = JSON.parse(data.tips);
-    let parsed_utensils = JSON.parse(data.kitchenUtensils)
+    let parsed_utensils = JSON.parse(data.kitchenUtensils);
 
     this.setState({
       currentIngredientMeasurement: last_ingredient.measurement,
@@ -636,7 +648,7 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
     this.setupCurrentMealStates(data, mealRole);
     console.log("Trying to call image to display ");
     //get meal image from gridfs
-    // var url = "http://chopchowdev/getOneMongoFileImage/"+data.mealImage;
+    // let url = 'http://localhost:5000/getOneMongoFileImage/' + data.mealImageName;
     let url = 'https://chopchowdev.herokuapp.com/getOneMongoFileImage/' + data.mealImageName;
     this.setState({ mealImage: url })
   };
@@ -679,7 +691,7 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
   ////////////////////////////////////////////////////////////////////////////
   submitMealUpdate = async () => {
     const data = this.state;
-    const { selected_id, mealImage, mealLabel, previousMealLabel, mealImageName, intro, 
+    const { selected_id, mealImage, mealLabel, previousMealImageName, mealImageName, intro, 
       servings, stepSlides, ingredientGroupList, ingredientStrings,
        prepTime, cookTime, categoryList, tips, new_product_ingredients,
        suggestedUtensils, instructionChunkContent1,instructionChunkContent2,
@@ -765,14 +777,25 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
     let suggestMealForm = new FormData();
     suggestMealForm.append('id', selected_id);
     suggestMealForm.append('mealName', mealLabel);
+    suggestMealForm.append('mealImageName', mealImageName);
 
     // check for if we want to re-update/re-add meal image data or leave as-is
-    if(previousMealLabel != mealLabel){
+    if(previousMealImageName != mealImageName){
       suggestMealForm.append('mealImage', mealImage);
-      suggestMealForm.append('mealImageName', mealImageName);
+    }
+    else{
+      console.log("previous meal image name is same as current: "+ mealImageName);
     }
 
     // check if instruction content has been updated before passing to server
+    console.log("Printing instruction chunk contents in state");
+    console.log(instructionChunkContent1);
+    console.log(instructionChunkContent2);
+    console.log(instructionChunkContent3);
+    console.log(instructionChunkContent4);
+    console.log(instructionChunkContent5);
+    console.log(instructionChunkContent6);
+
     if(instructionChunkContent1!= ""){
       suggestMealForm.append('instructionChunkContent1', instructionChunkContent1)
     }
@@ -814,8 +837,8 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
     suggestMealForm.append('stepSlides', JSON.stringify(stepSlides)); // or instruction group lists
 
     console.log(selected_id);
-    // var url = "/updateSuggestedMealItem";
-    var url = "http://localhost:5000/api/updateSuggestedMealItem";
+    var url = "/updateSuggestedMealItem";
+    // var url = "http://localhost:5000/api/updateSuggestedMealItem";
 
     const config = { method: 'POST', data: suggestMealForm, url: url };
     const response = await axios(config)
@@ -823,7 +846,7 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
       console.log("Updated Meal submitted successfully");
       // return (window.location.href = "/ViewSuggestedMeals");
     } else {
-      console.log("Somthing happened wrong");
+      console.log("Something happened wrong");
     }
   }
 
@@ -839,6 +862,7 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
     for (let i = 0; i < this.state.stepSlides.length; i++) {
       let sectionTitle = 'Section' +(i+1) + 'Title';
       let chunkTitle = 'chunk'+(i+1)+'Title';
+
       // Allowing file type
       var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
       var allowedVideoExtensions = /(\.mp4|\.m4v|\.)$/i;
@@ -851,7 +875,8 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
       else if (allowedImageExtensions.exec(this.state.stepSlides[i].dataName)) {
         instructionContent = <img id={"instructionImg" + i}
         src={'https://meal-chunk-images-and-videos.s3.us-west-1.amazonaws.com/' + this.state.stepSlides[i].dataName} 
-        alt={this.state.stepSlides[i].dataName} />
+        alt={this.state.stepSlides[i].dataName}
+        style={{width: "inherit"}} />
       }
       else {
         // use generic content
@@ -921,7 +946,8 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
     const { mealData_list, page, rowsPerPage, open, suggestMealRole,
        loading_imgSrc, categoryList, mealImage } = this.state;
     const { mealLabel, intro, currentIngredient, currentIngredientQuantity,
-       currentIngredientMeasurement, prepTime, cookTime, servings, suggestedUtensils } = this.state;
+       currentIngredientMeasurement, prepTime, cookTime, servings,
+        suggestedUtensils, chef } = this.state;
 
     const theme = createMuiTheme({
       palette: { primary: green, },
@@ -1047,7 +1073,7 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
                   <TextField multiline id="intro" fullWidth onChange={this.onTextFieldChange} label="Intro" variant="filled" className="mb-3" value={intro} />
                 </Col>
                 <Col md={4} style={{ marginTop: "20px" }}>
-                  <input accept="image/*" id="mealImage" type="file" className="mb-2 pr-4" onChange={(ev) => this.onMealUploadButtonClick(ev)} />
+                  <input accept="image/*" id="mealImage" type="file" className="mb-2 pr-4" onChange={(ev) => this.onMealImageUploadButtonClick(ev)} />
                   <img src={mealImage} width="100%" alt="meal"></img>
                 </Col>
                 <Col md={4} style={{ marginTop: "20px", textAlign: "center" }}>
@@ -1140,12 +1166,19 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
                 </Col>
               </Row>
               <Row className="mb-3">
-                <Col md={4} style={{ textAlign: "center", margin: "auto" }}>
+                <Col md={6} style={{ textAlign: "center", margin: "auto" }}>
                   <TextField id="servings" fullWidth type="number" 
                   onChange={this.onTextFieldChange} 
                   label="Servings" variant="filled" className="mb-2" 
                   placeholder="1 person, 2, 4 or 10 people" 
                   style={{ marginTop: "10px" }} value={servings} />
+                </Col>
+                <Col md={6} style={{ textAlign: "center", margin: "auto" }}>
+                  <TextField id="chef" fullWidth 
+                  onChange={this.onTextFieldChange} 
+                  label="Chef" variant="filled" className="mb-2" 
+                  placeholder="Author/Chef" 
+                  style={{ marginTop: "10px" }} value={chef} />
                 </Col>
               </Row>
 
