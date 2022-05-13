@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactToPrint from 'react-to-print';
 import './componentToPrint.css'
 import img_logo from "../../assets/images/logo2.png"
 
@@ -98,30 +97,25 @@ class ComponentToPrint extends React.Component {
                         <div className="meal_details">
                           <div className="col_2">
                             <div className="meal_detail">
-                              <i className="far fa-clock m-2" aria-hidden="true"  style={{ fontSize: "30px" }}></i>
+                              <img className='meal_detail_icon' src='/images/meal_preview_imgs/prep_time.jpg' />
                               <h2>Prep Time:</h2>
                               <p>{this.props.prepTime}</p>
                             </div>
                           </div>
                           <div className="col_2">
                             <div className="meal_detail">
-                              <i className="far fa-hat-chef m-2" aria-hidden="true"  style={{ fontSize: "30px" }}></i>
+                              <img className='meal_detail_icon' src='/images/meal_preview_imgs/cook_time.jpg' />
                               <h2>Cook Time:</h2>
                               <p>{this.props.cookTime}</p>
                             </div>
                             <div className="meal_detail">
-                              <i className="far fa-solid fa-cookie m-2" aria-hidden="true"  style={{ fontSize: "30px" }}></i>
+                              <img className='meal_detail_icon' src='/images/meal_preview_imgs/serves.jpg' />
                               <h2>Serves</h2>
                               <p>{this.props.serves} {this.props.serves>1 ? " people" : " person"}</p>
                             </div>
                           </div>
                         </div>
-                        <div className="print_details">
-                          <div className="print_detail">
-                            <h2>Utensils Needed</h2>
-                            <ul>{displayedUtensils}</ul>
-                          </div>
-                        </div>
+                        
                         <div className="print_top2">
                           <img className="print_top_logo_img" src={img_logo} />
                           <h2>{this.props.mealName}</h2>
@@ -130,6 +124,8 @@ class ComponentToPrint extends React.Component {
                       <div className="print_col_1_detail">
                         <h2>Ingredients</h2>
                         <ul style={{ fontSize: fontSize }}>{displayedIngredients}</ul>
+                        <h2>Utensils Needed</h2>
+                        <ul style={{ fontSize: fontSize }}>{displayedUtensils}</ul>
                       </div>
                     </div>
                   </div>
