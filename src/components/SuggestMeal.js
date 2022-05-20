@@ -569,7 +569,7 @@ class SuggestMeal extends Component {
     var particularArray;
 
     console.log("Index is : " + chunkIndex);
-    if(chip.split(' ').length > 170){
+    if(chip.split(' ').length > 150){
       this.setState({
         instructionFontSize: '10px'
       })
