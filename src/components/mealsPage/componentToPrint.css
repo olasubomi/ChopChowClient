@@ -118,7 +118,7 @@ html {
 .print_top2 > h2 {
   font-style: normal;
   font-weight: normal;
-  font-size: 50px;
+  font-size: 90px;
   line-height: 30px;
   color: #222321;
   text-transform: capitalize; }
@@ -368,28 +368,33 @@ html {
 
 .meal_instructions {
   display: grid;
-  grid-template-columns: 32.2% 32.2% 32.2%;
-  grid-gap: 1rem;
+  grid-template-columns: 1fr;
+  /* grid-gap: 1rem; */
   align-items: start; }
 
 .meal_instruction {
   display: grid;
-  grid-gap: 7px;
-  border: 1px solid #444;
-  padding: 1rem;
+  grid-gap: 1rem;
+  /* border: 1px solid #444;
+  padding: 1rem; */
   border-radius: 4px;
-  align-content: start; }
+  align-content: start;
+  grid-template-columns: 32.2% 32.2% 32.2%;
+  align-items: start; }
 
 .meal_instruction > div {
   display: grid;
-  grid-gap: 4px; }
+  grid-gap: 4px;
+  border: 1px solid #444;
+    padding: 4px;
+    border-radius: 4px; }
 
 .meal_instruction > div > div {
   border-bottom: 1px solid #444;
   font-style: normal;
   font-weight: 500;
   font-size: 15px;
-  line-height: 20px;
+  /* line-height: 20px; */
   letter-spacing: 0.5px;
   text-transform: capitalize;
   text-align: start;
@@ -401,8 +406,13 @@ html {
 .instruction_step {
   padding-left: 1rem;
   font-weight: normal !important;
-  font-size: 14px !important;
+  font-size: 14px;
   text-transform: capitalize; }
+
+.instruction_img{
+  height: 7rem;
+  width: 100%;
+}
 
 .title {
   display: grid;
@@ -416,8 +426,6 @@ html {
 
 .tips {
   display: grid;
-  min-height: 10rem;
-  max-height: 15rem;
   width: 20rem;
   border-top: 1px solid #444;
   border-right: 1px solid #444;

@@ -99,13 +99,14 @@ class SuggestMeal extends Component {
         instructionSteps: [],
         dataName: ""
       },
+      instructionFontSize: "14px",
 
-      chunk1Content: "",
-      chunk2Content: "",
-      chunk3Content: "",
-      chunk4Content: "",
-      chunk5Content: "",
-      chunk6Content: "",
+      // chunk1Content: "",
+      // chunk2Content: "",
+      // chunk3Content: "",
+      // chunk4Content: "",
+      // chunk5Content: "",
+      // chunk6Content: "",
 
       // do we want all the instruction variables ?
       // instructionGroupList:[],
@@ -296,22 +297,22 @@ class SuggestMeal extends Component {
 
     switch (id) {
       case 1:
-        this.setState({ chunk1Content: event.target.files[0] });
+        this.setState({ chunk1Content: URL.createObjectURL(event.target.files[0]) });
         break;
       case 2:
-        this.setState({ chunk2Content: event.target.files[0] });
+        this.setState({ chunk2Content: URL.createObjectURL(event.target.files[0]) });
         break;
       case 3:
-        this.setState({ chunk3Content: event.target.files[0] });
+        this.setState({ chunk3Content: URL.createObjectURL(event.target.files[0]) });
         break;
       case 4:
-        this.setState({ chunk4Content: event.target.files[0] });
+        this.setState({ chunk4Content: URL.createObjectURL(event.target.files[0]) });
         break;
       case 5:
-        this.setState({ chunk5Content: event.target.files[0] });
+        this.setState({ chunk5Content: URL.createObjectURL(event.target.files[0]) });
         break;
       case 6:
-        this.setState({ chunk6Content: event.target.files[0] });
+        this.setState({ chunk6Content: URL.createObjectURL(event.target.files[0]) });
         break;
       default:
       // ..do nothing
@@ -568,6 +569,11 @@ class SuggestMeal extends Component {
     var particularArray;
 
     console.log("Index is : " + chunkIndex);
+    if(chip.split(' ').length > 170){
+      this.setState({
+        instructionFontSize: '10px'
+      })
+    }
 
     switch (chunkIndex) {
       case 1:
@@ -1504,6 +1510,10 @@ availableLocations,
                   instructionChunk1={this.state.instructionChunk1} instructionChunk2={this.state.instructionChunk2}
                   instructionChunk3={this.state.instructionChunk3} instructionChunk4={this.state.instructionChunk4}
                   instructionChunk5={this.state.instructionChunk5} instructionChunk6={this.state.instructionChunk6}
+                  chunk1Content={this.state.chunk1Content} chunk2Content={this.state.chunk2Content}
+                  chunk3Content={this.state.chunk3Content} chunk4Content={this.state.chunk4Content}
+                  chunk5Content={this.state.chunk5Content} chunk6Content={this.state.chunk6Content}
+                  instructionFontSize={this.state.instructionFontSize}
                   tips={this.state.tips} mealImageData={this.state.mealImageData}
                  />
               </div>

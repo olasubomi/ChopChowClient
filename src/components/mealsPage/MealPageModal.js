@@ -52,6 +52,10 @@ class MealPageModal extends Component {
                 instructionChunk1={this.props.instructionChunk1} instructionChunk2={this.props.instructionChunk2}
                 instructionChunk3={this.props.instructionChunk3} instructionChunk4={this.props.instructionChunk4}
                 instructionChunk5={this.props.instructionChunk5} instructionChunk6={this.props.instructionChunk6}
+                chunk1Content={this.props.chunk1Content} chunk2Content={this.props.chunk2Content}
+                chunk3Content={this.props.chunk3Content} chunk4Content={this.props.chunk4Content}
+                chunk5Content={this.props.chunk5Content} chunk6Content={this.props.chunk6Content}
+                instructionFontSize={this.props.instructionFontSize}
                 tips={this.props.tips} mealImageData={this.props.mealImageData}
               />
           </div>
