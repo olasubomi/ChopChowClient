@@ -99,7 +99,7 @@ class SuggestMeal extends Component {
         instructionSteps: [],
         dataName: ""
       },
-      instructionFontSize: "14px",
+      instructionWordlength: 0,
 
       // chunk1Content: "",
       // chunk2Content: "",
@@ -569,11 +569,18 @@ class SuggestMeal extends Component {
     var particularArray;
 
     console.log("Index is : " + chunkIndex);
-    if(chip.split(' ').length > 150){
-      this.setState({
-        instructionFontSize: '10px'
-      })
-    }
+    // if(chip.split(' ').length > 150){
+    //   this.setState({
+
+    //     instructionWordlength: '10px'
+    //   })
+    // }
+
+    let wordlength = this.state.instructionWordlength;
+
+    this.setState({
+      instructionWordlength: wordlength + chip.split(' ').length
+    })
 
     switch (chunkIndex) {
       case 1:
@@ -1513,7 +1520,7 @@ availableLocations,
                   chunk1Content={this.state.chunk1Content} chunk2Content={this.state.chunk2Content}
                   chunk3Content={this.state.chunk3Content} chunk4Content={this.state.chunk4Content}
                   chunk5Content={this.state.chunk5Content} chunk6Content={this.state.chunk6Content}
-                  instructionFontSize={this.state.instructionFontSize}
+                  instructionWordlength={this.state.instructionWordlength}
                   tips={this.state.tips} mealImageData={this.state.mealImageData}
                  />
               </div>
