@@ -118,7 +118,7 @@ html {
 .print_top2 > h2 {
   font-style: normal;
   font-weight: normal;
-  font-size: 90px;
+  font-size: 70px;
   line-height: 30px;
   color: #222321;
   text-transform: capitalize; }
@@ -382,13 +382,11 @@ html {
 
 .meal_instruction > div {
   display: grid;
-  grid-gap: 4px;
   border: 1px solid #444;
   padding: 4px;
   border-radius: 4px; }
 
-.meal_instruction > div > div {
-  border-bottom: 1px solid #444;
+.instruction_step_top {
   font-style: normal;
   font-weight: 500;
   font-size: 15px;
@@ -397,9 +395,16 @@ html {
   text-transform: capitalize;
   text-align: start;
   color: #2B2B2B;
-  grid-template-columns: 10px max-content;
+  display: grid;
+  grid-template-columns: 10px 1fr;
   word-break: break-word;
   grid-gap: 5px; }
+
+.instruction_steps{
+  display: flex;
+  grid-gap: 4px;
+  flex-wrap: wrap;
+}
 
 .instruction_step {
   padding-left: 1rem;
@@ -414,9 +419,13 @@ html {
 
 .title {
   display: grid;
-  grid-template-columns: 2rem 1fr; }
+  border-bottom: 1px solid #444;
+  /* line-height: 20px; */
+  margin: 0;
+  margin-left: 1rem;
+  padding-bottom: 3px; }
 
-.title > h4 {
+.instruction_step_top > h4 {
   margin: 0 !important;
   font-style: normal;
   font-size: 15px;

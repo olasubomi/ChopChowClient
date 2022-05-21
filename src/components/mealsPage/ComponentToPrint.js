@@ -20,19 +20,19 @@ class ComponentToPrint extends React.Component {
         alert('Instruction steps might be too long for preview. Consider reducing text or spreading text more evenly between the sections available.')
       }
 
-      if((this.props.instructionChunk4.instructionSteps.length+this.props.instructionChunk1.instructionSteps.length) > 12){
-        this.setState({
-          instructionFontSize: '10px'
-        })
-      }else if((this.props.instructionChunk2.instructionSteps.length+this.props.instructionChunk5.instructionSteps.length) > 12){
-        this.setState({
-          instructionFontSize: '10px'
-        })
-      }else if((this.props.instructionChunk3.instructionSteps.length+this.props.instructionChunk6.instructionSteps.length) > 12){
-        this.setState({
-          instructionFontSize: '10px'
-        })
-      }
+      // if((this.props.instructionChunk4.instructionSteps.length+this.props.instructionChunk1.instructionSteps.length) > 12){
+      //   this.setState({
+      //     instructionFontSize: '10px'
+      //   })
+      // }else if((this.props.instructionChunk2.instructionSteps.length+this.props.instructionChunk5.instructionSteps.length) > 12){
+      //   this.setState({
+      //     instructionFontSize: '10px'
+      //   })
+      // }else if((this.props.instructionChunk3.instructionSteps.length+this.props.instructionChunk6.instructionSteps.length) > 12){
+      //   this.setState({
+      //     instructionFontSize: '10px'
+      //   })
+      // }
     }
 
     render() {
@@ -122,14 +122,14 @@ class ComponentToPrint extends React.Component {
                             <div className="meal_detail">
                               <img className='meal_detail_icon' src='/images/meal_preview_imgs/prep_time.jpg' />
                               <h2>Prep Time:</h2>
-                              <p>{this.props.prepTime}</p>
+                              <p>{this.props.prepTime} mins</p>
                             </div>
                           </div>
                           <div className="col_2">
                             <div className="meal_detail">
                               <img className='meal_detail_icon' src='/images/meal_preview_imgs/cook_time.jpg' />
                               <h2>Cook Time:</h2>
-                              <p>{this.props.cookTime}</p>
+                              <p>{this.props.cookTime} mins</p>
                             </div>
                             <div className="meal_detail">
                               <img className='meal_detail_icon' src='/images/meal_preview_imgs/serves.jpg' />
@@ -159,21 +159,42 @@ class ComponentToPrint extends React.Component {
                         <div className="meal_instruction"> 
                         {this.props.instructionChunk1.title &&
                           <div>
-                            <div className="title"><h4>1</h4>{this.props.instructionChunk1.title}</div>
-                            {/* <div>{this.props.instructionChunk1.dataName}</div> */}
-                            {this.props.instructionChunk1.instructionSteps.map(step => <div className="instruction_step" style={{ fontSize: this.state.instructionFontSize }}>{step}</div>)}
-                            {/* <div>{this.props.instructionChunk1.instructionSteps}</div> */}
+                            <div className="instruction_step_top">
+                              <h4>1</h4>
+                              {this.props.chunk1Content &&
+                              <img className="instruction_img" src={this.props.chunk1Content} ></img>}
+                              {!this.props.chunk1Content &&
+                              <h4 className='title'>{this.props.instructionChunk1.title}</h4>}
+                            </div>
                             {this.props.chunk1Content &&
-                            <img className="instruction_img" src={this.props.chunk1Content} ></img>}
+                            <h4 className='title'>{this.props.instructionChunk1.title}</h4>}
+                            {/* <div>{this.props.instructionChunk1.dataName}</div> */}
+                            <div className='instruction_steps'>
+                              <div className="instruction_step" style={{ fontSize: this.state.instructionFontSize }}>
+                                {this.props.instructionChunk1.instructionSteps.map(step => step + ', ')}
+                              </div>
+                            </div>
+                            {/* <div>{this.props.instructionChunk1.instructionSteps}</div> */}
+                            
                           </div>
                           }
                           {this.props.instructionChunk4.title &&
                           <div>
-                            <div className="title"><h4>4</h4>{this.props.instructionChunk4.title}</div>
-                            {/* <div>{this.props.instructionChunk4.dataName}</div> */}
-                            {this.props.instructionChunk4.instructionSteps.map(step => <div className="instruction_step" style={{ fontSize: this.state.instructionFontSize }}>{step}</div>)}
+                            <div className="instruction_step_top">
+                              <h4>4</h4>
+                              {this.props.chunk4Content &&
+                              <img className="instruction_img" src={this.props.chunk4Content} ></img>}
+                              {!this.props.chunk4Content &&
+                              <h4 className='title'>{this.props.instructionChunk4.title}</h4>}
+                            </div>
                             {this.props.chunk4Content &&
-                            <img className="instruction_img" src={this.props.chunk4Content} ></img>}
+                            <h4 className='title'>{this.props.instructionChunk4.title}</h4>}
+                            {/* <div>{this.props.instructionChunk4.dataName}</div> */}
+                            <div className='instruction_steps'>
+                              <div className="instruction_step" style={{ fontSize: this.state.instructionFontSize }}>
+                                {this.props.instructionChunk4.instructionSteps.map(step => step + ', ')}
+                              </div>
+                            </div>
                           </div>
                           }
                           
@@ -183,21 +204,43 @@ class ComponentToPrint extends React.Component {
                         <div className="meal_instruction"> 
                         {this.props.instructionChunk2.title &&
                           <div>
-                            <div className="title"><h4>2</h4>{this.props.instructionChunk2.title}</div>
-                            {/* <div>{this.props.instructionChunk2.dataName}</div> */}
-                            {this.props.instructionChunk2.instructionSteps.map(step => <div className="instruction_step" style={{ fontSize: this.state.instructionFontSize }}>{step}</div>)}
+                            <div className="instruction_step_top">
+                              <h4>2</h4>
+                              {this.props.chunk2Content &&
+                              <img className="instruction_img" src={this.props.chunk2Content} ></img>}
+                              {!this.props.chunk2Content &&
+                              <h4 className='title'>{this.props.instructionChunk2.title}</h4>}
+                            </div>
                             {this.props.chunk2Content &&
-                            <img className="instruction_img" src={this.props.chunk2Content} ></img>}
+                            <h4 className='title'>{this.props.instructionChunk2.title}</h4>}
+                            {/* <div>{this.props.instructionChunk4.dataName}</div> */}
+                            <div className='instruction_steps'>
+                              <div className="instruction_step" style={{ fontSize: this.state.instructionFontSize }}>
+                                {this.props.instructionChunk2.instructionSteps.map(step => step + ', ')}
+                              </div>
+                            </div>
                           </div>
                           }
                           
                           {this.props.instructionChunk5.title && 
                           <div>
-                            <div className="title"><h4>5</h4>{this.props.instructionChunk5.title}</div>
-                            {/* <div>{this.props.instructionChunk5.dataName}</div> */}
-                            {this.props.instructionChunk5.instructionSteps.map(step => <div className="instruction_step" style={{ fontSize: this.state.instructionFontSize }}>{step}</div>)}
+                            <div className="instruction_step_top">
+                              <h4>5</h4>
+                              {this.props.chunk5Content &&
+                              <img className="instruction_img" src={this.props.chunk5Content} ></img>}
+                              {!this.props.chunk5Content &&
+                              <h4 className='title'>{this.props.instructionChunk5.title}</h4>}
+                            </div>
                             {this.props.chunk5Content &&
-                            <img className="instruction_img" src={this.props.chunk5Content} ></img>}
+                            <h4 className='title'>{this.props.instructionChunk5.title}</h4>}
+                            {/* <div>{this.props.instructionChunk5.dataName}</div> */}
+                            <div className='instruction_steps'>
+                              <div className="instruction_step" style={{ fontSize: this.state.instructionFontSize }}>
+                                {this.props.instructionChunk5.instructionSteps.map(step => step + ', ')}
+                              </div>
+                            </div>
+                            {/* <div>{this.props.instructionChunk5.instructionSteps}</div> */}
+                            
                           </div>
                         }
                         </div>
@@ -206,21 +249,45 @@ class ComponentToPrint extends React.Component {
                         <div className="meal_instruction">
                           {this.props.instructionChunk3.title &&
                           <div>
-                            <div className="title"><h4>3</h4>{this.props.instructionChunk3.title}</div>
-                            {/* <div>{this.props.instructionChunk3.dataName}</div> */}
-                            {this.props.instructionChunk3.instructionSteps.map(step => <div className="instruction_step" style={{ fontSize: this.state.instructionFontSize }}>{step}</div>)}
+                            <div className="instruction_step_top">
+                              <h4>3</h4>
+                              {this.props.chunk3Content &&
+                              <img className="instruction_img" src={this.props.chunk3Content} ></img>}
+                              {!this.props.chunk3Content &&
+                            <h4 className='title'>{this.props.instructionChunk3.title}</h4>}
+                            </div>
                             {this.props.chunk3Content &&
-                            <img className="instruction_img" src={this.props.chunk3Content} ></img>}
+                            <h4 className='title'>{this.props.instructionChunk3.title}</h4>}
+                            {/* <div>{this.props.instructionChunk3.dataName}</div> */}
+                            <div className='instruction_steps'>
+                              <div className="instruction_step" style={{ fontSize: this.state.instructionFontSize }}>
+                                {this.props.instructionChunk3.instructionSteps.map(step => step + ', ')}
+                              </div>
+                            </div>
+                            {/* <div>{this.props.instructionChunk3.instructionSteps}</div> */}
+                            
                           </div>
                           }
                         
                         {this.props.instructionChunk6.title &&
                           <div>
-                            <div className="title"><h4>6</h4>{this.props.instructionChunk6.title}</div>
-                            {/* <div>{this.props.instructionChunk6.dataName}</div> */}
-                            {this.props.instructionChunk6.instructionSteps.map(step => <div className="instruction_step" style={{ fontSize: this.state.instructionFontSize }}>{step}</div>)}
+                            <div className="instruction_step_top">
+                              <h4>6</h4>
+                              {this.props.chunk6Content &&
+                              <img className="instruction_img" src={this.props.chunk6Content} ></img>}
+                              {!this.props.chunk6Content &&
+                              <h4 className='title'>{this.props.instructionChunk6.title}</h4>}
+                            </div>
                             {this.props.chunk6Content &&
-                            <img className="instruction_img" src={this.props.chunk6Content} ></img>}
+                            <h4 className='title'>{this.props.instructionChunk6.title}</h4>}
+                            {/* <div>{this.props.instructionChunk6.dataName}</div> */}
+                            <div className='instruction_steps'>
+                              <div className="instruction_step" style={{ fontSize: this.state.instructionFontSize }}>
+                                {this.props.instructionChunk6.instructionSteps.map(step => step + ', ')}
+                              </div>
+                            </div>
+                            {/* <div>{this.props.instructionChunk6.instructionSteps}</div> */}
+                            
                           </div>
                         }
                         </div>}
