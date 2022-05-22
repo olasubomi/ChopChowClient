@@ -251,11 +251,11 @@ class SuggestMeal extends Component {
   };
 
   ///////////////////////////////////////////////////////////////////////////////////////
-  onInputChange = (e) => {
+  onInputChange = (e, val) => {
     console.log("Comes in on text field change; ");
-
-    console.log(" " + [e.target.id] + " " + e.target.value);
-    this.setState({ [e.target.id]: e.target.value });
+    console.log(e.target.id)
+    // console.log(" " + [e.target.id] + " " + e.target.value);
+    this.setState({ "mealName": val });
   };
 
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -1182,7 +1182,7 @@ class SuggestMeal extends Component {
                   <Autocomplete
                     id="mealName"
                     options={this.props.allMealNames.map((option) => option)}
-                    onChange={(ev) => this.onInputChange(ev)}
+                    // onChange={(ev, val) => this.onInputChange(ev, val)}
                     onInputChange={(ev, val) => this.onInputChange(ev, val)}
                     freeSolo
                     renderInput={(params) => (<TextField {...params} label="Meal Name" variant="filled" />)}
