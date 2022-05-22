@@ -82,8 +82,8 @@ html {
   justify-content: start;
   align-items: center; }
 
-.meal_detail:not(:last-child) {
-  border-right: 1px solid #444; }
+/* .meal_detail:not(:last-child) {
+  border-right: 1px solid #444; } */
 
 .meal_detail > h2 {
   font-style: normal;
@@ -368,8 +368,8 @@ html {
 
 .meal_instructions {
   display: grid;
-  grid-template-columns: 32.2% 32.2% 32.2%;
-  grid-gap: 1rem;
+  /* grid-template-columns: 32.2% 32.2% 32.2%; */
+  /* grid-gap: 1rem; */
   align-items: start; }
 
 .meal_instruction {
@@ -378,7 +378,9 @@ html {
   /* border: 1px solid #444;
   padding: 1rem; */
   border-radius: 4px;
-  align-content: start; }
+  align-content: start;
+  align-items: start;
+  grid-template-columns: 1fr 1fr 1fr; }
 
 .meal_instruction > div {
   display: grid;
@@ -441,13 +443,15 @@ html {
   grid-gap: 4px;
   padding-top: 4px; }
 
-.tips > div {
+.tips > ul {
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
-  grid-gap: 4px; }
+  grid-gap: 28px;
+  margin-left: 23px;
+  grid-row-gap: 4px; }
 
-.tips > div > div {
+.tips > ul > li {
   font-size: 15px !important;
   text-transform: capitalize;
   word-break: break-word; }
