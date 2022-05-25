@@ -84,13 +84,14 @@ class SuggestMeal extends Component {
         instructionSteps: [],
         dataName: ""
       },
+      instructionWordlength: 0,
 
-      chunk1Content: "",
-      chunk2Content: "",
-      chunk3Content: "",
-      chunk4Content: "",
-      chunk5Content: "",
-      chunk6Content: "",
+      // chunk1Content: "",
+      // chunk2Content: "",
+      // chunk3Content: "",
+      // chunk4Content: "",
+      // chunk5Content: "",
+      // chunk6Content: "",
 
       // do we want all the instruction variables ?
       // instructionGroupList:[],
@@ -236,11 +237,11 @@ class SuggestMeal extends Component {
   };
 
   ///////////////////////////////////////////////////////////////////////////////////////
-  onInputChange = (e) => {
+  onInputChange = (e, val) => {
     console.log("Comes in on text field change; ");
-
-    console.log(" " + [e.target.id] + " " + e.target.value);
-    this.setState({ [e.target.id]: e.target.value });
+    console.log(e.target.id)
+    // console.log(" " + [e.target.id] + " " + e.target.value);
+    this.setState({ "mealName": val });
   };
 
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -557,6 +558,18 @@ class SuggestMeal extends Component {
     var particularArray;
 
     console.log("Index is : " + chunkIndex);
+    // if(chip.split(' ').length > 150){
+    //   this.setState({
+
+    //     instructionWordlength: '10px'
+    //   })
+    // }
+
+    let wordlength = this.state.instructionWordlength;
+
+    this.setState({
+      instructionWordlength: wordlength + chip.split(' ').length
+    })
 
     switch (chunkIndex) {
       case 1:
@@ -1092,7 +1105,7 @@ class SuggestMeal extends Component {
                   <Autocomplete
                     id="mealName"
                     options={this.props.allMealNames.map((option) => option)}
-                    onChange={(ev) => this.onInputChange(ev)}
+                    // onChange={(ev, val) => this.onInputChange(ev, val)}
                     onInputChange={(ev, val) => this.onInputChange(ev, val)}
                     freeSolo
                     renderInput={(params) => (<TextField {...params} label="Meal Name" variant="filled" />)}
@@ -1427,6 +1440,10 @@ availableLocations,
                   instructionChunk1={this.state.instructionChunk1} instructionChunk2={this.state.instructionChunk2}
                   instructionChunk3={this.state.instructionChunk3} instructionChunk4={this.state.instructionChunk4}
                   instructionChunk5={this.state.instructionChunk5} instructionChunk6={this.state.instructionChunk6}
+                  chunk1Content={this.state.chunk1Content} chunk2Content={this.state.chunk2Content}
+                  chunk3Content={this.state.chunk3Content} chunk4Content={this.state.chunk4Content}
+                  chunk5Content={this.state.chunk5Content} chunk6Content={this.state.chunk6Content}
+                  instructionWordlength={this.state.instructionWordlength}
                   tips={this.state.tips} mealImageData={this.state.mealImageData}
                  />
               </div>

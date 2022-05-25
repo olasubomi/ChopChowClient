@@ -22,15 +22,11 @@ class MealPageModal extends Component {
   render() {
     return (
       <>
-        <div>
-          <Modal
-            show={this.props.openModal}
-            onHide={this.props.closeModal}
-            dialogClassName="modal-90w"
-            centered
-          >
-            <Modal.Header closeButton style={{ 'borderBottom': '30px', 'padding': '0px' }} />
-            <Modal.Body style={{ padding: "0px" }}>
+      {this.props.openModal &&
+      <div className="print_container">
+        <div className="print_2">
+          <div className="print_col_2">
+            <div className="print_top">
               <ReactToPrint
                 trigger={() => {
                   // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
@@ -39,20 +35,33 @@ class MealPageModal extends Component {
                 }}
                 content={() => this.componentRef}
               />
-              <ComponentToPrint ref={el => (this.componentRef = el)}
+              <div onClick={this.props.closeModal} className="print_cancel_con">
+                <span
+                className="iconify print_cancel"
+                data-icon="bi:x"
+                >x</span>
+              </div>
+            </div>
+            <ComponentToPrint ref={el => (this.componentRef = el)}
                 mealName={this.props.mealName} mealImage={this.props.mealImage}
                 categories={this.props.categories}
                 prepTime={this.props.prepTime} cookTime={this.props.cookTime}
-                mealName={this.props.mealName} serves={this.props.serves}
+                serves={this.props.serves} componentRef={this.componentRef}
+                openModal={this.props.openModal} closeModal={this.props.closeModal}
                 ingredientsList={this.props.ingredientsList} utensilsList={this.props.utensilsList}
                 instructionChunk1={this.props.instructionChunk1} instructionChunk2={this.props.instructionChunk2}
                 instructionChunk3={this.props.instructionChunk3} instructionChunk4={this.props.instructionChunk4}
                 instructionChunk5={this.props.instructionChunk5} instructionChunk6={this.props.instructionChunk6}
+                chunk1Content={this.props.chunk1Content} chunk2Content={this.props.chunk2Content}
+                chunk3Content={this.props.chunk3Content} chunk4Content={this.props.chunk4Content}
+                chunk5Content={this.props.chunk5Content} chunk6Content={this.props.chunk6Content}
+                instructionWordlength={this.props.instructionWordlength}
                 tips={this.props.tips} mealImageData={this.props.mealImageData}
               />
-            </Modal.Body>
-          </Modal>
+          </div>
+          
         </div>
+      </div>}
       </>
     );
   }
