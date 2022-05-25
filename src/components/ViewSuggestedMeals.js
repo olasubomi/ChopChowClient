@@ -60,7 +60,6 @@ const LightTooltip = withStyles((theme) => ({
 
 ///////////////////////////////////////////////////////////////////////////////
 class ViewSuggestedMeals extends Component {
-  products = [];
   productsImg_path = [];
   categories = [];
   measurements = ["mL", "oz", "L", "cup(s)", "Tbsp", "tsp", "pt", "lb",
@@ -71,10 +70,11 @@ class ViewSuggestedMeals extends Component {
 
     this.state = {
       mealLabel: "",
+      previousMealImageName: "",
       intro: "",
       servings: 0,
       // currentIngredient: "Butter scotch",
-      currentIngredient: "",
+      currentIngredient: "control",
       currentIngredientMeasurement: "",
       currentIngredientQuantity: "",
       ingredientStrings: [],
@@ -85,6 +85,7 @@ class ViewSuggestedMeals extends Component {
       categoryChips: ["snacks", "abc", "123"],
       productsPopulated: false,
       meal_has_image: false,
+      chef: "",
 
       selected_id: "",
       mealData_list: [],
@@ -103,6 +104,7 @@ class ViewSuggestedMeals extends Component {
       productImg_path: "",
       product_ind: 0,
       ingredientGroupList: [],
+      new_product_ingredients: [],
       selected: [],
 
       stepSlides: [],
@@ -110,28 +112,24 @@ class ViewSuggestedMeals extends Component {
       instructionImgPath: "",
       categoryList: [],
       tips: [],
-      chunk1Content: "",
-      chunk2Content: "",
-      chunk3Content: "",
-      chunk4Content: "",
-      chunk5Content: "",
-      chunk6Content: "",
+      suggestedUtensils: [],
+
+      instructionChunkContent1: "",
+      instructionChunkContent2: "",
+      instructionChunkContent3: "",
+      instructionChunkContent4: "",
+      instructionChunkContent5: "",
+      instructionChunkContent6: "",
     };
 
-    this.handleIngredientDropdownChange = this.handleIngredientDropdownChange.bind(
-      this
-    );
-    this.handleProductName = this.handleProductName.bind(this);
-    this.handleIngredientMeasurement = this.handleIngredientMeasurement.bind(this);
-    this.handleIngredientQuantity = this.handleIngredientQuantity.bind(this);
     this.addIngredientToMeal = this.addIngredientToMeal.bind(this);
   }
 
   ////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
 
-    var url1 = "/get-suggested-meals"
-    url1 = "http://localhost:5000/api/get-suggested-meals"
+    var url1 = "/get-suggested-meals";
+    // url1 = 'http://localhost:5000/api/get-suggested-meals';
 
     axios.get(url1).then(body => {
       var mealsList = body.data;
@@ -145,24 +143,25 @@ class ViewSuggestedMeals extends Component {
 
 
     //----get category meals-------------------------
-    var url = "/get-all-categories";
-    axios.get(url).then((body) => {
-      var categoryList = body.data;
-      console.log(categoryList);
-      if (categoryList && categoryList.data.length !== 0) {
-        console.log("returns GET of ALL Categories ");
+    // var url = "/get-all-categories";
+    // axios.get(url).then((body) => {
+    //   var categoryList = body.data;
+    //   console.log(categoryList);
+    //   if (categoryList && categoryList.data.length !== 0) {
+    //     console.log("returns GET of ALL Categories ");
 
-        for (var i = 0; i < categoryList.data.length; i++) {
-          this.categories.push(categoryList.data[i].category_name);
-        }
-        console.log("PRINTING UPDATED CATEGORIES LIST");
-      } else {
-        console.log("get all products function does not return");
-      }
-    })
-      .catch((err) => {
-        console.log(err);
-      });
+    //     for (var i = 0; i < categoryList.data.length; i++) {
+    //       this.categories.push(categoryList.data[i].category_name);
+    //     }
+    //   } else {
+    //     console.log("get all products function does not return");
+    //   }
+    // })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
+    this.categories = this.props.categories;
 
   }
 
@@ -172,8 +171,8 @@ class ViewSuggestedMeals extends Component {
   };
 
   ////////////////////////////////////////////////////////////////////////////
-  onMealUploadButtonClick = (event) => {
-    this.setState({ mealImage: event.target.files[0] });
+  onMealImageUploadButtonClick = (event) => {
+    this.setState({ mealImage: event.target.files[0], mealImageName: event.target.files[0].name });
 
     if (this.state.mealImage !== null) {
       this.setState({ loading_imgSrc: URL.createObjectURL(event.target.files[0]) });
@@ -213,7 +212,8 @@ class ViewSuggestedMeals extends Component {
     // const tmp = {mealImage:event.target.files[0], path_flag: true, path:URL.createObjectURL(event.target.files[0])}
     // tmp_ingredientData[ind] = tmp;
     // this.setState({ingredientData: tmp_ingredientData});
-    if (event.target.files[0] === null || this.state.ingredientGroupList.length <= ind) return;
+    if (event.target.files[0] === null || this.state.ingredientGroupList.length <=
+       ind) return;
     const tmp_ingredientData = this.state.ingredientGroupList;
     const tmp_ingredientItem = tmp_ingredientData[ind];
 
@@ -232,21 +232,6 @@ class ViewSuggestedMeals extends Component {
   handleIngredientQuantity(event) {
     console.log(event.target.value);
     this.setState({ currentIngredientQuantity: event.target.value });
-  }
-
-  ////////////////////////////////////////////////////////////////////////////
-  handleIngredientDropdownChange = (event, value) => {
-    var array = this.products;
-    var index = array.indexOf(value);
-    if (index !== -1) {
-      this.setState({ product_ind: index });
-    }
-
-    if (event.target.value) {
-      this.setState({ currentIngredient: event.target.value });
-    } else {
-      this.setState({ currentIngredient: event.target.innerHTML });
-    }
   }
 
   ////////////////////////////////////////////////////////////////////////////
@@ -280,29 +265,7 @@ class ViewSuggestedMeals extends Component {
         console.log(err);
       });
   }
-  
-  ////////////////////////////////////////////////////////////////////////////
-  handleIngredientMeasurement(event) {
-    if (event.target.value) {
-      this.setState({ currentIngredientMeasurement: event.target.value });
-    } else {
-      this.setState({ currentIngredientMeasurement: event.target.innerHTML });
-    }
-  }
 
-  /////////////////////////////////////////////////////////////////////////////
-  handleProductName = (event, val) => {
-
-    const searchResult = this.products.map(element => element.toLowerCase().includes(val.toLowerCase()));
-    const flag = searchResult.find(element => element === true);
-    if (flag !== true || flag === null) {
-      this.setState({ productImgSetting_flag: true });
-      this.setState({ currentIngredient: val });
-    } else {
-      this.setState({ productImgSetting_flag: false });
-      this.setState({ currentIngredient: val });
-    }
-  }
 
   ////////////////////////////////////////////////////////////////////////////
   addIngredientToMeal(event) {
@@ -315,20 +278,21 @@ class ViewSuggestedMeals extends Component {
       return;
     }
 
-    if (this.state.currentIngredientQuantity === 0) {
+    if (document.getElementById('currentIngredientQuantity').value === 0 ) {
       properIngredientStringSyntax = document.getElementById("currentIngredient").value;
     } else if (
       document.getElementById("currentIngredientMeasurement").value === null
     ) {
-      properIngredientStringSyntax = "" + this.state.currentIngredientQuantity + " " + document.getElementById("currentIngredient").value;
+      properIngredientStringSyntax = "" + document.getElementById('currentIngredientQuantity').value + " " + document.getElementById("currentIngredient").value;
     } else {
-      properIngredientStringSyntax = "" + this.state.currentIngredientQuantity + " " + document.getElementById("currentIngredientMeasurement").value + " of " + document.getElementById("currentIngredient").value;
+      properIngredientStringSyntax = "" + document.getElementById('currentIngredientQuantity').value + " " + document.getElementById("currentIngredientMeasurement").value + " of " + document.getElementById("currentIngredient").value;
     }
 
     var currProductObject = {
-      product: this.state.currentIngredient,
-      quantity: this.state.currentIngredientQuantity,
-      measurement: this.state.currentIngredientMeasurement,
+      productName: document.getElementById('currentIngredient').value,
+      quantity:  document.getElementById('currentIngredientQuantity').value,
+      measurement: document.getElementById('currentIngredientMeasurement').value,
+
       productImgData: this.state.productImgSrc,
       productImgPath: null,
       flag: this.state.productImgSetting_flag,
@@ -339,103 +303,170 @@ class ViewSuggestedMeals extends Component {
       currProductObject.productImgPath = this.state.productImg_path;
       currProductObject.flag = true
     } else {
-      currProductObject.productImgPath = this.productsImg_path[this.state.product_ind];
+      currProductObject.productImgPath = 
+      this.productsImg_path[this.state.product_ind];
       currProductObject.flag = false;
     }
+
+    const searchResult = this.props.productNames.map(element=> { if (element.toLowerCase() === (currProductObject.productName.toLowerCase())) { return true; } else { return false; } });
+    const tmpcurrProductIndexInDBsProductsList = searchResult.indexOf(true);
+    console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrProductIndexInDBsProductsList);
+
+    if (tmpcurrProductIndexInDBsProductsList !== -1) {
+      console.log("using already existing product object from db");
+      console.log("DOES NOT ADD to new _product_ingredients");
+    }
+    else {
+      console.log("ADDs to new_product_ingredients");
+      console.log("creating new product object");
+      // edit product details for new product object
+      currProductObject.productIndex = 0;
+      // this.setState({ new_product_ingredients: updatedProductList })
+      this.setState({ new_product_ingredients: [...this.state.new_product_ingredients, currProductObject] });
+    }
+
+    // add to container display
+    let temp = this.state.ingredientGroupList;
+    temp.push(currProductObject);
+    this.setState({ ingredientGroupList: temp });
+
+
+    document.getElementById('currentIngredient').value = "";
+    document.getElementById('currentIngredientQuantity').value = 0;
+    document.getElementById('currentIngredientMeasurement').value = "";
     this.handleAddIngredientChip(properIngredientStringSyntax);
 
-    this.setState({ ingredientGroupList: [...this.state.ingredientGroupList, currProductObject] });
-    this.setState({ productImgSrc: null, productImg_path: "" });
-
-  }
-  ///////////////////////////////////////////////////////////////////////////
-  addInstructionList = () => {
-    if (this.state.instructionsChip.length === 0) return;
-    let tmp = {
-      step: this.state.instructionsChip,
-      imgdata: this.state.instructionImgData,
-      image: this.state.instructionImgPath,
-    }
-    this.setState({ stepSlides: [...this.state.stepSlides, tmp] });
-    this.setState({ instructionsChip: [], instructionImgData: null, instructionImgPath: "" });
   }
 
-  ////////////////////////////////////////////////////////////////////////////
-  onhandleInstructionImg = (event) => {
-    this.setState({ instructionImgData: event.target.files[0] });
-    if (event.target.files[0] !== null) {
-      this.setState({ instructionImgPath: URL.createObjectURL(event.target.files[0]) });
-    }
-  };
+  handleInstructionTitle(event, chunkIndex) {
 
-  ////////////////////////////////////////////////////////////////////////////
-  handleAddInstructionStep(chip) {
-    this.setState({
-      instructionsChip: [...this.state.instructionsChip, chip],
-    });
+    console.log("Index is : " + chunkIndex);
+    let chip = event.target.value;
+    console.log("Chip is : " + chip);
+
+    const tmp_stepSlides_data = this.state.stepSlides;
+    const tmp_stepSlide = tmp_stepSlides_data[chunkIndex];
+
+    // set file name in step slide
+    tmp_stepSlide.title = chip;
+    tmp_stepSlides_data[chunkIndex] = tmp_stepSlide;
+    this.setState({ stepSlides: tmp_stepSlides_data });
+
   }
 
-  ////////////////////////////////////////////////////////////////////////////
-  onHandleInstructionItem = (ind) => {
-    const array = this.state.stepSlides;
-    array.splice(ind, 1);
-    this.setState({ stepSlides: array });
+///////////////////////////////////////////////////////////////////////////////////////
+handleAddInstructionStep(chip, chunkIndex) {
+  console.log("Index is : " + chunkIndex);
+  console.log("Chip is : " + chip);
+
+  const tmp_stepSlides_data = this.state.stepSlides;
+  const tmp_stepSlide = tmp_stepSlides_data[chunkIndex];
+
+  // set file name in step slide
+  tmp_stepSlide.instructionSteps = 
+  [...this.state.stepSlides[chunkIndex].instructionSteps, chip];
+  tmp_stepSlides_data[chunkIndex] = tmp_stepSlide;
+  this.setState({ stepSlides: tmp_stepSlides_data });
+
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+handleDeleteInstructionsStep(chip, chunkIndex) {
+  console.log("In delete instruction step/chip")
+  console.log("Chip is " + chip);
+  console.log("Index is " + chunkIndex);
+
+  let index;
+  let arraySteps;
+
+  const tmp_stepSlides_data = this.state.stepSlides;
+  let tmp_stepSlide = tmp_stepSlides_data[chunkIndex];
+  arraySteps = tmp_stepSlide.instructionSteps;
+
+  index = arraySteps.indexOf(chip);
+  if (index !== -1) {
+    arraySteps.splice(index, 1);
+    tmp_stepSlide.instructionSteps = arraySteps;
+    tmp_stepSlides_data[chunkIndex] = tmp_stepSlide;
+
+    console.log("new array : \n"+ tmp_stepSlide);
+    this.setState({ stepSlides: tmp_stepSlides_data });
   }
 
-  ////////////////////////////////////////////////////////////////////////////
-  handleDeleteInstructionsStep(chip) {
-    console.log("removing chop input");
-    var array = [...this.state.instructionsChip]; // make a separate copy of the array
-    var index = array.indexOf(chip);
-    if (index !== -1) {
-      array.splice(index, 1);
-      this.setState({ instructionsChip: array });
-    }
-  }
+}
+  
 
   /////////////////////////////////////////////////////////////////////////////
   onUpdateInstructionImg = (event, ind) => {
-    if (event.target.files[0] === null || this.state.stepSlides.length <= ind) return;
+    console.log("Comes in update function with:");
+    console.log("ind: "+ ind+ "stepSlides length: "+ this.state.stepSlides.length);
+    if (event.target.files[0] === null || 
+      this.state.stepSlides.length <= ind) return;
     const tmp_stepSlides_data = this.state.stepSlides;
     const tmp_stepSlide = tmp_stepSlides_data[ind];
 
-    let tmp = {
-      step: tmp_stepSlide.step,
-      imgdata: event.target.files[0],
-      image: URL.createObjectURL(event.target.files[0]),
-    };
-
     // set file name in step slide
-    tmp_stepSlide.dataName = event.target.files[0].filename;
+    tmp_stepSlide.dataName = event.target.files[0].name;
     tmp_stepSlides_data[ind] = tmp_stepSlide;
+    console.log("Addded img name to step slides.. PRinting stepslides below");
+    console.log(event.target.files[0]);
+    console.log(event.target.files[0].name);
+    console.log(tmp_stepSlides_data[ind]);
+    console.log(tmp_stepSlides_data);
     this.setState({ stepSlides: tmp_stepSlides_data });
 
+    console.log("gets to switch case");
 
+    // we use index value 0-5 to match chunk contents 1-6
     switch (ind) {
+      case 0:
+        this.setState({ instructionChunkContent1: event.target.files[0] });
+        break;
       case 1:
-        this.setState({ chunk1Content: event.target.files[0] });
+        this.setState({ instructionChunkContent2: event.target.files[0] });
         break;
       case 2:
-        this.setState({ chunk2Content: event.target.files[0] });
+        this.setState({ instructionChunkContent3: event.target.files[0] });
         break;
       case 3:
-        this.setState({ chunk3Content: event.target.files[0] });
+        this.setState({ instructionChunkContent4: event.target.files[0] });
         break;
       case 4:
-        this.setState({ chunk4Content: event.target.files[0] });
+        this.setState({ instructionChunkContent5: event.target.files[0] });
         break;
       case 5:
-        this.setState({ chunk5Content: event.target.files[0] });
-        break;
-      case 6:
-        this.setState({ chunk6Content: event.target.files[0] });
+        this.setState({ instructionChunkContent6: event.target.files[0] });
         break;
       default:
       // ..do nothing
     }
+    console.log(this.state.stepSlides);
 
   }
+  ///////////////////////////////////////////////////////////////////////////////////////
+  handleKitchenUtensilInputName = (val) => {
+    this.setState({ suggestedUtensils: val });
+  }
 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    handleUtensilsDropdownChange(event) {
+      if (event.target.value) {
+        this.setState({ suggestedUtensils: [...this.state.suggestedUtensils, event.target.value] });
+      } else {
+        this.setState({ suggestedUtensils: [...this.state.suggestedUtensils, event.target.innerHTML] });
+      }
+    }
+
+      ///////////////////////////////////////////////////////////////////////////////////////
+  handleDeleteUtensilsChip(chip) {
+    var array = [...this.state.suggestedUtensils]; // make a separate copy of the array
+    var index = array.indexOf(chip);
+    if (index !== -1) {
+      array.splice(index, 1);
+      this.setState({ suggestedUtensils: array });
+    }
+  }
+  
   ////////////////////////////////////////////////////////////////////////////
   handleAddCategoryChip(chip) {
     this.setState({ categoryChips: [...this.state.categoryChips, chip] }); //
@@ -449,6 +480,22 @@ class ViewSuggestedMeals extends Component {
   /////////////////////////////////////////////////////////////////////////////
   handleCategoryDropdownChange = (val) => {
     this.setState({ categoryList: val });
+  }
+
+  /////////////////////////////////////////////////////////////////////////////
+  updateTip(chip) {
+    this.setState({ tips: [...this.state.tips, chip] })
+  }
+
+  ////////////////////////////////////////////////////////////////////////////
+  deleteTip(chip) {
+    let tipsList = this.state.tips;
+
+    var index = tipsList.indexOf(chip);
+    if (index !== -1) {
+      tipsList.splice(index, 1);
+      this.setState({ tips: tipsList });
+    }
   }
 
   ////////////////////////////////////////////////////////////////////////////
@@ -496,10 +543,12 @@ class ViewSuggestedMeals extends Component {
     console.log(parsed_ingredients);
     for (let i = 0; i < parsed_ingredients.length; i++) {
       var currProductObject = {
-        product: parsed_ingredients[i].productName,
+        productName: parsed_ingredients[i].productName,
         quantity: parsed_ingredients[i].quantity,
         measurement: parsed_ingredients[i].measurement,
         productImgData: null,
+        properIngredientStringSyntax: 
+        parsed_ingredients[i].properIngredientStringSyntax,
         // productImgPath: data.product_slider[i].image,
         flag: false,
       };
@@ -524,15 +573,15 @@ class ViewSuggestedMeals extends Component {
     for (let i = 0; i < parsed_instructionData.length; i++) {
       console.log("i : " + i);
       console.log("Length of instruction data: " + parsed_instructionData.length);
-      let instructionChunk = parsed_instructionData[i].instructionChunk;
+      let instructionChunk = parsed_instructionData[i];
       console.log("instruction is: ");
       console.log(instructionChunk);
       console.log("instruction steps is: ");
       console.log(instructionChunk.instructionSteps);
       // let instructionSteps = instructionChunk['instructionSteps'];
       let tmp = {
-        instructionSteps: instructionChunk.instructionSteps,
         title: instructionChunk.title,
+        instructionSteps: instructionChunk.instructionSteps,
         dataName: instructionChunk.dataName,
       }
       // this.getDataFromS3(tmp.dataName, i);
@@ -542,22 +591,36 @@ class ViewSuggestedMeals extends Component {
 
     this.setState({
       selected_id: data._id, stepSlides: tmp_stepSlides_data,
-      suggestMealRole: mealRole, mealLabel: data.mealName, intro: data.intro, servings: data.servings,
-      mealImage: data.mealImage, mealImageName: data.mealImageName, formatted_ingredient: data.formatted_ingredient, tips: data.tips
+      suggestMealRole: mealRole, mealLabel: data.mealName, 
+      previousMealImageName: data.mealImageName, 
+      intro: data.intro, servings: data.servings,
+      mealImage: data.mealImage, mealImageName: data.mealImageName,
+       formatted_ingredient: data.formatted_ingredient,
+       chef: data.chef
+       
     });
     this.setState({ open: true });
 
-    const last_ingredient = data.formatted_ingredient[(data.formatted_ingredient.length - 1)];
+    const last_ingredient = 
+    data.formatted_ingredient[(data.formatted_ingredient.length - 1)];
     let parsed_categories = JSON.parse(data.categories);
+    // let parsed_tips = data.tips;
+    // let parsed_utensils = data.kitchenUtensils;
+    let parsed_tips = JSON.parse(data.tips);
+    let parsed_utensils = JSON.parse(data.kitchenUtensils);
 
     this.setState({
       currentIngredientMeasurement: last_ingredient.measurement,
-      currentIngredientQuantity: last_ingredient.quantity, currentIngredient: last_ingredient.product
+      currentIngredientQuantity: last_ingredient.quantity, 
+      currentIngredient: last_ingredient.product
     });
 
     this.setState({
       prepTime: data.prepTime, cookTime: data.cookTime,
-      categoryList: parsed_categories, product_slider: data.product_slider, productImgSetting_flag: false
+      categoryList: parsed_categories, 
+      suggestedUtensils: parsed_utensils,
+      tips: parsed_tips,
+      product_slider: data.product_slider, productImgSetting_flag: false
     });
     // const last_slider = data.product_slider[data.product_slider.length-1];
     // this.setState({productImg_path: last_slider.image});
@@ -585,7 +648,7 @@ class ViewSuggestedMeals extends Component {
     this.setupCurrentMealStates(data, mealRole);
     console.log("Trying to call image to display ");
     //get meal image from gridfs
-    // var url = "http://chopchowdev/getOneMongoFileImage/"+data.mealImage;
+    // let url = 'http://localhost:5000/getOneMongoFileImage/' + data.mealImageName;
     let url = 'https://chopchowdev.herokuapp.com/getOneMongoFileImage/' + data.mealImageName;
     this.setState({ mealImage: url })
   };
@@ -593,10 +656,6 @@ class ViewSuggestedMeals extends Component {
   ////////////////////////////////////////////////////////////////////////////
   handleClose = () => { this.setState({ open: false }); };
 
-  ////////////////////////////////////////////////////////////////////////////
-  onTextFieldChange = (e) => {
-    this.setState({ [e.target.id]: e.target.value });
-  };
 
   ////////////////////////////////////////////////////////////////////////////
   handleSelectAllClick = (event) => {
@@ -632,16 +691,26 @@ class ViewSuggestedMeals extends Component {
   ////////////////////////////////////////////////////////////////////////////
   submitMealUpdate = async () => {
     const data = this.state;
-    const { selected_id, mealImage, mealLabel, mealImageName, intro, 
+    const { selected_id, mealImage, mealLabel, previousMealImageName, mealImageName, intro, 
       servings, stepSlides, ingredientGroupList, ingredientStrings,
-       prepTime, cookTime, categoryList, tips } = data;
+       prepTime, cookTime, categoryList, tips, new_product_ingredients,
+       suggestedUtensils, instructionChunkContent1,instructionChunkContent2,
+       instructionChunkContent3,instructionChunkContent4,
+       instructionChunkContent5,instructionChunkContent6 } = data;
 
     let productImgForm = new FormData();
     let img_count1 = 0;
+    let new_measurements = [];
     for (var i = 0; i < ingredientGroupList.length; i++) {
       if (ingredientGroupList[i].productImgData !== null) {
         productImgForm.append('productImgs', ingredientGroupList[i].productImgData);
         img_count1++;
+      }
+
+     // get new_Measurements from inputted ingredient packets
+      if (ingredientGroupList[i].measurement !== "") {
+        let index = this.props.measurements.indexOf(ingredientGroupList[i].measurement);
+        if (index === -1) new_measurements.push(ingredientGroupList[i].measurement);
       }
     }
 
@@ -662,9 +731,11 @@ class ViewSuggestedMeals extends Component {
     console.log("Creating product data");
     for (i = 0; i < ingredientGroupList.length; i++) {
       var tmp_ingredient = {
-        product: ingredientGroupList[i].product,
+        productName: ingredientGroupList[i].productName,
         quantity: ingredientGroupList[i].quantity,
         measurement: ingredientGroupList[i].measurement,
+        productImgPath: ingredientGroupList[i].productImgPath,
+        properIngredientStringSyntax: ingredientGroupList[i].properIngredientStringSyntax
       };
       console.log(tmp_ingredient);
       formatted_ingredient1.push(tmp_ingredient);
@@ -686,57 +757,59 @@ class ViewSuggestedMeals extends Component {
       product_slider.push(tmp_slider_data);
     }
 
-    //------------- to get glabal path for instrution image ----------------------------------------
-    let instructionImgForm = new FormData();
-    let img_count = 0;
-    for (i = 0; i < stepSlides.length; i++) {
-      if (stepSlides[i].imgdata !== null && stepSlides[i].imgdata !== -1) {
-        instructionImgForm.append('instructionImgs', stepSlides[i].imgdata);
-        img_count += 1;
-      }
-    }
 
-    // if (img_count !== 0) {
-    //   var instructionImg_url = "/getInstructionImgURL/";
-    //   const instructionImg_config = { method: 'POST', data: instructionImgForm, url: instructionImg_url };
-
-    //   const response = await axios(instructionImg_config)
-    //   instructionImg_paths = response.data.instrutionImg_paths;
-    // }
-
-    //-------------to make instruction data ------------------------------------------
-    const instructionGroupData = [];
-    for (i = 0; i < stepSlides.length; i++) {
-      let image = null;
-      // if (stepSlides[i].imgdata !== null && stepSlides[i].imgdata !== -1) {
-      //   n++; image = instructionImg_paths[n]
-      // }
-      // else if (stepSlides[i].imgdata === -1) {
-      //   image = stepSlides[i].image;
-      // }
-
-      let tmp = {
-        // step: stepSlides[i].step,
-        // image: stepSlides.image,
-        instructionSteps: stepSlides.instructionSteps,
-        title: stepSlides.title,
-        dataName: stepSlides.dataName,
-      }
-      instructionGroupData.push(tmp);
-    }
-
-    //-------------to make new category data ------------------------------------------
+    //-------------to store new category data ------------------------------------------
     let new_categories = [];
     for (i = 0; i < categoryList.length; i++) {
       let index = this.categories.indexOf(categoryList[i]);
       if (index === -1) new_categories.push(categoryList[i])
     }
 
+    //-------------to store new utensils data ------------------------------------------
+    let new_kitchen_utensils = [];
+    for (i = 0; i < suggestedUtensils.length; i++) {
+      // check if categories already exist, only add new categories to db,
+      // though all will still be attached to meal, as mentioned
+      let index = this.props.kitchenUtensils.indexOf(suggestedUtensils[i]);
+      if (index === -1) new_kitchen_utensils.push(suggestedUtensils[i]);
+    }
+
     let suggestMealForm = new FormData();
     suggestMealForm.append('id', selected_id);
     suggestMealForm.append('mealName', mealLabel);
-    suggestMealForm.append('mealImage', mealImage);
     suggestMealForm.append('mealImageName', mealImageName);
+
+    // check for if we want to re-update/re-add meal image data or leave as-is
+    if(previousMealImageName != mealImageName){
+      suggestMealForm.append('mealImage', mealImage);
+    }
+    else{
+      console.log("previous meal image name is same as current: "+ mealImageName);
+    }
+
+    // check if instruction content has been updated before passing to server
+    console.log("Printing instruction chunk contents in state");
+    console.log(instructionChunkContent1);
+    console.log(instructionChunkContent2);
+    console.log(instructionChunkContent3);
+    console.log(instructionChunkContent4);
+    console.log(instructionChunkContent5);
+    console.log(instructionChunkContent6);
+
+    if(instructionChunkContent1!= ""){
+      suggestMealForm.append('instructionChunkContent1', instructionChunkContent1)
+    }
+    if(instructionChunkContent2!= ""){
+      suggestMealForm.append('instructionChunkContent2', instructionChunkContent2)
+    }    if(instructionChunkContent3!= ""){
+      suggestMealForm.append('instructionChunkContent3', instructionChunkContent3)
+    }    if(instructionChunkContent4!= ""){
+      suggestMealForm.append('instructionChunkContent4', instructionChunkContent4)
+    }    if(instructionChunkContent5!= ""){
+      suggestMealForm.append('instructionChunkContent5', instructionChunkContent5)
+    }    if(instructionChunkContent6!= ""){
+      suggestMealForm.append('instructionChunkContent6', instructionChunkContent6)
+    }
 
     suggestMealForm.append('prepTime', prepTime);
     suggestMealForm.append('cookTime', cookTime);
@@ -745,62 +818,27 @@ class ViewSuggestedMeals extends Component {
     console.log("ingredient strings submitted as formaated ingredients is:");
     console.log(formatted_ingredient1);
     console.log(ingredientStrings);
-    suggestMealForm.append('tips', tips); 
+    suggestMealForm.append('tips',  JSON.stringify(tips)); 
     suggestMealForm.append('chef', this.state.chef);
     suggestMealForm.append('servings', servings);
 
-    suggestMealForm.append('formatted_ingredient', formatted_ingredient1);
-    // new measurements, ingredientsQuantityMeasurements, new product ingredients, 
+    suggestMealForm.append('formatted_ingredient',
+     JSON.stringify(formatted_ingredient1));
+     suggestMealForm.append('new_product_ingredients', JSON.stringify(new_product_ingredients));
+
+    suggestMealForm.append('new_measurements', JSON.stringify(new_measurements));
 
     suggestMealForm.append('categories', JSON.stringify(categoryList));
-    // new categories
+    suggestMealForm.append('newCategories', JSON.stringify(new_categories));
 
-    suggestMealForm.append('utensilsRequired', JSON.stringify(categoryList)); // or kitchen utensils
-    // new utensils
+    suggestMealForm.append('kitchenUtensils', JSON.stringify(suggestedUtensils)); // or kitchen utensils
+    suggestMealForm.append('newKitchenUtensils', JSON.stringify(new_kitchen_utensils));
 
-    suggestMealForm.append('stepSlides', JSON.stringify(instructionGroupData)); // or instruction group lists
+    suggestMealForm.append('stepSlides', JSON.stringify(stepSlides)); // or instruction group lists
 
-    // suggestMealForm.append('instructionData1Name', this.state.chunk1Content.filename);
-    // suggestMealForm.append('instructionData2Name', this.state.chunk2Content.filename);
-    // suggestMealForm.append('instructionData3Name', this.state.chunk3Content.filename);
-    // suggestMealForm.append('instructionData4Name', this.state.chunk4Content.filename);
-    // suggestMealForm.append('instructionData5Name', this.state.chunk5Content.filename);
-    // suggestMealForm.append('instructionData6Name', this.state.chunk6Content.filename);
-
-
-    // suggestMealForm.append('instructionChunkContent1', this.state.chunk1Content);
-    // suggestMealForm.append('instructionChunkContent2', this.state.chunk2Content);
-    // suggestMealForm.append('instructionChunkContent3', this.state.chunk3Content);
-    // suggestMealForm.append('instructionChunkContent4', this.state.chunk4Content);
-    // suggestMealForm.append('instructionChunkContent5', this.state.chunk5Content);
-    // suggestMealForm.append('instructionChunkContent6', this.state.chunk6Content);
-    // suggestMealForm.append('product_slider', JSON.stringify(product_slider));
-
-
-    // const ingredient_list = [];
-    // if (this.state.meal_has_image) {
-    //   suggestMealForm.append('meal_has_image', "true");
-    //   suggestMealForm.append('mealImage', mealImage);
-    // } else {
-    //   suggestMealForm.set('meal_has_image', "false");
-    // }
-
-    // console.log("KKKKKKKKKKK: ", ingredientData);
-    // for(var i=0; i< ingredientData.length; i++)
-    // {
-    //   if(ingredientData[i].mealImage==null){
-    //     ingredient_list.push(null);
-    //   }else{
-    //     ingredient_list.push({path_flag:ingredientData[i].path_flag,  path: ingredientData[i].path});
-    //     if(ingredientData[i].path_flag){
-    //       suggestMealForm.append('mealImage', ingredientData[i].mealImage);
-    //     } 
-    //   }    
-    // }  
-    // suggestMealForm.append('ingredient_list', JSON.stringify(ingredient_list));
     console.log(selected_id);
-    // var url = "/updateSuggestedMealItem";
-    var url = "http://localhost:5000/api/updateSuggestedMealItem";
+    var url = "/updateSuggestedMealItem";
+    // var url = "http://localhost:5000/api/updateSuggestedMealItem";
 
     const config = { method: 'POST', data: suggestMealForm, url: url };
     const response = await axios(config)
@@ -808,23 +846,23 @@ class ViewSuggestedMeals extends Component {
       console.log("Updated Meal submitted successfully");
       // return (window.location.href = "/ViewSuggestedMeals");
     } else {
-      console.log("Somthing happened wrong");
+      console.log("Something happened wrong");
     }
   }
 
   ////////////////////////////////////////////////////////////////////////////
   render() {
     console.log("this.state.stepSlides: ", this.state.stepSlides)
-    var composed_instructions = [];
-    var count_index = 1;
+    if( this.state.stepSlides.length > 0){
+      console.log("first content name : ", this.state.stepSlides[0].dataName);
+    }
 
-    // var urld_image = URL.createObjectURL(this.state.mealImage);
+   
+    var composed_instructions = [];
     for (let i = 0; i < this.state.stepSlides.length; i++) {
-      if (i !== 0) {
-        console.log("step salides instructions length is : " + this.state.stepSlides[i - 1].instructionSteps.length);
-        count_index += this.state.stepSlides[i - 1].instructionSteps.length;
-        console.log("count index is : " + count_index);
-      }
+      let sectionTitle = 'Section' +(i+1) + 'Title';
+      let chunkTitle = 'chunk'+(i+1)+'Title';
+
       // Allowing file type
       var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
       var allowedVideoExtensions = /(\.mp4|\.m4v|\.)$/i;
@@ -835,44 +873,56 @@ class ViewSuggestedMeals extends Component {
         </video>
       }
       else if (allowedImageExtensions.exec(this.state.stepSlides[i].dataName)) {
-        instructionContent = <img id={"instructionImg" + i} src={'https://meal-chunk-images-and-videos.s3.us-west-1.amazonaws.com/' + this.state.stepSlides[i].dataName} alt={this.state.stepSlides[i].dataName} />
+        instructionContent = <img id={"instructionImg" + i}
+        src={'https://meal-chunk-images-and-videos.s3.us-west-1.amazonaws.com/' + this.state.stepSlides[i].dataName} 
+        alt={this.state.stepSlides[i].dataName}
+        style={{width: "inherit"}} />
       }
       else {
         // use generic content
-        instructionContent = <img id={"instructionImg" + i} src={'public/images/meal_pics/chopchow_default_instruction.png'} alt="chop chow placeholder" />
+        instructionContent = <img id={"instructionImg" + i} 
+        src={'images/meal_pics/chopchow_default_instruction.png'} 
+        alt="chop chow placeholder" 
+        style={{width:"inherit"}}/>
       }
 
 
       composed_instructions.push(
-        <div key={i} className="mb-3" style={{ margin: "10px", padding: "10px", backgroundColor: "white", boxShadow: "1px 1px 4px 2px #00000030" }}>
-          {/* 'x' icon to Delete intruction slide */}
-          <Row style={{ justifyContent: "flex-end" }}>
-            <i className="fa fa-remove" style={{ fontSize: "50%", marginTop: "0px", marginRight: "15px" }} onClick={() => this.onHandleInstructionItem(i)}></i>
-          </Row>
+        <div key={i} className="mb-3" style={{ margin: "10px", 
+        padding: "10px", backgroundColor: "white",
+         boxShadow: "1px 1px 4px 2px #00000030" }}>
+
           {/* Step Slide Title */}
           <Row >
-            <div onClick={() => this.onHandleStepSlideTitleItem(i)}>
-              {this.state.stepSlides[i].title}
-            </div>
+              <TextField id={chunkTitle}
+              className="mb-2" 
+              onChange={(ev) => this.handleInstructionTitle(ev, i)}
+               label={sectionTitle} defaultValue={this.state.stepSlides[i].title} variant="filled" />
           </Row>
           <Row >
             {/* // list all steps on each step slide  */}
             <Col md={4} className="mb-2" style={{ overflowWrap: "break-word" }}>
               <div className="mdc-list">
-                {this.state.stepSlides[i].instructionSteps.map((chip, index1) => (
+              <ChipInput label="Instructions" className="mb-2" fullWidth
+               value={this.state.stepSlides[i].instructionSteps} 
+               onAdd={(chip) => this.handleAddInstructionStep(chip, i)}
+               onDelete={(chip) => this.handleDeleteInstructionsStep(chip, i)}
+                variant="filled" />
+                {/* {this.state.stepSlides[i].instructionSteps.map((chip, index1) => (
                   <div className="mdc-list-item" key={index1}>
-                    {/* <span className="mdc-list-item__text">{index1 + count_index}. */}
                     <span className="mdc-list-item__text"> {chip}</span>
-                    {/* </span> */}
                   </div>
-                ))}
+                ))} */}
               </div>
             </Col>
             {/* Display step content image/videos for each step slide  */}
             <Col md={4} className="mb-2" style={{ textAlign: "center" }}>
               {/* determine how img path is determined vs using dataname */}
-              <img className="mb-2" src={this.state.stepSlides[i].imgpath} width="auto" height="150px" alt="" />
-              <input accept="image/*" id="imgSrc1" type="file" className="mb-2, ml-3" onChange={(ev) => this.onUpdateInstructionImg(ev, i)} />
+              <img className="mb-2" src={this.state.stepSlides[i].imgpath}
+               width="auto" height="150px" alt="" />
+              <input accept="image/*" id="imgSrc1" type="file" 
+              className="mb-2, ml-3" 
+              onChange={(ev) => this.onUpdateInstructionImg(ev, i)} />
             </Col>
             <Col md={4} className="mb-2"></Col>
           </Row>
@@ -893,8 +943,11 @@ class ViewSuggestedMeals extends Component {
     }
 
     const { classes } = this.props;
-    const { mealData_list, page, rowsPerPage, open, suggestMealRole, loading_imgSrc, categoryList, mealImage } = this.state;
-    const { mealLabel, intro, currentIngredient, currentIngredientQuantity, currentIngredientMeasurement, prepTime, cookTime, servings } = this.state;
+    const { mealData_list, page, rowsPerPage, open, suggestMealRole,
+       loading_imgSrc, categoryList, mealImage } = this.state;
+    const { mealLabel, intro, currentIngredient, currentIngredientQuantity,
+       currentIngredientMeasurement, prepTime, cookTime, servings,
+        suggestedUtensils, chef } = this.state;
 
     const theme = createMuiTheme({
       palette: { primary: green, },
@@ -1020,7 +1073,7 @@ class ViewSuggestedMeals extends Component {
                   <TextField multiline id="intro" fullWidth onChange={this.onTextFieldChange} label="Intro" variant="filled" className="mb-3" value={intro} />
                 </Col>
                 <Col md={4} style={{ marginTop: "20px" }}>
-                  <input accept="image/*" id="mealImage" type="file" className="mb-2 pr-4" onChange={(ev) => this.onMealUploadButtonClick(ev)} />
+                  <input accept="image/*" id="mealImage" type="file" className="mb-2 pr-4" onChange={(ev) => this.onMealImageUploadButtonClick(ev)} />
                   <img src={mealImage} width="100%" alt="meal"></img>
                 </Col>
                 <Col md={4} style={{ marginTop: "20px", textAlign: "center" }}>
@@ -1055,7 +1108,7 @@ class ViewSuggestedMeals extends Component {
                     <Row >
                       <Col md={5} className="mb-2" style={{ overflowWrap: "break-word" }}>
                         <div className="card-ingredient-content">
-                          <div><span style={{ fontWeight: "600" }}>1. Product &emsp;&emsp;&nbsp; :</span> {data.product}</div>
+                          <div><span style={{ fontWeight: "600" }}>1. Product &emsp;&emsp;&nbsp; :</span> {data.productName}</div>
                           <div><span style={{ fontWeight: "600" }}>2. Quantity&emsp;&emsp; :</span> {data.quantity}</div>
                           <div><span style={{ fontWeight: "600" }}>3. Measurement:</span> {data.measurement}</div>
 
@@ -1075,17 +1128,21 @@ class ViewSuggestedMeals extends Component {
               <Row className="mb-1">
                 <Col md={4}>
                   <Autocomplete
-                    id="currentIngredient"
-                    options={this.products.map((option) => option)}
-                    onChange={(ev, val) => this.handleIngredientDropdownChange(ev, val)}
-                    onInputChange={(ev, val) => this.handleProductName(ev, val)}
                     freeSolo
+                    id="currentIngredient"
+                    options={this.props.productNames.map((option) => option)}
                     renderInput={(params) => (<TextField {...params} label="Ingredient.." variant="filled" />)}
                     fullWidth
                     className="mb-3"
-                    value={currentIngredient}
+                    // value={currentIngredient}
+                    options={this.props.productNames.map((option) => option)}
                   />
-                  <TextField fullWidth id="currentIngredientQuantity" type="number" onChange={this.onTextFieldChange} label="Quantity" variant="filled" placeholder="1.." className="mb-3" value={currentIngredientQuantity} />
+                  <TextField fullWidth id="currentIngredientQuantity" 
+                  type="number" 
+                  // onChange={this.onTextFieldChange}
+                   label="Quantity" variant="filled"
+                    placeholder="1.." className="mb-3" 
+                     />
                 </Col>
 
                 <Col md={4}>
@@ -1097,8 +1154,7 @@ class ViewSuggestedMeals extends Component {
                   <Autocomplete
                     id="currentIngredientMeasurement"
                     options={this.measurements.map((option) => option)}
-                    value={currentIngredientMeasurement}
-                    onChange={this.handleIngredientMeasurement}
+                    // value={currentIngredientMeasurement}
                     freeSolo
                     renderInput={(params) => (<TextField {...params} label="Measurement.." variant="filled" />)}
                     className="mb-3"
@@ -1110,11 +1166,47 @@ class ViewSuggestedMeals extends Component {
                 </Col>
               </Row>
               <Row className="mb-3">
-                <Col md={4} style={{ textAlign: "center", margin: "auto" }}>
-                  <TextField id="servings" fullWidth type="number" onChange={this.onTextFieldChange} label="Servings" variant="filled" className="mb-2" placeholder="1 person, 2, 4 or 10 people" style={{ marginTop: "10px" }} value={servings} />
+                <Col md={6} style={{ textAlign: "center", margin: "auto" }}>
+                  <TextField id="servings" fullWidth type="number" 
+                  onChange={this.onTextFieldChange} 
+                  label="Servings" variant="filled" className="mb-2" 
+                  placeholder="1 person, 2, 4 or 10 people" 
+                  style={{ marginTop: "10px" }} value={servings} />
                 </Col>
-                <Col md={4} style={{ textAlign: "center", margin: "auto" }}> </Col>
-                <Col md={4} style={{ textAlign: "center", margin: "auto" }}> </Col>
+                <Col md={6} style={{ textAlign: "center", margin: "auto" }}>
+                  <TextField id="chef" fullWidth 
+                  onChange={this.onTextFieldChange} 
+                  label="Chef" variant="filled" className="mb-2" 
+                  placeholder="Author/Chef" 
+                  style={{ marginTop: "10px" }} value={chef} />
+                </Col>
+              </Row>
+
+              <Row className="mb-3">
+                <Col md={4} style={{ textAlign: "center", margin: "auto" }}>
+                <Autocomplete
+                    multiple
+                    id="tags-standard"
+                    className="mb-2"
+                    freeSolo
+                    // filterSelectedOptions
+                    options={this.props.kitchenUtensils.map((option) => option)}
+                    onChange={(e, val) => this.handleKitchenUtensilInputName(val)}
+                    value={suggestedUtensils}
+                    renderInput={params => (
+                      <TextField 
+                      {...params}
+                      id="Kitchen Utensils" fullWidth
+                  // onChange={(ev,val)=>this.handleUtensilsDropdownChange(ev,val)}
+                   label="Utensils" variant="filled" 
+                   placeholder="Pots, pans and/or both ?" 
+                   style={{ marginTop: "10px" }} 
+                    />
+                    )}
+                  />
+
+                  
+                </Col>
               </Row>
               <hr />
 
@@ -1122,20 +1214,7 @@ class ViewSuggestedMeals extends Component {
                 composed_instructions
               }
 
-              <Row className="mb-3">
-                <Col md={12}>
-                  <ChipInput label="Instructions" className="mb-2" fullWidth value={this.state.instructionsChip} onAdd={(chip) => this.handleAddInstructionStep(chip)} onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, index)} variant="filled" />
-                </Col>
-              </Row>
-              <Row className="mb-3">
-                <Col md={4} className="mb-2">
-                  <input accept="image/*" id="imgSrc1" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev)} />
-                </Col>
-                <Col md={4} style={{ textAlign: "center", margin: "auto" }}>
-                  <Button variant="contained" color="primary" disableRipple style={{ color: "white", width: "300px" }} className="mb-3" onClick={this.addInstructionList}  > ADD NEW INSTRUCTION SET</Button>
-                </Col>
-                <Col md={4}> </Col>
-              </Row>
+
 
               <Row className="mb-3">
                 <Col md={4}>
@@ -1182,7 +1261,7 @@ class ViewSuggestedMeals extends Component {
               }
               <Row className="mb-3">
                 <Col md={12}>
-                  <ChipInput label="Tips" className="mb-2" fullWidth value={this.state.tips} variant="filled" />
+                  <ChipInput label="Tips" className="mb-2" fullWidth value={this.state.tips} onAdd={(chip)=>this.updateTip(chip)} onDelete={(chip, index)=>this.deleteTip(chip,index)} variant="filled" />
                 </Col>
               </Row>
             </form>
@@ -1193,6 +1272,75 @@ class ViewSuggestedMeals extends Component {
 }
 
 export default withStyles(styles)(ViewSuggestedMeals);
+          {/* 'x' icon to Delete intruction slide */}
+          {/* <Row style={{ justifyContent: "flex-end" }}>
+            <i className="fa fa-remove" style={{ fontSize: "50%", marginTop: "0px", marginRight: "15px" }} onClick={() => this.onHandleInstructionItem(i)}></i>
+          </Row> */}
+      ////////////////////////////////////////////////////////////////////////////
+ //     x on step slides container
+  // onHandleInstructionItem = (ind) => {
+  //   const array = this.state.stepSlides;
+  //   array.splice(ind, 1);
+  //   this.setState({ stepSlides: array });
+  // }
+  
+  //   <Row className="mb-3">
+  //   <Col md={12}>
+  //     <ChipInput label="Instructions" className="mb-2" 
+  //fullWidth value={this.state.instructionsChip} 
+  //onAdd={(chip) => this.handleAddInstructionStep(chip)} 
+  //onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, index)} 
+  // variant="filled" />
+  //   </Col>
+  // </Row>
+
+
+  ///////////////////////////////////////////////////////////////////////////
+  // addInstructionList = () => {
+  //   if (this.state.instructionsChip.length === 0) return;
+  //   let tmp = {
+  //     step: this.state.instructionsChip,
+  //     imgdata: this.state.instructionImgData,
+  //     image: this.state.instructionImgPath,
+  //   }
+  //   this.setState({ stepSlides: [...this.state.stepSlides, tmp] });
+  //   this.setState({ instructionsChip: [], instructionImgData: null, instructionImgPath: "" });
+  // }
+  ////////////////////////////////////////////////////////////////////////////
+  // onhandleInstructionImg = (event) => {
+  //   this.setState({ instructionImgData: event.target.files[0] });
+  //   if (event.target.files[0] !== null) {
+  //     this.setState({ instructionImgPath: URL.createObjectURL(event.target.files[0]) });
+  //   }
+  // };
+              {/* <Row className="mb-3">
+                <Col md={4} className="mb-2">
+                  <input accept="image/*" id="imgSrc1" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev)} />
+                </Col>
+                <Col md={4} style={{ textAlign: "center", margin: "auto" }}>
+                  <Button variant="contained" color="primary" disableRipple style={{ color: "white", width: "300px" }} className="mb-3" onClick={this.addInstructionList}  > ADD NEW INSTRUCTION SET</Button>
+                </Col>
+                <Col md={4}> </Col>
+              </Row> */}
+
+
+                //------------- to get glabal path for instrution image ----------------------------------------
+    // let instructionImgForm = new FormData();
+    // let img_count = 0;
+    // for (i = 0; i < stepSlides.length; i++) {
+    //   if (stepSlides[i].imgdata !== null && stepSlides[i].imgdata !== -1) {
+    //     instructionImgForm.append('instructionImgs', stepSlides[i].imgdata);
+    //     img_count += 1;
+    //   }
+    // }
+
+    // if (img_count !== 0) {
+    //   var instructionImg_url = "/getInstructionImgURL/";
+    //   const instructionImg_config = { method: 'POST', data: instructionImgForm, url: instructionImg_url };
+
+    //   const response = await axios(instructionImg_config)
+    //   instructionImg_paths = response.data.instrutionImg_paths;
+    // }
 
   // /////////////////////////////////////////////////////////////////////////
   // handleDeleteCategoryChip(chip) {
@@ -1237,7 +1385,7 @@ export default withStyles(styles)(ViewSuggestedMeals);
     //   this.setState({ ingredientData: [...this.state.ingredientData, tmp_data] });
     // }
 
-    // this.setState({ formatted_ingredient: [ ...this.state.formatted_ingredient, currIngredientObject, ],
+    // this.setState({ formatted_ingredient: [ ...this.state.formatted_ingredient, currProductObject, ],
     //   productImg_path:null,
     //   product_slider: [...this.state.product_slider, null],
     // });
