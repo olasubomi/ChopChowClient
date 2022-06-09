@@ -50,10 +50,10 @@ class TextSlider extends Component {
     var count_index = 1;
     
     for (i = 0; i < instructionData.length ; i++) {
-      const mealPrep1 = instructionData[i].step;
+      const mealPrep1 = instructionData[i].instructionSteps;
 
       if(i!==0){
-        count_index += instructionData[i-1].step.length;
+        count_index += instructionData[i-1].instructionSteps.length;
       }
 
       carouselSlides.push(
@@ -73,7 +73,7 @@ class TextSlider extends Component {
                 <p/>
                  <img
                   className="img-responsive imageHeighgt"
-                  src={instructionData[i].image !==null? instructionData[i].image: no_mealImg}
+                  src={instructionData[i].dataName !==null? instructionData[i].dataName: no_mealImg}
                   alt="First slide"
                   style ={{height:"auto", width:"80%", marginLeft:"10%"}}
                 />

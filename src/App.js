@@ -21,8 +21,8 @@ import AdminPanel from "./components/AdminPanel/AdminPanel";
 import { setInitUrl, getUser } from "./actions";
 import { connect } from 'react-redux';
 import axios from './util/Api';
+import productsObj from './custom_data/products.json';
 require("dotenv").config();
-
 
 
 
@@ -143,7 +143,7 @@ class App extends Component {
           {/* <Route path="/home" render={() => (customer_id !== undefined) ? <HomePage /> : (<Redirect to={{ pathname: "#" }} />)} /> */}
           <Route path="/home" render={(props) => <HomePage {...props} />} />
 
-          <Route path="/v2" render={() => <MealsPage />} />
+  <Route path="/v2" render={() => <MealsPage productsObj={productsObj}/>} />
           <Route path="/v3" render={() => <VSMealsPage />} />
 
           <Route exact path="/grocery" render={() => {           
@@ -185,6 +185,9 @@ class App extends Component {
     );
   }
 }
+
+
+
 // export default App;
 
 const mapStateToProps = ({ auth }) => {

@@ -136,7 +136,7 @@ class SuggestMeal extends Component {
       if (mealList && mealList.data.length !== 0) {
         console.log("returns GET of ALL MEALS ");
         for (var i = 0; i < mealList.data.length; i++) {
-          this.props.allMealNames.push(mealList.data[i].label);
+          this.props.allMealNames.push(mealList.data[i].mealName);
         }
       } else {
         console.log("get all meal names function does not return");
@@ -146,7 +146,7 @@ class SuggestMeal extends Component {
         console.log(err);
       });
 
-    console.log(this.allMealNames);
+    console.log(this.props.allMealNames);
     // get all store names*, if NEW products section exists.
 
     // can redux resolve this for us by checking if we recently called this in cache or from another page ??
@@ -867,7 +867,7 @@ class SuggestMeal extends Component {
         // name and optional image added to new product,
         // we can add remainder products data after testing current
         ingredient: new_product_ingredients[i].productName,
-        image: new_product_ingredients[i].productImgFile
+        // image: new_product_ingredients[i].productImgFile
       };
       // handle quantity measurement list
       var measurementQuantity = {

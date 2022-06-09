@@ -22,7 +22,6 @@ class MealsPage extends Component {
       selected_index: 0,
       selectedCardID: "",
 
-      mealSlider_Flag: false,
       currentMealCount: 12,
 
       mealList:null,
@@ -45,13 +44,13 @@ class MealsPage extends Component {
     //   .then(res => res.text())
     //   .then(body => {
       axios.get(url).then((body) => {
-        var productsList = body.data;
-        if(productsList && productsList.data.length !== 0){
+        var mealsList = body.data;
+        if(mealsList && mealsList.data.length !== 0){
           console.log("shows products does return");
-          console.log(productsList.data.length);
+          console.log(mealsList.data.length);
           let products = [];
-          for (var i = 0; i < productsList.data.length; i++) {
-            products.push(productsList.data[i]);
+          for (var i = 0; i < mealsList.data.length; i++) {
+            products.push(mealsList.data[i]);
           }
           this.setState({ products: products})
         }
@@ -66,7 +65,9 @@ class MealsPage extends Component {
 
   //////////////////////////////////////////////////////////////////////////////////////////////
   onClickMealCard = ( i, col_count )=>{
-    if(i === this.state.selected_index) this.setState({slider_flag: !this.state.slider_flag})
+    if(i === this.state.selected_index){
+      this.setState({slider_flag: !this.state.slider_flag})
+    }
     else this.setState({slider_flag: true})
 
     this.setState({ selected_index: i});
@@ -75,15 +76,6 @@ class MealsPage extends Component {
     this.setState({ firstPart_ind: (parseInt((i )/ col_count)+1)*col_count});   
   }
 
-  //////////////////////////////////////////////////////////////////////////////////////////////
-  setMealSliderModal=()=>{
-    this.setState({mealSlider_Flag: true});
-  }
-
-  //////////////////////////////////////////////////////////////////////////////////////////////
-  removeMealSliderModal=()=>{
-    this.setState({mealSlider_Flag: false});
-  }
 
   //////////////////////////////////////////////////////////////////////////////////////////////
   onhandleLoadMore = () => {
@@ -121,14 +113,20 @@ class MealsPage extends Component {
           if(i+j>= Math.min(count, this.state.firstPart_ind)) break;
           const value = this.state.products[i+j];  
           tmp_item.push(
-            <div key={i+j} className={`col-sm-${12/ this.state.col_count} mealContainer`} style={{ justifyContent:"center"}}>
-            <div className="meal-card" onClick={()=>this.onClickMealCard(i+j, this.state.col_count)}>
+            <div key={i+j} 
+            className={`col-sm-${12/ this.state.col_count} mealContainer`}
+             style={{ justifyContent:"center"}}
+            >
+            <div className="meal-card" 
+            onClick={()=>this.onClickMealCard(i+j, this.state.col_count)}>
               <div style={containerStyle}>
                 <div style={{ textAlign:"center" }}>
-                  <img src={value.mealImage} className="images" style={{ width: "200px", height: "200px" }} alt="/"></img>
+                  <img src={'https://chopchowdev.herokuapp.com/getOneMongoFileImage/' + value.mealImageName} className="images" 
+                  style={{ width: "200px", height: "200px" }} alt="/">
+                  </img>
                 </div>
                 <div>
-                  <span style={{ color: "orange" }} >{value.label}</span> <br></br>
+                  <span style={{ color: "orange" }} >{value.mealName}</span> <br></br>
                   <span style={{ color: "grey" }}>View Details | {value.cookTime}  mins to prepare</span>
                   <span style={{ color: "black" }}></span>
                 </div>              
@@ -145,25 +143,27 @@ class MealsPage extends Component {
 
       // Meal card for selected card ONLY including Selected Card ingredient images on display
       if(selectedCard_mealData && this.state.slider_flag){
+        console.log(selectedCard_mealData.formatted_ingredient);
         items.push(
           <Row key={Math.min(count, this.state.firstPart_ind)}>
             <div className="col-sm-12" style={{background:"#ffffff"}} key="1000001">
               <div style={{width: "95%", margin:"auto"}}>
                 <div className ="detail-card-explain" id={selectedCard_mealData._id} >
-                    <div style={{fontSize:"18px", paddingTop:"20px", paddingBottom:"20px"}}>{selectedCard_mealData.intro}
+                    <div style={{fontSize:"18px", paddingTop:"20px", paddingBottom:"20px"}}>
+                      {selectedCard_mealData.intro}
                     </div>
                   </div>
 
                   <div id={selectedCard_mealData._id + "products"}>                  
-                    <WithScrollbar products={selectedCard_mealData.product_slider} col_count={this.state.col_count}/>
+                    <WithScrollbar productsObj={this.props.productsObj} products={JSON.parse(selectedCard_mealData.formatted_ingredient[0])} col_count={this.state.col_count}/>
                   </div>
 
                   <MyModal 
                     value={selectedCard_mealData}
-                    mealPrep={selectedCard_mealData.instructions}
-                    ingredientsList={selectedCard_mealData.newer_ingredient_format }
-                    func_setMealFlag = {this.setMealSliderModal}
-                    func_removeMealFlag = {this.removeMealSliderModal}
+                    mealPrep={selectedCard_mealData.stepSlides}
+                    ingredientsList={JSON.parse(selectedCard_mealData.formatted_ingredient[0]) }
+                    // func_setMealFlag = {this.setMealSliderModal}
+                    // func_removeMealFlag = {this.removeMealSliderModal}
                   />
                 </div>
             </div>
@@ -179,8 +179,12 @@ class MealsPage extends Component {
           if(i+j>= count) break;
             const value = this.state.products[i+j];   
             tmp_item.push(
-              <div key={i+j} className={`col-sm-${12/ this.state.col_count} mealContainer`} style={{ justifyContent:"center"}}>
-                <div className="meal-card" onClick={()=>this.onClickMealCard(i+j, this.state.col_count)}>
+              <div key={i+j} 
+                className={`col-sm-${12/ this.state.col_count} mealContainer`}
+               style={{ justifyContent:"center"}}
+              >
+                <div className="meal-card" 
+                  onClick={()=>this.onClickMealCard(i+j, this.state.col_count)}>
                   <div style={containerStyle}>
                     <div style={{ textAlign:"center" }}>
                       <img
@@ -191,7 +195,7 @@ class MealsPage extends Component {
                       ></img>
                     </div>
                     <div>
-                      <span style={{ color: "orange" }} >{value.label}</span> <br></br>
+                      <span style={{ color: "orange" }} >{value.mealName}</span> <br></br>
                       <span style={{ color: "grey" }}>View Details | {value.cookTime}  mins to prepare</span>
                       <span style={{ color: "black" }}></span>
                     </div>              

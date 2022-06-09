@@ -25,17 +25,37 @@ export default class WithScrollbar extends Component {
 
   render() {
     let col_count = this.props.col_count;
+    console.log(this.props.productsObj);
 
     return (
-        <Carousel className="withScroll_slider" showThumbs={false} infiniteLoop={false} selectedItem = { parseInt(this.props.products.length /2) } centerMode={true} centerSlidePercentage={100 / (1.4*col_count)}>
-          {this.props.products.map((ingredient, index) => (
+      <div>
+  
+
+        Gets here value
+      
+        <Carousel 
+        className="withScroll_slider" 
+        showThumbs={false} 
+        infiniteLoop={false} 
+        selectedItem = { parseInt(this.props.products.length /2) } 
+        centerMode={true} 
+        centerSlidePercentage={100 / (1.4*col_count)}
+        >
+          {this.props.products.map((ingredient, index) => (        
             <div key={index}>                    
-                <img src={ingredient.image!==""? ingredient.image: no_mealImg} alt={ingredient.ingredient} height="200px" width="auto"/>
-                <p style={{fontSize:"20px"}}>{ingredient.ingredient}</p>
+                <img src={ingredient.productImgPath!=="" && 
+                this.props.productsObj[ingredient.productName] != undefined ?
+                 this.props.productsObj[ingredient.productName]["image"] : no_mealImg} 
+                 alt={ingredient.ingredient} 
+                 height="200px" 
+                 width="auto"/>
+                <p style={{fontSize:"20px"}}>
+                  {ingredient.productName}</p>
             </div>
           ))}
             
         </Carousel>
+        </div>
     );
   }
 }

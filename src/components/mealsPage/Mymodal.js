@@ -42,7 +42,7 @@ class MyModal extends Component {
   };
 
   openModal() {
-    this.props.func_setMealFlag();
+    // this.props.func_setMealFlag();
     this.setState({ modalIsOpen: true });
   }
 
@@ -53,7 +53,7 @@ class MyModal extends Component {
 
   closeModal() {
     this.setState({ modalIsOpen: false });
-    this.props.func_removeMealFlag();
+    // this.props.func_removeMealFlag();
   }
 
   handleSelect(selectedIndex, e) {
@@ -78,20 +78,20 @@ class MyModal extends Component {
                 <div className="detail-firstCol col-md-5 col-sm-12" >
                   <Carousel showThumbs={false} infiniteLoop={false} style={{width:"96%" }}>
                     {content.map(index => (
-                      <img style={{ height: "250px" }} alt="pp" key={index} src={value.mealImage} />
+                      <img style={{ height: "250px" }} alt="pp" key={index} src={'https://chopchowdev.herokuapp.com/getOneMongoFileImage/'+value.mealImageName} />
                     ))}                    
                   </Carousel>
                   <br />
                   <div className="col-md-12 col-xs-12">
                     <h3> {value.label}</h3>
                     <div>
-                      {value.readTime} mins read | {value.cookTime} mins to prepare
+                      {value.prepTime} mins to prepare | {value.cookTime} mins to cook
                     </div>
-                    <div> 
+                    {/* <div> 
                       <button  style={{ backgroundColor: "grey",color: "white"}} >
                         Compare items
                       </button>
-                    </div>
+                    </div> */}
                     <br />
                   </div>
                 </div>
@@ -111,7 +111,8 @@ class MyModal extends Component {
                       { ingredientsList &&
                         ingredientsList.map(ingredient => (
                           <div className="col-md-6 col-sm-12" key={value.label + ingredient.product}>
-                            <input type="checkbox" value="" />{" "+ ingredient.product} <br />
+                            {/* Should be updated with syntax options tih quantity updated as measurements update synchronously */}
+                            <input type="checkbox" value="" />{" "+ ingredient.properIngredientStringSyntax} <br />
                           </div>
                         ))} 
                   </div>    
@@ -126,7 +127,8 @@ class MyModal extends Component {
         <div id ={value.name}>
           <button
             className = "detail-step-btn"
-            style={{ backgroundColor: "orange"}}
+            style={{ backgroundColor: "orange", marginLeft: "50%",
+          }}
             key={value.id+value.label} onClick={this.openModal}>
               See Full Recipe
           </button>

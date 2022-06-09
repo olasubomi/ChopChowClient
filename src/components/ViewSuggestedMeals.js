@@ -500,9 +500,9 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
 
   ////////////////////////////////////////////////////////////////////////////
   onhandleSendData = () => {
-    fetch("./api/send-mealData", {
+    fetch("http://localhost:5000/api/send-mealData", {
       method: 'POST',
-      credentials: 'include',
+      // credentials: 'include',
       headers: {
         'Content-type': 'application/json',
       },
@@ -659,6 +659,7 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
 
   ////////////////////////////////////////////////////////////////////////////
   handleSelectAllClick = (event) => {
+    // add all meals to selected array ? 
     if (event.target.checked) {
       const newSelecteds = this.state.mealData_list.map((n) => n._id);
       this.setState({ selected: newSelecteds });
@@ -669,6 +670,7 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
 
   ////////////////////////////////////////////////////////////////////////////
   handleClick = (event, id) => {
+    // update selected meals in vsm meals display using meal id
     const selected = this.state.selected;
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
@@ -960,10 +962,16 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
       <div className={classes.root} style={{ boxShadow: "2px 2px 8px 0px #a0a0a0" }}>
         <Toolbar className={clsx(classes.root, { [classes.highlight]: numSelected > 0 })} >
           {numSelected > 0 ?
-            (<Typography className={classes.title} color="inherit" variant="subtitle1" component="div" style={{ fontSize: "16px", fontWeight: "600", marginRight: "20px", color: "blue" }}> {numSelected} selected</Typography>)
-            : (<Typography className={classes.title} variant="h6" id="tableTitle" component="div">None Selected  </Typography>)}
+            (<Typography className={classes.title} color="inherit" 
+              variant="subtitle1" component="div" 
+              style={{ fontSize: "16px", fontWeight: "600", marginRight: "20px", color: "blue" }}>
+                {numSelected} selected</Typography>)
+            : (<Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+              None Selected  
+              </Typography>)}
 
-          {numSelected > 0 ? (<Button variant="outlined" color="primary" endIcon={<SendIcon />} onClick={this.onhandleSendData}>Send</Button>) : null}
+          {numSelected > 0 ? (<Button variant="outlined" color="primary" endIcon={<SendIcon />}
+           onClick={this.onhandleSendData}>Send</Button>) : null}
         </Toolbar>
         <TableContainer className={classes.container}>
           <Table stickyHeader aria-label="sticky table">
