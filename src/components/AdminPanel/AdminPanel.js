@@ -3,7 +3,7 @@ import React from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import img_oil from "../../assets/images/ola_ola_palm_oil.jpg";
 import img_logo from "../../assets/images/logo2.png";
-import {Dialog, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
+import {Dialog, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
 import { connect } from 'react-redux';
 import { withRouter } from "react-router-dom";
 // import axios from '../../util/Api';

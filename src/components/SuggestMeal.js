@@ -1,15 +1,14 @@
 import React, { Component } from "react";
-import TextField from "@material-ui/core/TextField";
-import ChipInput from "material-ui-chip-input";
-// import Chip from "@material-ui/core/Chip";
-import Autocomplete from "@material-ui/lab/Autocomplete"; // createFilterOptions,
+import TextField from "@mui/material/TextField";
+import ChipInput from  "@mui/material/Chip"
+// import Chip from "@mui/material/Chip";
+import Autocomplete from "@mui/lab/Autocomplete"; // createFilterOptions,
 // import axios from 'axios';
 import axios from '../util/Api';
 import { Container, Row, Col } from "react-bootstrap";
-import Button from '@material-ui/core/Button';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import { green } from '@material-ui/core/colors';
-import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
+import Button from '@mui/material/Button';
+import { green } from '@mui/material/colors';
+import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import MealPageModal from "./mealsPage/MealPageModal";
 
 // import ProductsPageModal from "./ProductsPageModal";
@@ -1085,9 +1084,9 @@ class SuggestMeal extends Component {
 
     // const [ingredientInput, setIngredientInput] = useState('');    
 
-    const theme = createMuiTheme({
-      palette: { primary: green },
-    });
+    // const theme = createMuiTheme({
+    //   palette: { primary: green },
+    // });
 
     const { ingredientGroupList } = this.state;
 
@@ -1449,9 +1448,9 @@ availableLocations,
               </div>
               <Row className="mb-5">
                 <Col md={12}>
-                  <ThemeProvider theme={theme}>
+                  {/* <ThemeProvider theme={theme}> */}
                     <Button variant="contained" className="mb-2" color="primary" style={{ color: "white", width: "100%" }} onClick={() => this.sendSuggestedMealToDB()}> Add Meal</Button>
-                  </ThemeProvider>
+                  {/* </ThemeProvider> */}
                 </Col>
                 <u>View privacy policy <sup>i</sup></u>
               </Row>

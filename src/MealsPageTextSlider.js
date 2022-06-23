@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { Carousel,  } from "react-bootstrap";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "./text_slider.css";
-import Paper from '@material-ui/core/Paper';
-import List from '@material-ui/core/List';
+import Paper from '@mui/material/Paper';
+import List from '@mui/material/List';
 import no_mealImg from '../src/assets/images/no_meal_step_image.png';
 
 class MealsPageTextSlider extends Component {

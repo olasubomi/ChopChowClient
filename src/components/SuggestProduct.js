@@ -1,14 +1,14 @@
 import React, { Component } from "react";
-import TextField from "@material-ui/core/TextField";
-// import Chip from "@material-ui/core/Chip";
-import Autocomplete from "@material-ui/lab/Autocomplete"; // createFilterOptions,
+import TextField from "@mui/material/TextField";
+// import Chip from "@mui/material/Chip";
+import Autocomplete from "@mui/lab/Autocomplete"; // createFilterOptions,
 // import axios from 'axios';
 import axios from '../util/Api';
 import { Row, Col } from "react-bootstrap";
-import Button from '@material-ui/core/Button';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import { green } from '@material-ui/core/colors';
-import {Dialog, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
+import Button from '@mui/material/Button';
+import { createMuiTheme, ThemeProvider } from '@mui/material/styles';
+import { green } from '@mui/material/colors';
+import {Dialog, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
 
 class SuggestProduct extends Component {
   products = [];

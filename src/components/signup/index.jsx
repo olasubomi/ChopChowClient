@@ -3,7 +3,7 @@ import './style.css';
 import { Form, Button, Container, Modal, Row, Col, ButtonToolbar } from 'react-bootstrap';
 
 import { Link } from 'react-router-dom';
-import { setTimeout } from 'timers';
+// import { setTimeout } from 'timers';
 
 export default class SignUp extends React.Component {
   state = {
@@ -27,9 +27,9 @@ export default class SignUp extends React.Component {
 
 
   handleClose = (delay) => {
-    setTimeout(() => {
+    // setTimeout(() => {
       this.props.history.push('/grocery');
-    }, delay || 0);
+    // }, delay, || 0);
   };
 
   formSubmit = (e) => {
