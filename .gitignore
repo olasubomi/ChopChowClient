@@ -7,8 +7,6 @@
 .icloud
 .env
 
-package-lock.json
-
 # testing
 /coverage
 
