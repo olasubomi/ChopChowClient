@@ -22,9 +22,7 @@ import { setInitUrl, getUser } from "./actions";
 import { connect } from 'react-redux';
 import axios from './util/Api';
 import productsObj from './custom_data/products.json';
-import { createMuiTheme, ThemeProvider } from '@mui/material';
-
-require("dotenv").config();
+// import { createMuiTheme, ThemeProvider } from '@mui/material';
 
 
 

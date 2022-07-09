@@ -5,7 +5,6 @@
     "node": "16.x"
   },
   "private": true,
-  "proxy": "http://localhost:5000",
   "dependencies": {
     "@aws-sdk/client-cognito-identity": "^3.41.0",
     "@aws-sdk/client-s3": "^3.41.0",
@@ -17,10 +16,8 @@
     "@mui/material": "^5.8.4",
     "@mui/styles": "^5.8.4",
     "axios": "^0.27.2",
-    "bootstrap": "^4.3.1",
     "connected-react-router": "^6.8.0",
     "ejs": "^3.1.6",
-    "fs": "^0.0.1-security",
     "jquery": "^3.5.1",
     "os": "^0.1.2",
     "passport-facebook": "^3.0.0",
@@ -42,7 +39,7 @@
     "redux-thunk": "^2.3.0",
     "source-map-explorer": "^2.5.2"
   },
-    "scripts": {
+  "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start-js": "react-scripts start",
     "start": "react-scripts start",

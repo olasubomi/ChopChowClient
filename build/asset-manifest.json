@@ -1,31 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.151d660e.chunk.css",
-    "main.js": "/static/js/main.0e0b7c97.chunk.js",
-    "main.js.map": "/static/js/main.0e0b7c97.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.685e71ab.js",
-    "runtime-main.js.map": "/static/js/runtime-main.685e71ab.js.map",
-    "static/css/2.9bd6e663.chunk.css": "/static/css/2.9bd6e663.chunk.css",
-    "static/js/2.4fc69728.chunk.js": "/static/js/2.4fc69728.chunk.js",
-    "static/js/2.4fc69728.chunk.js.map": "/static/js/2.4fc69728.chunk.js.map",
+    "main.css": "/static/css/main.ebdbb59c.css",
+    "main.js": "/static/js/main.1b7c00f0.js",
+    "static/media/food_prep.jpg": "/static/media/food_prep.25733fbe6d8d82d81cf5.jpg",
+    "static/media/grocery_bag.jpg": "/static/media/grocery_bag.fb448ffade2d2574c969.jpg",
+    "static/media/CC_Logo_no_bg.png": "/static/media/CC_Logo_no_bg.ab28aee4659a51f9fd46.png",
+    "static/media/ola_ola_palm_oil.jpg": "/static/media/ola_ola_palm_oil.71212b7a58caaa239801.jpg",
+    "static/media/no_meal_step_image.png": "/static/media/no_meal_step_image.db87af01898efd0c843a.png",
+    "static/media/logo2.png": "/static/media/logo2.2d4f6f905df348c5bf92.png",
     "index.html": "/index.html",
-    "precache-manifest.c3b9698c7e48db515c9717c62b9fea14.js": "/precache-manifest.c3b9698c7e48db515c9717c62b9fea14.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/2.9bd6e663.chunk.css.map": "/static/css/2.9bd6e663.chunk.css.map",
-    "static/css/main.151d660e.chunk.css.map": "/static/css/main.151d660e.chunk.css.map",
-    "static/js/2.4fc69728.chunk.js.LICENSE.txt": "/static/js/2.4fc69728.chunk.js.LICENSE.txt",
-    "static/media/CC_Logo_no_bg.png": "/static/media/CC_Logo_no_bg.23a343fa.png",
-    "static/media/food_prep.jpg": "/static/media/food_prep.920586b2.jpg",
-    "static/media/grocery_bag.jpg": "/static/media/grocery_bag.6702032b.jpg",
-    "static/media/logo2.png": "/static/media/logo2.8340d35f.png",
-    "static/media/no_meal_step_image.png": "/static/media/no_meal_step_image.da8c3317.png",
-    "static/media/ola_ola_palm_oil.jpg": "/static/media/ola_ola_palm_oil.70ad3e22.jpg"
+    "main.ebdbb59c.css.map": "/static/css/main.ebdbb59c.css.map",
+    "main.1b7c00f0.js.map": "/static/js/main.1b7c00f0.js.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.685e71ab.js",
-    "static/css/2.9bd6e663.chunk.css",
-    "static/js/2.4fc69728.chunk.js",
-    "static/css/main.151d660e.chunk.css",
-    "static/js/main.0e0b7c97.chunk.js"
+    "static/css/main.ebdbb59c.css",
+    "static/js/main.1b7c00f0.js"
   ]
 }

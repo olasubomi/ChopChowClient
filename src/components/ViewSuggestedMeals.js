@@ -783,7 +783,7 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
     suggestMealForm.append('mealImageName', mealImageName);
 
     // check for if we want to re-update/re-add meal image data or leave as-is
-    if(previousMealImageName != mealImageName){
+    if(previousMealImageName !== mealImageName){
       suggestMealForm.append('mealImage', mealImage);
     }
     else{
@@ -799,18 +799,18 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
     console.log(instructionChunkContent5);
     console.log(instructionChunkContent6);
 
-    if(instructionChunkContent1!= ""){
+    if(instructionChunkContent1!== ""){
       suggestMealForm.append('instructionChunkContent1', instructionChunkContent1)
     }
-    if(instructionChunkContent2!= ""){
+    if(instructionChunkContent2!== ""){
       suggestMealForm.append('instructionChunkContent2', instructionChunkContent2)
-    }    if(instructionChunkContent3!= ""){
+    }    if(instructionChunkContent3!== ""){
       suggestMealForm.append('instructionChunkContent3', instructionChunkContent3)
-    }    if(instructionChunkContent4!= ""){
+    }    if(instructionChunkContent4!== ""){
       suggestMealForm.append('instructionChunkContent4', instructionChunkContent4)
-    }    if(instructionChunkContent5!= ""){
+    }    if(instructionChunkContent5!== ""){
       suggestMealForm.append('instructionChunkContent5', instructionChunkContent5)
-    }    if(instructionChunkContent6!= ""){
+    }    if(instructionChunkContent6!== ""){
       suggestMealForm.append('instructionChunkContent6', instructionChunkContent6)
     }
 
@@ -948,8 +948,7 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
     const { classes } = this.props;
     const { mealData_list, page, rowsPerPage, open, suggestMealRole,
        loading_imgSrc, categoryList, mealImage } = this.state;
-    const { mealLabel, intro, currentIngredient, currentIngredientQuantity,
-       currentIngredientMeasurement, prepTime, cookTime, servings,
+    const { mealLabel, intro, prepTime, cookTime, servings,
         suggestedUtensils, chef } = this.state;
 
     const theme = createMuiTheme({
@@ -1144,7 +1143,6 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
                     fullWidth
                     className="mb-3"
                     // value={currentIngredient}
-                    options={this.props.productNames.map((option) => option)}
                   />
                   <TextField fullWidth id="currentIngredientQuantity" 
                   type="number" 
@@ -1281,10 +1279,10 @@ handleDeleteInstructionsStep(chip, chunkIndex) {
 }
 
 export default withStyles(styles)(ViewSuggestedMeals);
-          {/* 'x' icon to Delete intruction slide */}
-          {/* <Row style={{ justifyContent: "flex-end" }}>
+          /* 'x' icon to Delete intruction slide */
+          /* <Row style={{ justifyContent: "flex-end" }}>
             <i className="fa fa-remove" style={{ fontSize: "50%", marginTop: "0px", marginRight: "15px" }} onClick={() => this.onHandleInstructionItem(i)}></i>
-          </Row> */}
+          </Row> */
       ////////////////////////////////////////////////////////////////////////////
  //     x on step slides container
   // onHandleInstructionItem = (ind) => {
@@ -1322,7 +1320,7 @@ export default withStyles(styles)(ViewSuggestedMeals);
   //     this.setState({ instructionImgPath: URL.createObjectURL(event.target.files[0]) });
   //   }
   // };
-              {/* <Row className="mb-3">
+              /* <Row className="mb-3">
                 <Col md={4} className="mb-2">
                   <input accept="image/*" id="imgSrc1" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev)} />
                 </Col>
@@ -1330,7 +1328,7 @@ export default withStyles(styles)(ViewSuggestedMeals);
                   <Button variant="contained" color="primary" disableRipple style={{ color: "white", width: "300px" }} className="mb-3" onClick={this.addInstructionList}  > ADD NEW INSTRUCTION SET</Button>
                 </Col>
                 <Col md={4}> </Col>
-              </Row> */}
+              </Row> */
 
 
                 //------------- to get glabal path for instrution image ----------------------------------------

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Modal } from "react-bootstrap";
+// import { Modal } from "react-bootstrap";
 // import {Button} from 'react-bootstrap/Button';
 // import { Text } from "react-native";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -31,7 +31,7 @@ class MealPageModal extends Component {
                 trigger={() => {
                   // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
                   // to the root node of the returned component as it will be overwritten.
-                  return <a href="#">Print/Share</a>;
+                  return "Print/Share";
                 }}
                 content={() => this.componentRef}
               />

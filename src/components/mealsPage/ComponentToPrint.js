@@ -36,7 +36,7 @@ class ComponentToPrint extends React.Component {
     }
 
     render() {
-        const { value, mealPrep, ingredientsList, categories, utensilsList } = this.props;
+        const { ingredientsList, categories, utensilsList } = this.props;
         let displayedCategories = ''
         displayedCategories = categories.map((cat) => cat + ', ');
         let displayedIngredients = ingredientsList.map((ingredientSyntax) => <li key={ingredientSyntax} > <h4>{ingredientSyntax} </h4></li>);
@@ -115,7 +115,7 @@ class ComponentToPrint extends React.Component {
                 <div className="print">
                   <div className="print_page_1">
                     <div className="print_page_1_row_1">
-                      <img className="print_main_logo_img" src={this.props.mealImageData} ></img>
+                      <img className="print_main_logo_img" alt="print_main_logo_image" src={this.props.mealImageData} ></img>
                     </div>
                     <div className="print_page_1_row_2">
                       <div className="print_page_1_col_1">
@@ -126,19 +126,19 @@ class ComponentToPrint extends React.Component {
                         <div className="meal_details">
                           <div className="col_2">
                             <div className="meal_detail">
-                              <img className='meal_detail_icon' src='/images/meal_preview_imgs/prep_time.jpg' />
+                              <img className='meal_detail_icon' alt="meal_detail_icon" src='/images/meal_preview_imgs/prep_time.jpg' />
                               <h2>Prep Time:</h2>
                               <p>{this.props.prepTime} mins</p>
                             </div>
                           </div>
                           <div className="col_2">
                             <div className="meal_detail">
-                              <img className='meal_detail_icon' src='/images/meal_preview_imgs/cook_time.jpg' />
+                              <img className='meal_detail_icon' alt="meal_detail_icon" src='/images/meal_preview_imgs/cook_time.jpg' />
                               <h2>Cook Time:</h2>
                               <p>{this.props.cookTime} mins</p>
                             </div>
                             <div className="meal_detail">
-                              <img className='meal_detail_icon' src='/images/meal_preview_imgs/serves.jpg' />
+                              <img className='meal_detail_icon' alt="meal_detail_icon" src='/images/meal_preview_imgs/serves.jpg' />
                               <h2>Serves</h2>
                               <p>{this.props.serves} {this.props.serves>1 ? " people" : " person"}</p>
                             </div>
@@ -146,7 +146,7 @@ class ComponentToPrint extends React.Component {
                         </div>
                         
                         <div className="print_top2">
-                          <img className="print_top_logo_img" src={img_logo} />
+                          <img className="print_top_logo_img" alt="print_top_logo_img" src={img_logo} />
                           <h2 style={{ fontSize: mealFont }}>{this.props.mealName}</h2>
                         </div>
                       </div>
@@ -167,7 +167,7 @@ class ComponentToPrint extends React.Component {
                             <div className="instruction_step_top">
                               <h4>1</h4>
                               {this.props.chunk1Content &&
-                              <img className="instruction_img" src={this.props.chunk1Content} ></img>}
+                              <img className="instruction_img" alt="instruction_img" src={this.props.chunk1Content} ></img>}
                               {!this.props.chunk1Content &&
                               <h4 className='title'>{this.props.instructionChunk1.title}</h4>}
                             </div>
@@ -188,7 +188,7 @@ class ComponentToPrint extends React.Component {
                             <div className="instruction_step_top">
                               <h4>2</h4>
                               {this.props.chunk2Content &&
-                              <img className="instruction_img" src={this.props.chunk2Content} ></img>}
+                              <img className="instruction_img" alt = "instruction_img" src={this.props.chunk2Content} ></img>}
                               {!this.props.chunk2Content &&
                               <h4 className='title'>{this.props.instructionChunk2.title}</h4>}
                             </div>
@@ -207,7 +207,7 @@ class ComponentToPrint extends React.Component {
                             <div className="instruction_step_top">
                               <h4>3</h4>
                               {this.props.chunk3Content &&
-                              <img className="instruction_img" src={this.props.chunk3Content} ></img>}
+                              <img className="instruction_img" alt="instruction_img" src={this.props.chunk3Content} ></img>}
                               {!this.props.chunk3Content &&
                             <h4 className='title'>{this.props.instructionChunk3.title}</h4>}
                             </div>
@@ -228,7 +228,7 @@ class ComponentToPrint extends React.Component {
                             <div className="instruction_step_top">
                               <h4>4</h4>
                               {this.props.chunk4Content &&
-                              <img className="instruction_img" src={this.props.chunk4Content} ></img>}
+                              <img className="instruction_img" alt="instruction_img" src={this.props.chunk4Content} ></img>}
                               {!this.props.chunk4Content &&
                               <h4 className='title'>{this.props.instructionChunk4.title}</h4>}
                             </div>
@@ -247,7 +247,7 @@ class ComponentToPrint extends React.Component {
                             <div className="instruction_step_top">
                               <h4>5</h4>
                               {this.props.chunk5Content &&
-                              <img className="instruction_img" src={this.props.chunk5Content} ></img>}
+                              <img className="instruction_img" alt="instruction_img" src={this.props.chunk5Content} ></img>}
                               {!this.props.chunk5Content &&
                               <h4 className='title'>{this.props.instructionChunk5.title}</h4>}
                             </div>
@@ -269,7 +269,7 @@ class ComponentToPrint extends React.Component {
                             <div className="instruction_step_top">
                               <h4>6</h4>
                               {this.props.chunk6Content &&
-                              <img className="instruction_img" src={this.props.chunk6Content} ></img>}
+                              <img className="instruction_img"alt ="instruction_img" src={this.props.chunk6Content} ></img>}
                               {!this.props.chunk6Content &&
                               <h4 className='title'>{this.props.instructionChunk6.title}</h4>}
                             </div>

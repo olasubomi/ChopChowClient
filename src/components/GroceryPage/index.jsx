@@ -317,7 +317,7 @@ class GroceryPage extends React.Component {
 
       // add to local list
       // var mealObject = Object;
-      var mealObject = {
+      mealObject = {
         id : -1,
         product_name : selected[0].label,
         product_image: 'butter.jpg',
