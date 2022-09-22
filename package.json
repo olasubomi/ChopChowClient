@@ -50,9 +50,6 @@
     "build-storybook": "build-storybook -s public",
     "build-css": "node-sass src/ -o src/"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": [
     ">0.2%",
     "not dead",
