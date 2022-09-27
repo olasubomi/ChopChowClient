@@ -52,7 +52,7 @@ class ComponentToPrint extends React.Component {
         }
         let mealFont;
         if(this.props.mealName.length > 16){
-          mealFont = (70 - this.props.mealName.length) + "px"
+          mealFont = '20px'
         }else{
           mealFont = '70px'
         }

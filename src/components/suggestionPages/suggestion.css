@@ -70,10 +70,11 @@ a {
     line-height: 19px;
 
     color: #353535;
-  }
+}
   
 .suggestion_header_page_arrow {
-color: #626360;
+    font-size: 20px !important;
+    color: #353535;
 }
 
 .suggestion_section_1_col_2{
@@ -106,6 +107,9 @@ color: #626360;
     border-radius: 4px;
     padding: 7.5px 10px;
     position: relative;
+    display: grid;
+    justify-content: space-between;
+    grid-auto-flow: column;
 }
 
 .select_box > p{
@@ -119,6 +123,11 @@ color: #626360;
     color: #6D6D6D;
 }
 
+.select_box_icon{
+    font-size: 20px !important;
+    color: #353535;
+}
+
 .select_options{
     top: 66px;
     width: 162px;
@@ -129,6 +138,10 @@ color: #626360;
     padding: 7.5px 14px;
     display: grid;
     grid-gap: 15px;
+}
+
+.select_options > p{
+    cursor: pointer;
 }
 
 p{
@@ -192,7 +205,7 @@ p{
 
 .suggestion_form > h3 {
     margin: 0;
-    margin-bottom: -1rem;
+    margin-bottom: -0.8rem;
     font-style: normal;
     font-weight: 500;
     font-size: 18px;
@@ -235,6 +248,10 @@ input{
     border-radius: 3px;
 }
 
+input:hover{
+    border-color: #04d505 !important;
+}
+
 fieldset{
     border: 0 !important;
     border-color: none !important;
@@ -250,6 +267,10 @@ textarea{
     border: 1px solid #7f7f7f !important;
     box-sizing: border-box;
     border-radius: 3px;
+}
+
+textarea:hover{
+    border-color: #04d505 !important;
 }
 
 .MuiOutlinedInput-root{
@@ -293,6 +314,7 @@ textarea{
     font-weight: 400;
     font-size: 16px !important;
     line-height: 19px !important;
+    margin-bottom: 8px !important;
 
     color: #000000 !important;
 }
@@ -310,7 +332,12 @@ textarea{
 .suggestion_recipe_steps{
     display: grid;
     grid-template-columns: 1fr;
+    /* grid-template-rows: repeat(auto-fill, 410px); */
     grid-gap: 1rem;
+}
+
+.more_steps{
+    grid-template-columns: 1fr 1fr;
 }
 
 .suggestion_recipe_step > h3 {
@@ -328,6 +355,7 @@ textarea{
 .suggestion_recipe_step{
     display: grid;
     grid-gap: 1rem;
+    align-content: start;
 }
 
 u{
@@ -337,4 +365,53 @@ u{
     font-weight: 400;
     font-size: 16px;
     line-height: 19px;
+}
+
+.suggestion_form_image{
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 2.5rem;
+    justify-content: start;
+    align-items: center;
+}
+
+.suggestion_form_image_icon_con{
+    width: 75px;
+    height: 72px;
+    left: 0px;
+    top: 0px;
+
+    border: 1px dashed #F47900;
+    border-radius: 8px;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+}
+
+.suggestion_form_image_icon{
+    color: #F47900;
+}
+
+.suggestion_form_image_col_2 > p{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    /* identical to box height */
+
+
+    color: #949494;
+}
+
+.suggestion_image{
+    width: 130px;
+    height: 130px;
+}
+
+.MuiAutocomplete-tag{
+    display: none !important;
+}
+
+.stack{
+    flex-wrap: wrap;
 }

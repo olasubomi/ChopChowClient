@@ -27,14 +27,14 @@ class MealPageModal extends Component {
         <div className="print_2">
           <div className="print_col_2">
             <div className="print_top">
-              <ReactToPrint
+              {/* <ReactToPrint
                 trigger={() => {
                   // NOTE: could just as easily return <SomeComponent />. Do NOT pass an `onClick` prop
                   // to the root node of the returned component as it will be overwritten.
                   return "Print/Share";
                 }}
                 content={() => this.componentRef}
-              />
+              /> */}
               <div onClick={this.props.closeModal} className="print_cancel_con">
                 <span
                 className="iconify print_cancel"
