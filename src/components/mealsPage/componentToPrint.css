@@ -373,20 +373,27 @@ html {
   align-items: start; }
 
 .meal_instruction {
-  display: grid;
+  position: relative;
+  display: flex;
+  /* flex-wrap: wrap; */
   grid-gap: 7px;
-  /* border: 1px solid #444;
-  padding: 1rem; */
+  height: 100%;
+  width: 100%;
   border-radius: 4px;
-  align-content: start;
-  align-items: start;
-  grid-template-columns: 1fr 1fr 1fr; }
+  /* align-content: start; */
+  justify-content: space-between;
+    /* grid-template-columns: 1fr 1fr 1fr;*/ }
 
 .meal_instruction > div {
   display: grid;
-  border: 1px solid #444;
-  padding: 4px;
-  border-radius: 4px; }
+    border: 1px solid #444;
+    padding: 4px;
+    border-radius: 4px;
+    /* height: 100%; */
+    width: 100%;
+    align-content: start;
+    /* min-width: 400px;  */
+  }
 
 .instruction_step_top {
   font-style: normal;

@@ -335,14 +335,14 @@ class SuggestKitchenUtensilForm extends Component {
 
               <u style={{ color: "#F47900" }} onClick={this.openMealDetailsModal}> Show Preview</u>
               
-              <Row>
-                <Col md={12}>
+              {/* <Row>
+                <Col md={12}> */}
                   {/* <ThemeProvider theme={theme}> */}
-                    <Button variant="contained" className='ingredient_button' style={{ width: "100%" }} onClick={() => this.sendSuggestedMealToDB()}> Add Meal</Button>
+                    <Button variant="contained" className='ingredient_button' style={{ width: "100%" }} onClick={() => this.sendSuggestedMealToDB()}> Add Utensil</Button>
                   {/* </ThemeProvider> */}
-                </Col>
+                {/* </Col>
                 
-              </Row>
+              </Row> */}
               <u >View privacy policy</u>
               <div id="ProductAdditionalDataDisplayed" >
                 <MealPageModal openModal={this.state.openModal} closeModal={this.closeModal}

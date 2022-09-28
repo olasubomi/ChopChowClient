@@ -2,11 +2,14 @@
 .suggestion_container{
     position: relative;
     background: #FCFCFC;
+    display: grid;
+    justify-items: center;
 }
 
 .suggestion_sections{
     display: grid;
-    padding: 2rem 3rem;
+    padding: 2rem 0;
+    width: 85%;
     grid-gap: 2rem;
 }
 
@@ -129,7 +132,7 @@ a {
 }
 
 .select_options{
-    top: 66px;
+    top: 70px;
     width: 162px;
     position: absolute;
     background: #FFFFFF;
@@ -138,6 +141,7 @@ a {
     padding: 7.5px 14px;
     display: grid;
     grid-gap: 15px;
+    z-index: 5;
 }
 
 .select_options > p{
@@ -320,7 +324,7 @@ textarea:hover{
 }
 
 .chip > svg{
-    color: #000000;
+    color: #000000 !important;
 }
 
 .input_button{
@@ -365,6 +369,7 @@ u{
     font-weight: 400;
     font-size: 16px;
     line-height: 19px;
+    cursor: pointer;
 }
 
 .suggestion_form_image{
@@ -414,4 +419,71 @@ u{
 
 .stack{
     flex-wrap: wrap;
+}
+
+@media screen and (max-width: 620px) {
+    
+    .suggestion_form_2_col{
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 1rem;
+    }
+
+    .input_button{
+        grid-template-columns: 1fr;
+        grid-gap: 1rem;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .suggestion_sections{
+        width: 90%;
+    }
+
+    .suggestion_form{
+        padding: 2rem 1rem;
+        grid-gap: 1rem;
+    }
+
+    .suggestion_forms > h3{
+        font-size: 16px;
+        line-height: 19px;
+    }
+
+    .suggestion_form > h3{
+        font-size: 12px;
+        line-height: 15px;
+    }
+
+    .suggestion_form > p{
+        display: none;
+    }
+
+    .suggestion_form_image{
+        grid-auto-flow: row;
+        grid-gap: 1rem;
+    }
+
+    .suggestion_section_1_col_2_p{
+        display: none;
+    }
+
+    .suggestion_form_image_col_2{
+        grid-row: 1/2;
+    }
+
+    .suggestion_form_image_col_2 > p{
+        font-size: 10px;
+        line-height: 12px;
+    }
+
+    label{
+        font-size: 10px;
+    }
+
+    .ingredient_button{
+        font-size: 12px !important;
+        line-height: 15px !important;
+        height: 35px !important;
+        padding: 6px 10px !important;
+    }
 }

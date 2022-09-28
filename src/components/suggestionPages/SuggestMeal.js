@@ -1150,66 +1150,8 @@ class SuggestMealForm extends Component {
 
     let id = stepInputs.length + 2;
     
-    let more = 
-    <div className="suggestion_recipe_step">
-      <div className="suggestion_form_group">
-        <label className="suggestion_form_label">
-          Step {id} Title
-        </label>
-        <TextField id={"chunk"+id+"Title"} 
-        onChange={(ev) => this.handleInstructionTitle(ev, id)} variant="outlined" />
-      </div>
-      
-      <div className="suggestion_form_group">
-        <label className="suggestion_form_label">
-          Instruction
-        </label>
-        <TextField fullWidth id={"instructionChunk"+id}
-        onKeyUp={(chip) => this.handleAddInstructionStep(chip, id)} 
-        variant="outlined" required />
-        {/* <ChipInput label="Instructions" className="mb-2" fullWidth 
-        value={this.state.instructionChunk2.instructionSteps} 
-        onAdd={(chip) => this.handleAddInstructionStep(chip, id)} 
-        onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, id)} variant="outlined" /> */}
-      </div>
-      <Stack direction="row" spacing={1} className="stack">
-        {
-          this.state["instructionChunk"+ id].instructionSteps.map((chip, index) => (
-            <Chip
-              key={index}
-              label={chip}
-              className='chip'
-              onClick={() => this.handleDeleteInstructionsStep(id)}
-              onDelete={() => this.handleDeleteInstructionsStep(id)}
-            />
-          ))
-        }
-      </Stack>
-      <h3>Upload Media</h3>
-      {/* <div className="suggestion_form_group">
-      <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent2" name="instructionChunkContent2" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 2)} />
-      </div> */}
-      <div className="suggestion_form_image">
-          <div onClick={() => this.uploadMediaStep(id)} className="suggestion_form_image_col_1">
-            <div className="suggestion_form_image_icon_con">
-              <AddIcon className="suggestion_form_image_icon" />
-            </div>
-          </div>
-          <div className="suggestion_form_image_col_2">
-            <p>Upload picture/video with : Jpeg,png,mp4,mpeg format and not more than 2mb</p>
-          </div>
-      </div>
-
-      <p><img id={"chunk"+id+"Image"} className="suggestion_image" alt={"recipe_step"+id+"_image_or_video"} style={{ display: "none" }} />
-        <video className="suggestion_image" id={"chunk"+id+"Video"} style={{ display: "none" }} controls>
-          Your browser does not support the video tag.
-        </video>
-      </p>
-      
-    </div>
     console.log(document.getElementById('chunk1Title'))
-    stepInputs.push(more)
-    console.log(more)
+    stepInputs.push(id)
     this.setState({
       stepInputs
     })
@@ -1278,7 +1220,7 @@ class SuggestMealForm extends Component {
                       <p>Upload picture with : Jpeg or Png format and not more than 500kb</p>
                     </div>
                 </div>
-                <Row className="mb-3">
+                <Row>
                   <Col md={12} style={{ marginTop: "20px" }}>
                     <p><img id="MealsMainImages" width="100%" alt="main_Meal_Image" style={{ display: "none" }} />
                     </p>
@@ -1296,7 +1238,7 @@ class SuggestMealForm extends Component {
                   <div className="suggestion_form_2_col_1">
                     <div className="suggestion_form_group">
                       <label htmlFor="servings" className="suggestion_form_label">
-                        People to serve (1, 2, or 10 persons)
+                        People to serve
                       </label>
                       <TextField id="servings" fullWidth type="number" onChange={this.onTextFieldChange} variant="outlined" placeholder="1 person, 2, 4 or 10 people" />
                     </div>
@@ -1454,7 +1396,7 @@ availableLocations,
 
               <h3>Add Recipe Steps</h3>
               <div className="suggestion_form">
-                {/* <Row className="mb-3">
+                {/* <Row>
                     <Col md={12}>
                       <ChipInput label="Instructions"  className="mb-2" fullWidth  value={this.state.instructionsChip} onAdd={(chip) => this.handleAddInstructionStep(chip)} onDelete={(chip, index) =>this.handleDeleteInstructionsStep(chip, index)}   variant="outlined" />
                     </Col>               
@@ -1467,7 +1409,7 @@ availableLocations,
                     </Col>    */}
 
                   {/* <Col md={4}  style={{textAlign:"center", margin: "auto"}}> 
-                      <Button variant="contained" color="primary"  disableRipple style={{color:"white", width:"300px"}}  className="mb-3" onClick={this.addInstructionList}  > ADD NEW INSTRUCTION SET</Button>
+                      <Button variant="contained" color="primary"  disableRipple style={{color:"white", width:"300px"}}  onClick={this.addInstructionList}  > ADD NEW INSTRUCTION SET</Button>
                     </Col> */}
                 
                 <div className={stepInputs.length>0?"suggestion_recipe_steps more_steps":"suggestion_recipe_steps" }>
@@ -1528,9 +1470,64 @@ availableLocations,
                     
                   </div>
 
-                  {stepInputs.map((input => {
+                  {stepInputs.map(((id, index) => {
                     return(
-                      input
+                      <div key={index} className="suggestion_recipe_step">
+                        <div className="suggestion_form_group">
+                          <label className="suggestion_form_label">
+                            Step {id} Title
+                          </label>
+                          <TextField id={"chunk"+id+"Title"} 
+                          onChange={(ev) => this.handleInstructionTitle(ev, id)} variant="outlined" />
+                        </div>
+                        
+                        <div className="suggestion_form_group">
+                          <label className="suggestion_form_label">
+                            Instruction
+                          </label>
+                          <TextField fullWidth id={"instructionChunk"+id}
+                          onKeyUp={(chip) => this.handleAddInstructionStep(chip, id)} 
+                          variant="outlined" required />
+                          {/* <ChipInput label="Instructions" className="mb-2" fullWidth 
+                          value={this.state.instructionChunk2.instructionSteps} 
+                          onAdd={(chip) => this.handleAddInstructionStep(chip, id)} 
+                          onDelete={(chip, index) => this.handleDeleteInstructionsStep(chip, id)} variant="outlined" /> */}
+                        </div>
+                        <Stack direction="row" spacing={1} className="stack">
+                          {
+                            this.state["instructionChunk"+ id].instructionSteps.map((chip, index) => (
+                              <Chip
+                                key={index}
+                                label={chip}
+                                className='chip'
+                                onClick={() => this.handleDeleteInstructionsStep(id)}
+                                onDelete={() => this.handleDeleteInstructionsStep(id)}
+                              />
+                            ))
+                          }
+                        </Stack>
+                        <h3>Upload Media</h3>
+                        {/* <div className="suggestion_form_group">
+                        <input accept="image/*,video/mp4,video/x-m4v,video/*" id="instructionChunkContent2" name="instructionChunkContent2" type="file" className="mb-2" onChange={(ev) => this.onhandleInstructionImg(ev, 2)} />
+                        </div> */}
+                        <div className="suggestion_form_image">
+                            <div onClick={() => this.uploadMediaStep(id)} className="suggestion_form_image_col_1">
+                              <div className="suggestion_form_image_icon_con">
+                                <AddIcon className="suggestion_form_image_icon" />
+                              </div>
+                            </div>
+                            <div className="suggestion_form_image_col_2">
+                              <p>Upload picture/video with : Jpeg,png,mp4,mpeg format and not more than 2mb</p>
+                            </div>
+                        </div>
+
+                        <p><img id={"chunk"+id+"Image"} className="suggestion_image" alt={"recipe_step"+id+"_image_or_video"} style={{ display: "none" }} />
+                          <video className="suggestion_image" id={"chunk"+id+"Video"} style={{ display: "none" }} controls>
+                            Your browser does not support the video tag.
+                          </video>
+                        </p>
+                        
+                      </div>
                     )
                   }))}
                   
@@ -1703,14 +1700,14 @@ availableLocations,
               </div>
               <u style={{ color: "#F47900" }} onClick={this.openMealDetailsModal}> Show Preview</u>
               
-              <Row>
-                <Col md={12}>
+              {/* <Row>
+                <Col md={12}> */}
                   {/* <ThemeProvider theme={theme}> */}
                     <Button variant="contained" className='ingredient_button' style={{ width: "100%" }} onClick={() => this.sendSuggestedMealToDB()}> Add Meal</Button>
                   {/* </ThemeProvider> */}
-                </Col>
+                {/* </Col>
                 
-              </Row>
+              </Row> */}
               <u >View privacy policy</u>
               <div id="ProductAdditionalDataDisplayed" >
                 <MealPageModal openModal={this.state.openModal} closeModal={this.closeModal}

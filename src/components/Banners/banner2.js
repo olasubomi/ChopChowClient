@@ -17,28 +17,16 @@ class Banner2 extends Component {
         return (
             <div>
                 <div style={{
-                    height: "510px",
-                    verticalAlign: "top",
                     backgroundImage: `url(${background})`,
-                    backgroundRepeat: "no-repeat",
-                    // backgroundSize: "100%",
-                    backgroundColor: "transparent",
-                    backgroundSize: "cover"
                 }}
-
+                className="banner_container"
                 >
                     {/* <!-- <h1>Book a Consultation</h1> --> */}
-                    <div className="banner2_spacing"></div>
                     <div className="banner2container">
                         <p className="banner2_text">
-                            <b>
-                                HOME COOK<br></br>
-                                INTERNATIONAL FOODS<br></br>
-                                <button className="banner2_button">
-                                     <Link to="/v2" className="nav-link px-2">SEE RECIPES</Link>
-                                </button>
-                            </b>
+                            ENJOY HASSLE FREE COOKING WITH CHOP CHOW
                         </p>
+                            <Link to="/v2" className="banner2_button">Learn More</Link>
                     </div>
 
                 </div>
