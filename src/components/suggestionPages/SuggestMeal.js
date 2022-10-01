@@ -12,7 +12,6 @@ import AddIcon from '@mui/icons-material/Add';
 // import MealPageModal from "../mealsPage/MealPageModal";
 import "./suggestion.css";
 import Popup2 from "../popups/popup2";
-import MealPageModal from "../mealsPage/MealPageModal";
 // import ProductsPageModal from "./ProductsPageModal";
 var FormData = require('form-data');
 
@@ -1711,7 +1710,7 @@ availableLocations,
               </Row> */}
               <u >View privacy policy</u>
               <div id="ProductAdditionalDataDisplayed" >
-                {/* <Popup2 popupType='Meal Suggestion Preview' openModal={this.state.openModal} closeModal={this.closeModal}
+                <Popup2 popupType='Meal Suggestion Preview' openModal={this.state.openModal} closeModal={this.closeModal}
                  name={this.state.mealName} description={this.state.intro}
                  imageData={this.state.mealImageData} image={this.state.mealImage}
                  imagesData={this.state.mealImagesData} categories={this.state.suggestedCategories}
@@ -1726,8 +1725,8 @@ availableLocations,
                   chunk5Content={this.state.chunk5Content} chunk6Content={this.state.chunk6Content}
                   instructionWordlength={this.state.instructionWordlength}
                   tips={this.state.tips} mealImageData={this.state.mealImageData}
-                /> */}
-                <MealPageModal openModal={this.state.openModal} closeModal={this.closeModal}
+                />
+                {/* <MealPageModal openModal={this.state.openModal} closeModal={this.closeModal}
                  mealName={this.state.mealName} mealImage={this.state.mealImage}
                  categories={this.state.suggestedCategories}
                   prepTime={this.state.prepTime} cookTime={this.state.cookTime}
@@ -1741,7 +1740,7 @@ availableLocations,
                   chunk5Content={this.state.chunk5Content} chunk6Content={this.state.chunk6Content}
                   instructionWordlength={this.state.instructionWordlength}
                   tips={this.state.tips} mealImageData={this.state.mealImageData}
-                 />
+                 /> */}
               </div>
               {/* <Popup1></Popup1> */}
             </form>
