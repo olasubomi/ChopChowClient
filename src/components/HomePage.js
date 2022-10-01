@@ -1,10 +1,18 @@
 import React, { Component } from "react";
-import Banner from "./Banners/banner"
+// import Banner from "./Banners/banner"
 import Banner2 from "./Banners/banner2"
-import HomePageButtons from "./HomePage/HomePageButtons"
+// import HomePageButtons from "./HomePage/HomePageButtons"
 import './HomePage/home.css';
 import EastIcon from '@mui/icons-material/East';
 import background from "../assets/images/homepage/grocery_bag.jpg";
+import foodImage from "../assets/images/homepage/food.png";
+import utensilImage from "../assets/images/homepage/utensil.png";
+import shopImage from "../assets/images/homepage/shop.png";
+import banner1 from "../assets/images/homepage/banner-1.png";
+import banner2 from "../assets/images/homepage/banner-2.png";
+import supplierImage from "../assets/images/homepage/supplier.png";
+import shoppingImage from "../assets/images/homepage/shopping.png";
+import chefImage from "../assets/images/homepage/chef.png";
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
@@ -20,7 +28,10 @@ class HomePage extends Component {
 
   componentDidMount(){
     let slideIndex = this.state.slideIndex;
-    this.slider(slideIndex)
+
+    setInterval(() => {
+      this.plusSlides(slideIndex)
+    }, 6000)
   }
 
   plusSlides = (n) => {
@@ -44,7 +55,7 @@ class HomePage extends Component {
   }
 
   slider = (n) => {
-    let {slideIndex, images} = this.state;
+    let {slideIndex} = this.state;
     console.log(slideIndex)
     // if(slideIndex < images.length-1){
     //   this.setState({
@@ -94,23 +105,48 @@ class HomePage extends Component {
             <div className="mySlides fade_in">
               <div className="slide_wrapper"></div>
               <div className="slide_text">
-                {/* {Parser(`${homeAd.description}`)} */}
                 <h2>Get the best Ingredients for your meal</h2>
-                {/* <Link href="/products/182/sale"> */}
                   <a href="/" className="slide_button">
                   Sign Up Now
                   </a>
-                {/* </Link> */}
               </div>
-              <img src={background} className="slide_image" />
+              {/* <img src={banner1} className="slide_image" /> */}
+              <div className="slide_image" style={{
+                    backgroundImage: `url(${banner1})`,
+                }}></div>
             </div>
 
             <div className="mySlides fade_in">
-              <img src={background} className="slide_image" />
+              <div className="slide_wrapper"></div>
+              <div className="slide_text">
+                <h2>
+                  Well established
+                  Local and
+                  international
+                  food suppliers
+                </h2>
+                  <a href="/" className="slide_button">
+                  Learn More
+                  </a>
+              </div>
+              {/* <img src={background} className="slide_image" /> */}
+              <div className="slide_image" style={{
+                    backgroundImage: `url(${background})`,
+                }}></div>
             </div>
 
             <div className="mySlides fade_in">
-              <img src={background} className="slide_image" />
+              <div className="slide_wrapper"></div>
+              <div className="slide_text">
+                <h2>Enjoy hassle free cooking with CHOP CHOW</h2>
+                  <a href="/" className="slide_button">
+                  Learn More
+                  </a>
+              </div>
+              <div className="slide_image" style={{
+                    backgroundImage: `url(${banner2})`,
+                }}></div>
+              {/* <img src={banner2} className="slide_image" /> */}
             </div>
 
             {/* Next and previous buttons */}
@@ -140,8 +176,8 @@ class HomePage extends Component {
               <div className="feature_num">
                 <p>1</p>
               </div>
-              <img src={background} alt="feature" className="feature_img" />
-              <h2 className="feature_name">Top Story</h2>
+              <img src={supplierImage} alt="feature" className="feature_img" />
+              <h2 className="feature_name">Fast Delivery</h2>
               <p className="feature_desc">
                 So yes, the alcohol (ethanol) in hand sanitizers can be absorbed through theskin, but no, it would not cause intoxication.
               </p>
@@ -150,8 +186,8 @@ class HomePage extends Component {
               <div className="feature_num">
                 <p>2</p>
               </div>
-              <img src={background} alt="feature" className="feature_img" />
-              <h2 className="feature_name">Top Story</h2>
+              <img src={shoppingImage} alt="feature" className="feature_img" />
+              <h2 className="feature_name">All-in-One Shopping</h2>
               <p className="feature_desc">
                 So yes, the alcohol (ethanol) in hand sanitizers can be absorbed through theskin, but no, it would not cause intoxication.
               </p>
@@ -160,8 +196,8 @@ class HomePage extends Component {
               <div className="feature_num">
                 <p>3</p>
               </div>
-              <img src={background} alt="feature" className="feature_img" />
-              <h2 className="feature_name">Top Story</h2>
+              <img src={chefImage} alt="feature" className="feature_img" />
+              <h2 className="feature_name">Earn as a Chef</h2>
               <p className="feature_desc">
                 So yes, the alcohol (ethanol) in hand sanitizers can be absorbed through theskin, but no, it would not cause intoxication.
               </p>
@@ -172,7 +208,7 @@ class HomePage extends Component {
           <div className="home_section_3_row">
             <div className="home_section_3_row_1">
               <img
-                src={background}
+                src={shopImage}
                 alt="home"
                 className="home_section_3_row_1"
               />
@@ -195,7 +231,7 @@ class HomePage extends Component {
           <div className="home_section_3_row">
             <div className="home_section_3_row_1 row_reverse">
               <img
-                src={background}
+                src={utensilImage}
                 alt="about us"
                 className="home_section_3_row_1"
               />
@@ -219,7 +255,7 @@ class HomePage extends Component {
           <div className="home_section_3_row">
             <div className="home_section_3_row_1">
               <img
-                src={background}
+                src={foodImage}
                 alt="about us"
                 className="home_section_3_row_1"
               />

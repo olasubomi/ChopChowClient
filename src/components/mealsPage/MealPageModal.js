@@ -3,7 +3,7 @@ import React, { Component } from "react";
 // import {Button} from 'react-bootstrap/Button';
 // import { Text } from "react-native";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import ReactToPrint from 'react-to-print';
+
 import ComponentToPrint from "./ComponentToPrint";
 
 

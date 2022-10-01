@@ -1,27 +1,19 @@
 import React, { Component } from "react";
 import TextField from "@mui/material/TextField";
-import ChipInput from  "@mui/material/Chip"
 // import Chip from "@mui/material/Chip";
 import Autocomplete from "@mui/lab/Autocomplete"; // createFilterOptions,
 // import axios from 'axios';
 import axios from '../../util/Api';
-import { Container, Row, Col } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import Button from '@mui/material/Button';
-import { green } from '@mui/material/colors';
 import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
-import WestIcon from '@mui/icons-material/West';
 import AddIcon from '@mui/icons-material/Add';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import MealPageModal from "../mealsPage/MealPageModal";
+// import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+// import MealPageModal from "../mealsPage/MealPageModal";
 import "./suggestion.css";
-import { Link } from "react-router-dom";
+import Popup1 from "../popups/popup1";
 
-// import ProductsPageModal from "./ProductsPageModal";
-var FormData = require('form-data');
-
-// var fs = require('fs');
 
 class SuggestKitchenUtensilForm extends Component {
   ingredientsQuantityMeasurements = [];
@@ -29,21 +21,22 @@ class SuggestKitchenUtensilForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mealName: "",
-      mealImage: "",
-      mealImageName: "",
-      mealImageFile: "",
+      utensilName: "",
+      utensilImage: "",
+      utensilImageName: "",
+      utensilImageFile: "",
+      utensilImagesData:[],
       intro: "",
 
-      ingredientNames: [],
+      sizeNames: [],
       // do we need product group list AND strings ?
-      ingredientGroupList: [],
+      sizeGroupList: [],
       // store product names of inputted strings to compare with db products
-      ingredientStrings: [],
+      sizeStrings: [],
       // do we want to use current ingredient formats ? Yes.
       currentIngredient: "",
-      currentIngredientMeasurement: "",
-      currentIngredientQuantity: "",
+      size: "",
+      price: "",
       currentProductImgSrc: null,
       currentProductDisplayIndex: 0,
 
@@ -51,64 +44,15 @@ class SuggestKitchenUtensilForm extends Component {
 
       // we need to update how we create image paths
       productImg_path: "",
-      new_product_ingredients: [],
+      new_product_size: [],
       suggested_stores: [],
       currProductIndexInDBsProductsList: -1,
       // currStoreIndexIfExistsInProductsList: -1,
       suggestedUtensils: [],
 
-      cookTime: 0,
-      prepTime: 0,
-
-      instructionChunk6: {
-        title: "",
-        instructionSteps: [],
-        dataName: ""
-      },
-      instructionChunk1: {
-        title: "",
-        instructionSteps: [],
-        dataName: ""
-      },
-      instructionChunk2: {
-        title: "",
-        instructionSteps: [],
-        dataName: ""
-      },
-      instructionChunk3: {
-        title: "",
-        instructionSteps: [],
-        dataName: ""
-      },
-      instructionChunk4: {
-        title: "",
-        instructionSteps: [],
-        dataName: ""
-      },
-      instructionChunk5: {
-        title: "",
-        instructionSteps: [],
-        dataName: ""
-      },
       instructionWordlength: 0,
 
-      // chunk1Content: "",
-      // chunk2Content: "",
-      // chunk3Content: "",
-      // chunk4Content: "",
-      // chunk5Content: "",
-      // chunk6Content: "",
-
-      // do we want all the instruction variables ?
-      // instructionGroupList:[],
-
-      instructionimagesAndVideos: [],
-
-      chef: "",
       suggestedCategories: [],
-      servings: 0,
-      tip: '',
-      tips: [],
 
       booleanOfDisplayOfDialogBoxConfirmation: false,
 
@@ -187,10 +131,241 @@ class SuggestKitchenUtensilForm extends Component {
     this.categories = this.props.categories;
   }
 
+  onInputChange = (e) => {
+    console.log("Comes in on text field change; ");
+    console.log(e.target.value)
+    // console.log(" " + [e.target.id] + " " + e.target.value);
+    this.setState({ "utensilName": e.target.value });
+  };
+
+  uploadUtensilImage = () => {
+    // <input accept="image/*,video/mp4,video/mov,video/x-m4v,video/*" id="utensilImage" name="utensilImage" type="file" className="mb-2 pr-4" onChange={(ev) => this.onUpdateutensilImage(ev)} />
+    const input = document.createElement("input");
+    input.accept = "image/*,video/mp4,video/x-m4v,video/*";
+    input.id = "utensilImage";
+    input.name = "utensilImage";
+    input.type = "file";
+    input.onchange = (ev) => this.onUpdateUtensilImage(ev);
+    input.hidden = true;
+    input.click()
+  }
+
+  onUpdateUtensilImage = (event) => {
+    if (event.target.files[0] === undefined) return;
+    // Allowing file type
+    var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
+
+    if (allowedImageExtensions.exec(event.target.files[0].name)) {
+      //display utensils main image or videoin suggest utensil
+      if(this.state.utensilImage === ''){
+        this.setState({ utensilImage: event.target.files[0], 
+          utensilImageName: event.target.files[0].name,
+        utensilImageData:  URL.createObjectURL(event.target.files[0]) });
+        var image = document.getElementById("UtensilsMainImages");
+        image.style.display = "block";
+        image.src = URL.createObjectURL(event.target.files[0]);
+  
+        console.log(event.target.files[0]);
+        console.log(event.target.files[0].name);
+  
+  
+        console.log(allowedImageExtensions.exec(event.target.files[0].name));
+  
+        // console.log(URL.createObjectURL(event.target.files[0]));
+      }else{
+        this.setState({ 
+        utensilImagesData: [...this.state.utensilImagesData,  URL.createObjectURL(event.target.files[0])] });
+        // var image = document.getElementById("UtensilsMainImages"+(this.state.utensilImagesData.length+1));
+        // image.style.display = "block";
+        // image.src = URL.createObjectURL(event.target.files[0]);
+  
+        console.log(event.target.files[0]);
+        console.log(event.target.files[0].name);
+  
+  
+        console.log(allowedImageExtensions.exec(event.target.files[0].name));
+  
+      }
+    }
+    else {
+      alert("Invalid image type");
+    }
+
+  };
+
+  onTextFieldChange = (e) => {
+    console.log("Comes in on text field change; ");
+
+    console.log(" " + [e.target.id] + " " + e.target.value);
+    this.setState({ [e.target.id]: e.target.value });
+  };
+
+  handleCategoryDropdownChange = (val) => {
+    console.log(this.state.suggestedCategories)
+    this.setState({ suggestedCategories: val });
+    // below setstate causes an error to make each new set a sum of all previous.
+    // this.setState({ suggestedCategories: [...this.state.suggestedCategories, val] });
+
+  }
+
+  addCategory = () => {
+    let cat = document.getElementById('tags-outlined');
+    let suggestedCategories = this.state.suggestedCategories;
+    suggestedCategories.push(cat.value);
+    this.setState({
+      suggestedCategories
+    })
+    cat.value = '';
+  }
+
+  handleSize = (event, val) => {
+    // if (event.target.value) {
+    //   this.setState({ size: event.target.value });
+    // } else {
+    //   this.setState({ size: "" });
+    // }
+
+    console.log("In handleSize . \n val is: " + val);
+
+    if (val !== null && val !== undefined) {
+      // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
+      // set currProductIndexInDBsProductsList variable 
+      const searchResult = this.props.measurements.map(function callback(element) { if (element.toLowerCase() === (val.toLowerCase())) { return true; } else { return false; } });
+      const tmpcurrMeasurementIndexInDBsMeasurementList = searchResult.indexOf(true);
+      console.log("Curr Product Index If Exists In Products List is: \n" + tmpcurrMeasurementIndexInDBsMeasurementList);
+
+      // check if product name is an existing product
+      // set product existense to index, so one will not need to edit
+      // this.setState({ currProductIndexInDBsProductsList: tmpcurrMeasurementIndexInDBsMeasurementList });
+
+      // set current ingredient to input Product regardless
+      // console.log("Event is: \n"+ event.target);
+      if (event != null && event.target.value !== null) {
+        this.setState({ size: event.target.innerHTML });
+
+      } else {
+        this.setState({ size: val });
+      }
+    }
+    else {
+      console.log('val is null!');
+    }
+  }
+
+  addSize = (event) => {
+    console.log("COMES IN addIngredientToMeal");
+    event.preventDefault();
+    var properSizeStringSyntax;
+    // var ingredientValue = document.getElementById("currentIngredient").value;
+    var priceValue = document.getElementById("price").value;
+    // best to get the measurement from the state
+    // perhaps becuse inner html is defined before state is updated
+    // var measurementValue = this.state.currentIngredientMeasurement;
+    var sizeValue = document.getElementById("size").value;
+
+
+    if (sizeValue === "") { window.alert("Enter an ingredient to add to meal"); return; }
+    // update ingredient string syntax for no quantity or no measurement.
+    if (priceValue === "") {
+      properSizeStringSyntax = '';
+    } else if (sizeValue === "" && priceValue !== "") {
+      // MAKE sure we are using the right and tested variables to display the right type of string at all times.
+      properSizeStringSyntax = "" + priceValue;
+    } else {
+      properSizeStringSyntax =
+        "" + priceValue + " " + sizeValue;
+    }
+    console.log(properSizeStringSyntax);
+
+    // This is the Object for an Ingredient of a Known Product
+    var sizeObject = {
+
+      // display: this.state.currProductIndexInDBsProductsList,
+      // availableLocations: [],
+      size: sizeValue,
+      properSizeStringSyntax: properSizeStringSyntax
+    };
+
+    console.log("current state of product index at Add Ingredient To Meal is : \n" + this.state.currProductIndexInDBsProductsList);
+
+    console.log("ADDs to new_product_ingredients");
+
+    console.log("creating new product object");
+
+    // edit product details for new product object
+    // sizeObject.productImgFile = null;
+    sizeObject.productIndex = 0;
+    // sizeObject.calories = 0;
+
+    // append String to new Products array if not
+    // var tmpNewProducts = [...this.state.new_product_ingredients];
+    // var tmpNewProducts = this.state.new_product_ingredients;
+    // var updatedProductList = [tmpNewProducts, sizeObject];
+
+    // this.setState({ new_product_ingredients: updatedProductList })
+    this.setState({ new_product_size: [...this.state.new_product_size, sizeObject] });
+
+    this.setState({ sizeGroupList: [...this.state.sizeGroupList, sizeObject] });
+    // after adding product to ingredient group list
+    // reset current product img src and path to null, and same for current ingredient inputs
+    // this.setState({ currentProductImgSrc: null, productImg_path: "" });
+    this.setState({ price: '', size: "null" });
+    this.setState({ size: "" });
+    this.handleAddSizeChip(properSizeStringSyntax);
+
+    //  Resetting inner html directly to clear ingredient inputs without changing state
+    // document.getElementById("currentIngredient").value = 'NewPs';
+    // document.getElementById("currentIngredientQuantity").value = 8;
+    // document.getElementById("currentIngredientMeasurement").value = 'Removed';
+
+  }
+
+  handleAddSizeChip(chip) {
+    this.setState({
+      sizeStrings: [...this.state.sizeStrings, chip],
+    });
+  }
+
+  handleDeleteSizeChip(chip) {
+    var array = this.state.sizeStrings; // make a separate copy of the array
+    var removeFromGroup = this.state.sizeGroupList;
+
+    var index = array.indexOf(chip);
+    if (index !== -1) {
+      array.splice(index, 1);
+      removeFromGroup.splice(index, 1);
+
+      this.setState({ sizeStrings: array, sizeGroupList: removeFromGroup });
+    }
+  }
+
   closeModal() {
     this.setState({ openModal: false });
     // this.props.openModal = false;
-    // this.props.func_removeMealFlag();
+    // this.props.func_removeutensilFlag();
+  }
+
+  openMealDetailsModal = (index) => {
+    // toggle products page visibility for product to be Edited.
+    // this.productDisplayBooleansOutOfState[this.state.ingredientGroupList.length] = false;
+    // this.productDisplayBooleansOutOfState[index] = true;
+
+    // var tmpIngredientGroupList = this.state.ingredientGroupList;
+    // tmpIngredientGroupList[index].display = true;
+    // tmpIngredientGroupList[currentProductDisplayIndex].display = false;
+    // this.setState({ingredientGroupList: tmpIngredientGroupList});
+    console.log("Comes in toggle product details div id. Index is : " + index);
+
+    var individualProductDisplay = document.getElementById("ProductAdditionalDataDisplayed");
+    console.log(individualProductDisplay);
+
+    // if (individualProductDisplay.style.display === "block") {
+    //   individualProductDisplay.style.display = "none";
+    // }
+    // else {
+    //   individualProductDisplay.style.display = "block";
+    // }
+    this.setState({openModal: true});
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -202,7 +377,7 @@ class SuggestKitchenUtensilForm extends Component {
     //   palette: { primary: green },
     // });
 
-    const { ingredientGroupList, ingredientStrings, stepInputs } = this.state;
+    const { sizeStrings } = this.state;
 
     return (
           <div className="suggestion_section_2" >
@@ -212,14 +387,14 @@ class SuggestKitchenUtensilForm extends Component {
                   <label htmlFor="utensilName" className="suggestion_form_label">
                     Utensil Name
                   </label>
-                  <TextField id="utensilName" fullWidth onChange={this.handleTip} variant="outlined" required />
+                  <TextField id="utensilName" fullWidth onChange={this.onInputChange} variant="outlined" required />
                 </div>
 
                 <h3>Upload Utensil Images <em>(Up to 4)</em></h3>
 
                 <div className="suggestion_form_image">
                     <div className="suggestion_form_image_col_1">
-                      <div onClick={() => this.uploadMealImage()} className="suggestion_form_image_icon_con">
+                      <div onClick={() => this.uploadUtensilImage()} className="suggestion_form_image_icon_con">
                         <AddIcon className="suggestion_form_image_icon" />
                       </div>
                     </div>
@@ -227,6 +402,24 @@ class SuggestKitchenUtensilForm extends Component {
                       <p>Upload picture with : Jpeg or Png format and not more than 500kb</p>
                     </div>
                 </div>
+
+                <Row>
+                  <Col md={12} style={{ marginTop: "20px" }}>
+                    <p><img id="UtensilsMainImages" width="100%" alt="main_Utensil_Image" style={{ display: "none" }} />
+                    </p>
+                  </Col>
+                </Row>
+
+                {
+                  this.state.utensilImagesData.map((data, index) => 
+                  <Row key={index}>
+                    <Col md={12} style={{ marginTop: "20px" }}>
+                      <p><img id="UtensilsMainImages" src={data} width="100%" alt="main_Utensil_Image" />
+                      </p>
+                    </Col>
+                  </Row>
+                  )
+                }
 
                 <h3>Description</h3>
                 <div className="suggestion_form_group">
@@ -242,44 +435,44 @@ class SuggestKitchenUtensilForm extends Component {
                 <div className="suggestion_form_2_col">
                   <div className="suggestion_form_2_col_1">
                     <div className="suggestion_form_group">
-                      <label htmlFor="currentIngredientQuantity" className="suggestion_form_label">
-                        Quantity
-                      </label>
-                      <TextField fullWidth id="currentIngredientQuantity" type="number" onChange={this.onTextFieldChange}
-                        variant="outlined" placeholder="1.." value={this.state.currentIngredientQuantity} />
-                    </div>
-                  </div>
-
-                  <div className="suggestion_form_2_col_2">
-                    <div className="suggestion_form_group">
-                      <label htmlFor="currentIngredientMeasurement" className="suggestion_form_label">
-                        Measurement
+                      <label htmlFor="size" className="suggestion_form_label">
+                        Size
                       </label>
                       <Autocomplete
-                        id="currentIngredientMeasurement"
+                        id="size"
                         options={this.props.measurements.map((option) => option)}
-                        value={this.state.currentIngredientMeasurement}
-                        onChange={this.handleIngredientMeasurement}
+                        value={this.state.size}
+                        onChange={this.handleSize}
                         freeSolo
                         renderInput={(params) => (<TextField {...params}
-                          value={this.state.currentIngredientMeasurement} id="currentIngredientMeasurement"
+                          value={this.state.size} id="size"
                           variant="outlined" type="text"  />)}
                       />
                     </div>
                   </div>
 
-                  <Button variant="contained" disableRipple onClick={this.addIngredientToMeal} className='ingredient_button' style={{ width: "max-content" }} > Add Ingredient</Button>
+                  <div className="suggestion_form_2_col_2">
+                    <div className="suggestion_form_group">
+                      <label htmlFor="price" className="suggestion_form_label">
+                        Price
+                      </label>
+                      <TextField fullWidth id="price" type="number" onChange={this.onTextFieldChange}
+                        variant="outlined" placeholder="1.." value={this.state.price} />
+                    </div>
+                  </div>
+
+                  <Button variant="contained" disableRipple onClick={this.addSize} className='ingredient_button' style={{ width: "max-content" }} > Add Size</Button>
                 </div>
 
                 <Stack direction="row" spacing={1} className="stack">
                 {
-                  ingredientStrings.map((data, index) => (
+                  sizeStrings.map((data, index) => (
                     <Chip
                       key={index}
                       label={data}
                       className='chip'
-                      onClick={() => this.handleDeleteIngredientChip(data)}
-                      onDelete={() => this.handleDeleteIngredientChip(data)}
+                      onClick={() => this.handleDeleteSizeChip(data)}
+                      onDelete={() => this.handleDeleteSizeChip(data)}
                     />
                   ))
                 }
@@ -310,7 +503,7 @@ class SuggestKitchenUtensilForm extends Component {
                         <TextField
                           {...params}
                           variant="outlined"
-                          placeholder="Suggest categories for this meal.."
+                          placeholder="Suggest categories for this utensil.."
                           fullWidth
                         />                    )}
                     />
@@ -345,7 +538,13 @@ class SuggestKitchenUtensilForm extends Component {
               </Row> */}
               <u >View privacy policy</u>
               <div id="ProductAdditionalDataDisplayed" >
-                <MealPageModal openModal={this.state.openModal} closeModal={this.closeModal}
+                <Popup1 openModal={this.state.openModal} closeModal={this.closeModal}
+                 name={this.state.utensilName} description={this.state.intro}
+                 imageData={this.state.utensilImageData} image={this.state.utensilImage}
+                 imagesData={this.state.utensilImagesData} categories={this.state.suggestedCategories}
+                 sizesList = {this.state.sizeStrings}
+                />
+                {/* <MealPageModal openModal={this.state.openModal} closeModal={this.closeModal}
                  mealName={this.state.mealName} mealImage={this.state.mealImage}
                  categories={this.state.suggestedCategories}
                   prepTime={this.state.prepTime} cookTime={this.state.cookTime}
@@ -359,7 +558,7 @@ class SuggestKitchenUtensilForm extends Component {
                   chunk5Content={this.state.chunk5Content} chunk6Content={this.state.chunk6Content}
                   instructionWordlength={this.state.instructionWordlength}
                   tips={this.state.tips} mealImageData={this.state.mealImageData}
-                 />
+                 /> */}
               </div>
             </form>
           </div>

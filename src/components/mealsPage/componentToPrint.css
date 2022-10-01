@@ -381,7 +381,7 @@ html {
   width: 100%;
   border-radius: 4px;
   /* align-content: start; */
-  justify-content: space-between;
+  /* justify-content: space-between; */
     /* grid-template-columns: 1fr 1fr 1fr;*/ }
 
 .meal_instruction > div {
@@ -424,6 +424,7 @@ html {
 .instruction_img{
   height: 7rem;
   width: 100%;
+    max-width: 13rem;
 }
 
 .title {

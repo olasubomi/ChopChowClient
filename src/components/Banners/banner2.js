@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import background from "../../assets/images/homepage/grocery_bag.jpg";
+import banner3 from "../../assets/images/homepage/banner-3.png";
 import './banner2.css';
 import { Link  } from "react-router-dom";
 
@@ -17,7 +17,7 @@ class Banner2 extends Component {
         return (
             <div>
                 <div style={{
-                    backgroundImage: `url(${background})`,
+                    backgroundImage: `url(${banner3})`,
                 }}
                 className="banner_container"
                 >

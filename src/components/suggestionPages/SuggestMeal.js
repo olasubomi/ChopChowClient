@@ -1,23 +1,18 @@
 import React, { Component } from "react";
 import TextField from "@mui/material/TextField";
-import ChipInput from  "@mui/material/Chip"
 // import Chip from "@mui/material/Chip";
 import Autocomplete from "@mui/lab/Autocomplete"; // createFilterOptions,
 // import axios from 'axios';
 import axios from '../../util/Api';
-import { Container, Row, Col } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import Button from '@mui/material/Button';
-import { green } from '@mui/material/colors';
 import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
-import WestIcon from '@mui/icons-material/West';
 import AddIcon from '@mui/icons-material/Add';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import MealPageModal from "../mealsPage/MealPageModal";
+// import MealPageModal from "../mealsPage/MealPageModal";
 import "./suggestion.css";
-import { Link } from "react-router-dom";
-
+import Popup2 from "../popups/popup2";
+import MealPageModal from "../mealsPage/MealPageModal";
 // import ProductsPageModal from "./ProductsPageModal";
 var FormData = require('form-data');
 
@@ -33,6 +28,7 @@ class SuggestMealForm extends Component {
       mealImage: "",
       mealImageName: "",
       mealImageFile: "",
+      mealImagesData: [],
       intro: "",
 
       ingredientNames: [],
@@ -392,6 +388,9 @@ class SuggestMealForm extends Component {
     this.setState({
       tip: e.target.value
     })
+    if(e.keyCode === 13){
+      this.updateTip()
+    }
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -1167,7 +1166,7 @@ class SuggestMealForm extends Component {
     //   palette: { primary: green },
     // });
 
-    const { ingredientGroupList, ingredientStrings, stepInputs } = this.state;
+    const { ingredientStrings, stepInputs } = this.state;
 
     return (
           <div className="suggestion_section_2" >
@@ -1441,8 +1440,8 @@ availableLocations,
                           key={index}
                           label={chip}
                           className='chip'
-                          onClick={() => this.handleDeleteInstructionsStep(1)}
-                          onDelete={() => this.handleDeleteInstructionsStep(1)}
+                          onClick={() => this.handleDeleteInstructionsStep(chip, 1)}
+                          onDelete={() => this.handleDeleteInstructionsStep(chip, 1)}
                         />
                       ))
                     }
@@ -1500,8 +1499,8 @@ availableLocations,
                                 key={index}
                                 label={chip}
                                 className='chip'
-                                onClick={() => this.handleDeleteInstructionsStep(id)}
-                                onDelete={() => this.handleDeleteInstructionsStep(id)}
+                                onClick={() => this.handleDeleteInstructionsStep(chip, id)}
+                                onDelete={() => this.handleDeleteInstructionsStep(chip, id)}
                               />
                             ))
                           }
@@ -1534,7 +1533,9 @@ availableLocations,
                 </div>
                 <div className="input_button">
                     <div></div>
+                    {stepInputs.length <5 &&
                     <Button variant="contained" disableRipple onClick={this.addMoreStep} className='ingredient_button' style={{ width: "209px" }} > ADD MORE</Button>
+                    }
                   </div>
 
                 {/* <Row>
@@ -1676,7 +1677,7 @@ availableLocations,
                   </label>
                   <div className="input_button">
                     {/* <ChipInput label="tips" className="mb-2" fullWidth value={this.state.tips} onAdd={(chip) => this.updateTip(chip)} onDelete={(chip, index) => this.deleteTip(chip, index)} variant="outlined" /> */}
-                    <TextField id="tips" value={this.state.tip} fullWidth onChange={this.handleTip} variant="outlined" required />
+                    <TextField id="tips" value={this.state.tip} fullWidth onChange={this.handleTip} onKeyUp={this.handleTip} variant="outlined" required />
                     {/* <ChipInput id="tips"
                     fullWidth value={this.state.tips} 
                     onAdd={(chip) => this.updateTip(chip)} 
@@ -1710,6 +1711,22 @@ availableLocations,
               </Row> */}
               <u >View privacy policy</u>
               <div id="ProductAdditionalDataDisplayed" >
+                {/* <Popup2 popupType='Meal Suggestion Preview' openModal={this.state.openModal} closeModal={this.closeModal}
+                 name={this.state.mealName} description={this.state.intro}
+                 imageData={this.state.mealImageData} image={this.state.mealImage}
+                 imagesData={this.state.mealImagesData} categories={this.state.suggestedCategories}
+                 prepTime={this.state.prepTime} cookTime={this.state.cookTime}
+                  serves={this.state.servings} chef={this.state.chef}
+                  ingredientsList = {this.state.ingredientStrings} utensilsList={this.state.suggestedUtensils}
+                  instructionChunk1={this.state.instructionChunk1} instructionChunk2={this.state.instructionChunk2}
+                  instructionChunk3={this.state.instructionChunk3} instructionChunk4={this.state.instructionChunk4}
+                  instructionChunk5={this.state.instructionChunk5} instructionChunk6={this.state.instructionChunk6}
+                  chunk1Content={this.state.chunk1Content} chunk2Content={this.state.chunk2Content}
+                  chunk3Content={this.state.chunk3Content} chunk4Content={this.state.chunk4Content}
+                  chunk5Content={this.state.chunk5Content} chunk6Content={this.state.chunk6Content}
+                  instructionWordlength={this.state.instructionWordlength}
+                  tips={this.state.tips} mealImageData={this.state.mealImageData}
+                /> */}
                 <MealPageModal openModal={this.state.openModal} closeModal={this.closeModal}
                  mealName={this.state.mealName} mealImage={this.state.mealImage}
                  categories={this.state.suggestedCategories}
@@ -1726,6 +1743,7 @@ availableLocations,
                   tips={this.state.tips} mealImageData={this.state.mealImageData}
                  />
               </div>
+              {/* <Popup1></Popup1> */}
             </form>
           </div>
     );
