@@ -161,13 +161,13 @@ class ComponentToPrint extends React.Component {
                   <div className="print_page_2">
                     <div className="print_body">
                       <div className="meal_instructions">
-                        <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) && {flexWrap: 'wrap'}} className="meal_instruction"> 
+                        <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) ? {flexWrap: 'wrap'}: {}} className="meal_instruction"> 
                         {(this.props.instructionChunk1.instructionSteps.length > 0 || this.props.instructionChunk1.title || this.props.chunk1Content) &&
-                          <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) && {flex: '0 0 32.5%'}}>
+                          <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) ? {flex: '0 0 32.5%'} : {}}>
                             <div className="instruction_step_top">
                               <h4>1</h4>
                               {this.props.chunk1Content &&
-                              <img className="instruction_img" alt="instruction_img" src={URL.createObjectURL(this.props.chunk1Content)} ></img>}
+                              <img className="instruction_img" alt="instruction_img" src={this.props.chunk1Content} ></img>}
                               {!this.props.chunk1Content &&
                               <h4 className='title'>{this.props.instructionChunk1.title}</h4>}
                             </div>
@@ -184,11 +184,11 @@ class ComponentToPrint extends React.Component {
                           </div>
                           }
                           {(this.props.instructionChunk2.instructionSteps.length > 0 || this.props.instructionChunk2.title || this.props.chunk2Content) &&
-                          <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) && {flex: '0 0 32.5%'}}>
+                          <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) ? {flex: '0 0 32.5%'} : {}}>
                             <div className="instruction_step_top">
                               <h4>2</h4>
                               {this.props.chunk2Content &&
-                              <img className="instruction_img" alt = "instruction_img" src={URL.createObjectURL(this.props.chunk2Content)} ></img>}
+                              <img className="instruction_img" alt = "instruction_img" src={this.props.chunk2Content} ></img>}
                               {!this.props.chunk2Content &&
                               <h4 className='title'>{this.props.instructionChunk2.title}</h4>}
                             </div>
@@ -203,11 +203,11 @@ class ComponentToPrint extends React.Component {
                           </div>
                           }
                           {(this.props.instructionChunk3.instructionSteps.length > 0 || this.props.instructionChunk3.title || this.props.chunk3Content) &&
-                          <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) && {flex: '0 0 32.5%'}}>
+                          <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) ? {flex: '0 0 32.5%'} : {}}>
                             <div className="instruction_step_top">
                               <h4>3</h4>
                               {this.props.chunk3Content &&
-                              <img className="instruction_img" alt="instruction_img" src={URL.createObjectURL(this.props.chunk3Content)} ></img>}
+                              <img className="instruction_img" alt="instruction_img" src={this.props.chunk3Content} ></img>}
                               {!this.props.chunk3Content &&
                             <h4 className='title'>{this.props.instructionChunk3.title}</h4>}
                             </div>
@@ -224,11 +224,11 @@ class ComponentToPrint extends React.Component {
                           </div>
                           }
                           {(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) &&
-                          <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) && {flex: '0 0 32.5%'}}>
+                          <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) ? {flex: '0 0 32.5%'} : {}}>
                             <div className="instruction_step_top">
                               <h4>4</h4>
                               {this.props.chunk4Content &&
-                              <img className="instruction_img" alt="instruction_img" src={URL.createObjectURL(this.props.chunk4Content)} ></img>}
+                              <img className="instruction_img" alt="instruction_img" src={this.props.chunk4Content} ></img>}
                               {!this.props.chunk4Content &&
                               <h4 className='title'>{this.props.instructionChunk4.title}</h4>}
                             </div>
@@ -243,11 +243,11 @@ class ComponentToPrint extends React.Component {
                           </div>
                           }
                           {(this.props.instructionChunk5.instructionSteps.length > 0 || this.props.instructionChunk5.title || this.props.chunk5Content) && 
-                          <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) && {flex: '0 0 32.5%'}}>
+                          <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) ? {flex: '0 0 32.5%'} : {}}>
                             <div className="instruction_step_top">
                               <h4>5</h4>
                               {this.props.chunk5Content &&
-                              <img className="instruction_img" alt="instruction_img" src={URL.createObjectURL(this.props.chunk5Content)} ></img>}
+                              <img className="instruction_img" alt="instruction_img" src={this.props.chunk5Content} ></img>}
                               {!this.props.chunk5Content &&
                               <h4 className='title'>{this.props.instructionChunk5.title}</h4>}
                             </div>
@@ -265,11 +265,11 @@ class ComponentToPrint extends React.Component {
                           }
                           
                           {(this.props.instructionChunk6.instructionSteps.length > 0 || this.props.instructionChunk6.title || this.props.chunk6Content) &&
-                          <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) && {flex: '0 0 32.5%'}}>
+                          <div style={(this.props.instructionChunk4.instructionSteps.length > 0 || this.props.instructionChunk4.title || this.props.chunk4Content) ? {flex: '0 0 32.5%'} : {}}>
                             <div className="instruction_step_top">
                               <h4>6</h4>
                               {this.props.chunk6Content &&
-                              <img className="instruction_img"alt ="instruction_img" src={URL.createObjectURL(this.props.chunk6Content)} ></img>}
+                              <img className="instruction_img"alt ="instruction_img" src={this.props.chunk6Content} ></img>}
                               {!this.props.chunk6Content &&
                               <h4 className='title'>{this.props.instructionChunk6.title}</h4>}
                             </div>

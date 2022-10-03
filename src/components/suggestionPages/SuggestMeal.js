@@ -26,7 +26,7 @@ class SuggestMealForm extends Component {
       mealName: "",
       mealImage: "",
       mealImageName: "",
-      mealImageFile: "",
+      mealImageData: "",
       mealImagesData: [],
       intro: "",
 
@@ -87,12 +87,12 @@ class SuggestMealForm extends Component {
       },
       instructionWordlength: 0,
 
-      // chunk1Content: "",
-      // chunk2Content: "",
-      // chunk3Content: "",
-      // chunk4Content: "",
-      // chunk5Content: "",
-      // chunk6Content: "",
+      chunk1Content: "",
+      chunk2Content: "",
+      chunk3Content: "",
+      chunk4Content: "",
+      chunk5Content: "",
+      chunk6Content: "",
 
       // do we want all the instruction variables ?
       // instructionGroupList:[],
@@ -191,6 +191,229 @@ class SuggestMealForm extends Component {
     //     console.log(err);
     //   });
     this.categories = this.props.categories;
+
+    let doc = document.querySelector('#formmeal')
+    if(doc){
+      doc.addEventListener('keyup', (e) => {
+        console.log('sdcd')
+        localStorage.setItem('suggestMealForm', JSON.stringify(this.state))
+      })
+
+      doc.addEventListener('click', (e) => {
+        localStorage.setItem('suggestMealForm', JSON.stringify(this.state))
+      }, false)
+    }
+
+    if(localStorage.getItem('suggestMealForm')){
+      let {
+        mealName,
+        mealImage,
+        mealImageName,
+        mealImageData,
+        mealImagesData,
+        intro,
+
+        ingredientNames,
+        // do we need product group list AND strings ?
+        ingredientGroupList,
+        // store product names of inputted strings to compare with db products
+        ingredientStrings,
+        // do we want to use current ingredient formats ? Yes.
+        currentIngredient,
+        currentIngredientMeasurement,
+        currentIngredientQuantity,
+        currentProductImgSrc,
+        currentProductDisplayIndex,
+
+        currentStore,
+
+        // we need to update how we create image paths
+        productImg_path,
+        new_product_ingredients,
+        suggested_stores,
+        currProductIndexInDBsProductsList,
+        // currStoreIndexIfExistsInProductsList,
+        suggestedUtensils,
+
+        cookTime,
+        prepTime,
+
+        instructionChunk6,
+        instructionChunk1,
+        instructionChunk2,
+        instructionChunk3,
+        instructionChunk4,
+        instructionChunk5,
+        instructionWordlength,
+
+        chunk1Content,
+        chunk2Content,
+        chunk3Content,
+        chunk4Content,
+        chunk5Content,
+        chunk6Content,
+
+        // do we want all the instruction variables ?
+        // instructionGroupList:[],
+
+        instructionimagesAndVideos,
+
+        chef,
+        suggestedCategories,
+        servings,
+        tip,
+        tips,
+
+        booleanOfDisplayOfDialogBoxConfirmation,
+        stepInputs
+      } = JSON.parse(localStorage.getItem('suggestMealForm'))
+
+      if(mealImageData !== ''){
+        var imageM = document.getElementById("MealsMainImages");
+        imageM.style.display = "block";
+        imageM.src = mealImageData;
+      }
+
+      var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
+      var allowedVideoExtensions = /(\.mp4|\.m4v|\.)$/i;
+
+      var imageElementId = "chunk1Image";
+      var videoElementId = "chunk1Video";
+
+      // console.log(allowedImageExtensions.exec(event.target.files[0].name));
+
+      // we need to keep track of wether an image or video was last uploaded and use the last one only.
+      if(JSON.parse(localStorage.getItem('suggestMealForm'))['chunk1Content'] !== ''){
+        if (allowedImageExtensions.exec(JSON.parse(localStorage.getItem('suggestMealForm'))['instructionChunk1'].dataName)) {
+          //display meals main image or videoin suggest meal
+
+          setTimeout(()  => {
+            var image = document.getElementById(imageElementId);
+            var video = document.getElementById(videoElementId);
+            image.style.display = "block";
+            image.src= JSON.parse(localStorage.getItem('suggestMealForm'))['chunk1Content'];
+            video.style.display = "none";
+          }, 100)
+
+        }
+        else if (allowedVideoExtensions.exec(JSON.parse(localStorage.getItem('suggestMealForm'))['instructionChunk1'].dataName)) {
+          //display meals main image or videoin suggest meal
+          setTimeout(()  => {
+            var image = document.getElementById(imageElementId);
+            var video = document.getElementById(videoElementId);
+            video.style.display = "block";
+            video.src= JSON.parse(localStorage.getItem('suggestMealForm'))['chunk1Content'];
+            image.style.display = "none";
+            video.play();
+          }, 100)
+        }
+        else {
+          alert('Invalid file type');
+        }
+      }
+      
+      for(let i=0; i<stepInputs.length; i++){
+
+        let imageElementId = "chunk" + (stepInputs[i]) + "Image";
+        let videoElementId = "chunk" + (stepInputs[i]) + "Video";
+
+        // console.log(allowedImageExtensions.exec(event.target.files[0].name));
+
+        // we need to keep track of wether an image or video was last uploaded and use the last one only.
+        if(JSON.parse(localStorage.getItem('suggestMealForm'))['chunk'+stepInputs[i]+'Content'] !== ''){
+          if (allowedImageExtensions.exec(JSON.parse(localStorage.getItem('suggestMealForm'))['instructionChunk'+stepInputs[i]].dataName)) {
+            //display meals main image or videoin suggest meal
+
+            setTimeout(()  => {
+              console.log(imageElementId, videoElementId)
+              var image = document.getElementById(imageElementId);
+              var video = document.getElementById(videoElementId);
+              image.style.display = "block";
+              image.src= JSON.parse(localStorage.getItem('suggestMealForm'))['chunk'+stepInputs[i]+'Content'];
+              video.style.display = "none";
+            }, 100)
+
+          }
+          else if (allowedVideoExtensions.exec(JSON.parse(localStorage.getItem('suggestMealForm'))['instructionChunk'+stepInputs[i]].dataName)) {
+            //display meals main image or videoin suggest meal
+            setTimeout(()  => {
+              var image = document.getElementById(imageElementId);
+              var video = document.getElementById(videoElementId);
+              video.style.display = "block";
+              video.src= JSON.parse(localStorage.getItem('suggestMealForm'))['chunk'+stepInputs[i]+'Content'];
+              image.style.display = "none";
+              video.play();
+            }, 100)
+          }
+          else {
+            alert('Invalid file type');
+          }
+        }
+      }
+
+      this.setState({
+        mealName,
+        mealImage,
+        mealImageName,
+        mealImageData,
+        mealImagesData,
+        intro,
+
+        ingredientNames,
+        // do we need product group list AND strings ?
+        ingredientGroupList,
+        // store product names of inputted strings to compare with db products
+        ingredientStrings,
+        // do we want to use current ingredient formats ? Yes.
+        currentIngredient,
+        currentIngredientMeasurement,
+        currentIngredientQuantity,
+        currentProductImgSrc,
+        currentProductDisplayIndex,
+
+        currentStore,
+
+        // we need to update how we create image paths
+        productImg_path,
+        new_product_ingredients,
+        suggested_stores,
+        currProductIndexInDBsProductsList,
+        // currStoreIndexIfExistsInProductsList,
+        suggestedUtensils,
+
+        cookTime,
+        prepTime,
+
+        instructionChunk6,
+        instructionChunk1,
+        instructionChunk2,
+        instructionChunk3,
+        instructionChunk4,
+        instructionChunk5,
+        instructionWordlength,
+
+        chunk1Content,
+        chunk2Content,
+        chunk3Content,
+        chunk4Content,
+        chunk5Content,
+        chunk6Content,
+
+        // do we want all the instruction variables ?
+        // instructionGroupList:[],
+
+        instructionimagesAndVideos,
+
+        chef,
+        suggestedCategories,
+        servings,
+        tip,
+        tips,
+
+        booleanOfDisplayOfDialogBoxConfirmation,
+        stepInputs
+      })
+    }
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -242,7 +465,7 @@ class SuggestMealForm extends Component {
   ///////////////////////////////////////////////////////////////////////////////////////
   onInputChange = (e, val) => {
     console.log("Comes in on text field change; ");
-    console.log(e.target.id)
+    // console.log(e.target.id)
     // console.log(" " + [e.target.id] + " " + e.target.value);
     this.setState({ "mealName": val });
   };
@@ -250,26 +473,41 @@ class SuggestMealForm extends Component {
   ///////////////////////////////////////////////////////////////////////////////////////
   onUpdateMealImage = (event) => {
     if (event.target.files[0] === undefined) return;
-    this.setState({ mealImage: event.target.files[0], 
-      mealImageName: event.target.files[0].name,
-    mealImageData:  URL.createObjectURL(event.target.files[0]) });
 
     // Allowing file type
     var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
 
     if (allowedImageExtensions.exec(event.target.files[0].name)) {
-      //display meals main image or videoin suggest meal
-      var image = document.getElementById("MealsMainImages");
-      image.style.display = "block";
-      image.src = URL.createObjectURL(event.target.files[0]);
+      if(this.state.mealImage === ''){
+        this.setState({ mealImage: event.target.files[0], 
+          mealImageName: event.target.files[0].name,
+        mealImageData:  URL.createObjectURL(event.target.files[0]) });
+        //display meals main image or videoin suggest meal
+        var image = document.getElementById("MealsMainImages");
+        image.style.display = "block";
+        image.src = URL.createObjectURL(event.target.files[0]);
 
-      console.log(event.target.files[0]);
-      console.log(event.target.files[0].name);
+        console.log(event.target.files[0]);
+        console.log(event.target.files[0].name);
 
 
-      console.log(allowedImageExtensions.exec(event.target.files[0].name));
+        console.log(allowedImageExtensions.exec(event.target.files[0].name));
 
-      // console.log(URL.createObjectURL(event.target.files[0]));
+        // console.log(URL.createObjectURL(event.target.files[0]));
+      }else{
+        this.setState({ 
+        mealImagesData: [...this.state.mealImagesData,  URL.createObjectURL(event.target.files[0])] });
+        // var image = document.getElementById("mealsMainImages"+(this.state.utensilImagesData.length+1));
+        // image.style.display = "block";
+        // image.src = URL.createObjectURL(event.target.files[0]);
+  
+        console.log(event.target.files[0]);
+        console.log(event.target.files[0].name);
+  
+  
+        console.log(allowedImageExtensions.exec(event.target.files[0].name));
+  
+      }
     }
     else {
       alert("Invalid image type");
@@ -289,32 +527,32 @@ class SuggestMealForm extends Component {
       case 1:     
         particularArray = this.state.instructionChunk1;
         particularArray.dataName = event.target.files[0].name;
-        this.setState({ instructionChunk1: particularArray, chunk1Content: event.target.files[0]  });
+        this.setState({ instructionChunk1: particularArray, chunk1Content: URL.createObjectURL(event.target.files[0])  });
         break;
       case 2:
         particularArray = this.state.instructionChunk2;
         particularArray.dataName = event.target.files[0].name;
-        this.setState({ instructionChunk2: particularArray, chunk2Content: event.target.files[0]  });
+        this.setState({ instructionChunk2: particularArray, chunk2Content: URL.createObjectURL(event.target.files[0])  });
         break;
       case 3:
         particularArray = this.state.instructionChunk3;
         particularArray.dataName = event.target.files[0].name;
-        this.setState({ instructionChunk3: particularArray ,chunk3Content: event.target.files[0]});
+        this.setState({ instructionChunk3: particularArray ,chunk3Content: URL.createObjectURL(event.target.files[0])});
         break;
       case 4:
         particularArray = this.state.instructionChunk4;
         particularArray.dataName = event.target.files[0].name;
-        this.setState({ instructionChunk4: particularArray ,chunk4Content: event.target.files[0]});
+        this.setState({ instructionChunk4: particularArray ,chunk4Content: URL.createObjectURL(event.target.files[0])});
         break;
       case 5:
         particularArray = this.state.instructionChunk5;
         particularArray.dataName = event.target.files[0].name;
-        this.setState({ instructionChunk5: particularArray ,chunk5Content: event.target.files[0]});
+        this.setState({ instructionChunk5: particularArray ,chunk5Content: URL.createObjectURL(event.target.files[0])});
         break;
       case 6:
         particularArray = this.state.instructionChunk6;
         particularArray.dataName = event.target.files[0].name;
-        this.setState({ instructionChunk6: particularArray, chunk6Content: event.target.files[0] });
+        this.setState({ instructionChunk6: particularArray, chunk6Content: URL.createObjectURL(event.target.files[0]) });
         break;
       default:
       // ..do nothing
@@ -715,14 +953,34 @@ class SuggestMealForm extends Component {
     // this.setState({ suggestedUtensils: [tmpKitchenUtenails, val] });
   }
 
-  addKitchenUtensil = () => {
-    let cat = document.getElementById('kitchen_utenails');
-    let suggestedUtensils = this.state.suggestedUtensils;
-    suggestedUtensils.push(cat.value);
+  kitBlur = (e) =>{
+    console.log(e.target.value)
     this.setState({
-      suggestedUtensils
+      kitVal: e.target.value
     })
-    cat.value = '';
+  }
+
+  addKitchenUtensil = (e) => {
+    let utensil = this.state.kitVal;
+    console.log(utensil)
+    let suggestedUtensils = this.state.suggestedUtensils;
+    var index = suggestedUtensils.indexOf(utensil);
+    if (index === -1) {
+      suggestedUtensils.push(utensil);
+      this.setState({
+        suggestedUtensils
+      })
+    }
+  }
+
+  deleteUtensil(chip) {
+    let suggestedUtensils = this.state.suggestedUtensils;
+    console.log(chip)
+    var index = suggestedUtensils.indexOf(chip);
+    if (index !== -1) {
+      suggestedUtensils.splice(index, 1);
+      this.setState({ suggestedUtensils: suggestedUtensils });
+    }
   }
   ///////////////////////////////////////////////////////////////////////////////////////
   handleUtensilsDropdownChange(event) {
@@ -760,14 +1018,23 @@ class SuggestMealForm extends Component {
 
   }
 
-  addCategory = () => {
-    let cat = document.getElementById('tags-outlined');
-    let suggestedCategories = this.state.suggestedCategories;
-    suggestedCategories.push(cat.value);
+  categoryBlur = (e) =>{
+    console.log(e.target.value)
     this.setState({
-      suggestedCategories
+      categoryVal: e.target.value
     })
-    cat.value = '';
+  }
+
+  addCategory = () => {
+    let cat = this.state.categoryVal;
+    let suggestedCategories = this.state.suggestedCategories;
+    var index = suggestedCategories.indexOf(cat);
+    if (index === -1) {
+      suggestedCategories.push(cat);
+      this.setState({
+        suggestedCategories
+      })
+    }
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////
@@ -793,7 +1060,9 @@ class SuggestMealForm extends Component {
     var measurementValue = document.getElementById("currentIngredientMeasurement").value;
 
 
-    if (ingredientValue === "") { window.alert("Enter an ingredient to add to meal"); return; }
+    if (ingredientValue === "") { window.alert("Enter ingredient to add to meal"); return; }
+    if (quantityValue === "") { window.alert("Enter quantity to add to meal"); return; }
+    if (measurementValue === "") { window.alert("Enter measurement to add to meal"); return; }
     // update ingredient string syntax for no quantity or no measurement.
     if (quantityValue === "") {
       properIngredientStringSyntax = ingredientValue;
@@ -1148,10 +1417,49 @@ class SuggestMealForm extends Component {
 
     let id = stepInputs.length + 2;
     
-    console.log(document.getElementById('chunk1Title'))
     stepInputs.push(id)
     this.setState({
       stepInputs
+    })
+  }
+
+  removeStep = (n) =>{
+    let stepInputs = this.state.stepInputs;
+    var index = stepInputs.indexOf(n);
+    stepInputs.splice(index, 1);
+    
+    // let instruction = this.state['instructionChunk'+n];
+
+    this.state['instructionChunk'+n] = {
+      title: "",
+      instructionSteps: [],
+      dataName: ""
+    }
+
+    this.state['chunk'+n+'Content'] = ''
+    const input = document.getElementById("instructionChunkContent" + n);
+    if(input){
+      input.accept = "";
+      input.id = "";
+      input.name = "";
+      input.type = "";
+      input.onchange = null;
+      input.hidden = true;
+  
+      var imageElementId = "chunk" + (n) + "Image";
+      var videoElementId = "chunk" + (n) + "Video";
+      var image = document.getElementById(imageElementId);
+      var video = document.getElementById(videoElementId);
+      image.style.display = "none";
+      video.style.display = "none";
+  
+      image.src = '';
+      video.src = '';
+    }
+
+    this.setState({
+      stepInputs,
+
     })
   }
 
@@ -1169,7 +1477,7 @@ class SuggestMealForm extends Component {
 
     return (
           <div className="suggestion_section_2" >
-            <form className="suggestion_forms" noValidate autoComplete="off" encType="multipart/form-data" method="post" >
+            <form id="formmeal" className="suggestion_forms" noValidate autoComplete="off" encType="multipart/form-data" method="post" >
               <h3>Begin Suggesting Meal</h3>
               <div className="suggestion_form">
                 <div className="suggestion_form_group">
@@ -1193,7 +1501,7 @@ class SuggestMealForm extends Component {
                       <label htmlFor="prepTime" className="suggestion_form_label">
                         PrepTime (Minutes)
                       </label>
-                      <TextField id="prepTime" type="number" fullWidth onChange={this.onTextFieldChange} variant="outlined" required />
+                      <TextField value={this.state.prepTime} id="prepTime" type="number" fullWidth onChange={this.onTextFieldChange} variant="outlined" required />
                     </div>
                   </div>
                   <div className="suggestion_form_2_col_2">
@@ -1201,13 +1509,13 @@ class SuggestMealForm extends Component {
                       <label htmlFor="cookTime" className="suggestion_form_label">
                         CookTime (Minutes)
                       </label>
-                      <TextField id="cookTime" type="number" fullWidth onChange={this.onTextFieldChange} variant="outlined" required />
+                      <TextField value={this.state.cookTime} id="cookTime" type="number" fullWidth onChange={this.onTextFieldChange} variant="outlined" required />
                     </div>
                   </div>
                 </div>
 
-                <h3>Upload Images</h3>
-
+                <h3>Upload Images <em>(Up to 4)</em></h3>
+                {this.state.mealImagesData.length < 3 &&
                 <div className="suggestion_form_image">
                     <div className="suggestion_form_image_col_1">
                       <div onClick={() => this.uploadMealImage()} className="suggestion_form_image_icon_con">
@@ -1217,7 +1525,7 @@ class SuggestMealForm extends Component {
                     <div className="suggestion_form_image_col_2">
                       <p>Upload picture with : Jpeg or Png format and not more than 500kb</p>
                     </div>
-                </div>
+                </div>}
                 <Row>
                   <Col md={12} style={{ marginTop: "20px" }}>
                     <p><img id="MealsMainImages" width="100%" alt="main_Meal_Image" style={{ display: "none" }} />
@@ -1225,12 +1533,23 @@ class SuggestMealForm extends Component {
                   </Col>
                 </Row>
 
+                {
+                  this.state.mealImagesData.map((data, index) => 
+                  <Row key={index}>
+                    <Col md={12} style={{ marginTop: "20px" }}>
+                      <p><img src={data} width="100%" alt="main_Utensil_Image" />
+                      </p>
+                    </Col>
+                  </Row>
+                  )
+                }
+
                 <h3>Add more details</h3>
                 <div className="suggestion_form_group">
                   <label htmlFor="intro" className="suggestion_form_label">
                     Intro (150 words)
                   </label>
-                  <TextField multiline id="intro" fullWidth onChange={this.onTextFieldChange} variant="outlined" />
+                  <TextField multiline value={this.state.intro} id="intro" fullWidth onChange={this.onTextFieldChange} variant="outlined" />
                 </div>
                 <div className="suggestion_form_2_col">
                   <div className="suggestion_form_2_col_1">
@@ -1238,7 +1557,7 @@ class SuggestMealForm extends Component {
                       <label htmlFor="servings" className="suggestion_form_label">
                         People to serve
                       </label>
-                      <TextField id="servings" fullWidth type="number" onChange={this.onTextFieldChange} variant="outlined" placeholder="1 person, 2, 4 or 10 people" />
+                      <TextField value={this.state.servings} id="servings" fullWidth type="number" onChange={this.onTextFieldChange} variant="outlined" placeholder="1 person, 2, 4 or 10 people" />
                     </div>
                   </div>
                   <div className="suggestion_form_2_col_2">
@@ -1355,14 +1674,16 @@ availableLocations,
               <h3>Kitchen Utensils<em>(optional)</em></h3>
               <div className="suggestion_form">
                 <div className="suggestion_form_group">
-                  <label htmlFor="kitchen_utenails" className="suggestion_form_label">
+                  <label htmlFor="kitchen_utensils" className="suggestion_form_label">
                     Utensils Name
                   </label>
                   <div className="input_button">
                     <Autocomplete
                       multiple
-                      id="kitchen_utenails"
+                      id="kitchen_utensils"
                       freeSolo
+                      clearOnBlur
+                      onBlur={this.kitBlur}
                       options={this.props.kitchenUtensils.map((option) => option)}
                       // onChange={(ev,val)=>this.handleUtensilsDropdownChange(ev,val)}
                       onChange={(e, val) => this.handleKitchenUtensilInputName(val)}
@@ -1382,8 +1703,8 @@ availableLocations,
                       key={index}
                       label={data}
                       className='chip'
-                      onClick={() => this.handleDeleteCategoryChip(data)}
-                      onDelete={() => this.handleDeleteCategoryChip(data)}
+                      onClick={() => this.deleteUtensil(data)}
+                      onDelete={() => this.deleteUtensil(data)}
                     />
                   ))
                 }
@@ -1416,7 +1737,7 @@ availableLocations,
                       <label className="suggestion_form_label">
                         Step 1 Title
                       </label>
-                      <TextField id="chunk1Title" 
+                      <TextField value={this.state.instructionChunk1.title} id="chunk1Title" 
                       onChange={(ev) => this.handleInstructionTitle(ev, 1)} variant="outlined" />
                     </div>
                     
@@ -1476,6 +1797,7 @@ availableLocations,
                             Step {id} Title
                           </label>
                           <TextField id={"chunk"+id+"Title"} 
+                          value={this.state["instructionChunk"+id].title}
                           onChange={(ev) => this.handleInstructionTitle(ev, id)} variant="outlined" />
                         </div>
                         
@@ -1531,7 +1853,9 @@ availableLocations,
                   
                 </div>
                 <div className="input_button">
-                    <div></div>
+                  {stepInputs.length > 0 &&
+                  <Button variant="contained" disableRipple onClick={() => this.removeStep(stepInputs[stepInputs.length -1])} className='ingredient_button' style={{ width: "209px" }} > REMOVE STEP</Button>
+                  }
                     {stepInputs.length <5 &&
                     <Button variant="contained" disableRipple onClick={this.addMoreStep} className='ingredient_button' style={{ width: "209px" }} > ADD MORE</Button>
                     }
@@ -1634,6 +1958,8 @@ availableLocations,
                       multiple
                       id="tags-outlined"
                       freeSolo
+                      clearOnBlur
+                      onBlur={this.categoryBlur}
                       // filterSelectedOptions
                       options={this.props.categories.map((option) => option)}
                       // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}

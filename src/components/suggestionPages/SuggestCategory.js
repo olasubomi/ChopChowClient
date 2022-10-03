@@ -7,8 +7,6 @@ import axios from '../../util/Api';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
-// import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import MealPageModal from "../mealsPage/MealPageModal";
 import "./suggestion.css";
 
 
@@ -193,8 +191,6 @@ class SuggestCategoryForm extends Component {
                 }
                 </Stack>
               </div>
-
-              <u style={{ color: "#F47900" }} onClick={this.openMealDetailsModal}> Show Preview</u>
               
               {/* <Row>
                 <Col md={12}> */}
@@ -205,23 +201,6 @@ class SuggestCategoryForm extends Component {
                 
               </Row> */}
               <u >View privacy policy</u>
-              <div id="ProductAdditionalDataDisplayed" >
-                <MealPageModal openModal={this.state.openModal} closeModal={this.closeModal}
-                 mealName={this.state.mealName} mealImage={this.state.mealImage}
-                 categories={this.state.suggestedCategories}
-                  prepTime={this.state.prepTime} cookTime={this.state.cookTime}
-                  serves={this.state.servings}
-                  ingredientsList = {this.state.ingredientStrings} utensilsList={this.state.suggestedUtensils}
-                  instructionChunk1={this.state.instructionChunk1} instructionChunk2={this.state.instructionChunk2}
-                  instructionChunk3={this.state.instructionChunk3} instructionChunk4={this.state.instructionChunk4}
-                  instructionChunk5={this.state.instructionChunk5} instructionChunk6={this.state.instructionChunk6}
-                  chunk1Content={this.state.chunk1Content} chunk2Content={this.state.chunk2Content}
-                  chunk3Content={this.state.chunk3Content} chunk4Content={this.state.chunk4Content}
-                  chunk5Content={this.state.chunk5Content} chunk6Content={this.state.chunk6Content}
-                  instructionWordlength={this.state.instructionWordlength}
-                  tips={this.state.tips} mealImageData={this.state.mealImageData}
-                 />
-              </div>
             </form>
           </div>
     );

@@ -102,7 +102,7 @@ class HomePage extends Component {
           <div className="slideshow_container">
 
             {/* Full-width images with number and caption text */}
-            <div className="mySlides fade_in">
+            <div className="mySlides">
               <div className="slide_wrapper"></div>
               <div className="slide_text">
                 <h2>Get the best Ingredients for your meal</h2>
@@ -116,7 +116,7 @@ class HomePage extends Component {
                 }}></div>
             </div>
 
-            <div className="mySlides fade_in">
+            <div className="mySlides">
               <div className="slide_wrapper"></div>
               <div className="slide_text">
                 <h2>
@@ -135,7 +135,7 @@ class HomePage extends Component {
                 }}></div>
             </div>
 
-            <div className="mySlides fade_in">
+            <div className="mySlides">
               <div className="slide_wrapper"></div>
               <div className="slide_text">
                 <h2>Enjoy hassle free cooking with CHOP CHOW</h2>

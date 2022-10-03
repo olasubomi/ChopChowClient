@@ -24,7 +24,7 @@ class SuggestKitchenUtensilForm extends Component {
       utensilName: "",
       utensilImage: "",
       utensilImageName: "",
-      utensilImageFile: "",
+      utensilImageData: "",
       utensilImagesData:[],
       intro: "",
 
@@ -35,8 +35,8 @@ class SuggestKitchenUtensilForm extends Component {
       sizeStrings: [],
       // do we want to use current ingredient formats ? Yes.
       currentIngredient: "",
-      size: "",
-      price: "",
+      measurement: "",
+      quantity: "",
       currentProductImgSrc: null,
       currentProductDisplayIndex: 0,
 
@@ -129,6 +129,95 @@ class SuggestKitchenUtensilForm extends Component {
     //     console.log(err);
     //   });
     this.categories = this.props.categories;
+
+    let doc = document.querySelector('#formutensil')
+    if(doc){
+      doc.addEventListener('keyup', (e) => {
+        localStorage.setItem('suggestUtensilForm', JSON.stringify(this.state))
+      })
+
+      doc.addEventListener('click', (e) => {
+        localStorage.setItem('suggestUtensilForm', JSON.stringify(this.state))
+      }, false)
+    }
+
+    if(localStorage.getItem('suggestUtensilForm')){
+      let {
+        utensilName,
+        utensilImage,
+        utensilImageName,
+        utensilImageData,
+        utensilImagesData,
+        intro,
+
+        sizeNames,
+        // do we need product group list AND strings ?
+        sizeGroupList,
+        // store product names of inputted strings to compare with db products
+        sizeStrings,
+        // do we want to use current ingredient formats ? Yes.
+        currentIngredient,
+        measurement,
+        quantity,
+        currentProductImgSrc,
+        currentProductDisplayIndex,
+
+        currentStore,
+
+        // we need to update how we create image paths
+        productImg_path,
+        new_product_ingredients,
+        suggested_stores,
+        currProductIndexInDBsProductsList,
+        // currStoreIndexIfExistsInProductsList,
+        suggestedUtensils,
+
+        suggestedCategories,
+
+        booleanOfDisplayOfDialogBoxConfirmation
+      } = JSON.parse(localStorage.getItem('suggestUtensilForm'))
+
+      if(utensilImageData !== ''){
+        var image = document.getElementById("UtensilsMainImages");
+        image.style.display = "block";
+        image.src = utensilImageData;
+      }
+
+      this.setState({
+        utensilName,
+        utensilImage,
+        utensilImageName,
+        utensilImageData,
+        utensilImagesData,
+        intro,
+
+        sizeNames,
+        // do we need product group list AND strings ?
+        sizeGroupList,
+        // store product names of inputted strings to compare with db products
+        sizeStrings,
+        // do we want to use current ingredient formats ? Yes.
+        currentIngredient,
+        measurement,
+        quantity,
+        currentProductImgSrc,
+        currentProductDisplayIndex,
+
+        currentStore,
+
+        // we need to update how we create image paths
+        productImg_path,
+        new_product_ingredients,
+        suggested_stores,
+        currProductIndexInDBsProductsList,
+        // currStoreIndexIfExistsInProductsList,
+        suggestedUtensils,
+
+        suggestedCategories,
+
+        booleanOfDisplayOfDialogBoxConfirmation,
+      })
+    }
   }
 
   onInputChange = (e) => {
@@ -208,24 +297,29 @@ class SuggestKitchenUtensilForm extends Component {
 
   }
 
+  categoryBlur = (e) =>{
+    this.setState({
+      categoryVal: e.target.value
+    })
+  }
+
   addCategory = () => {
-    let cat = document.getElementById('tags-outlined');
+    let cat = this.state.categoryVal;
     let suggestedCategories = this.state.suggestedCategories;
-    suggestedCategories.push(cat.value);
+    suggestedCategories.push(cat);
     this.setState({
       suggestedCategories
     })
-    cat.value = '';
   }
 
-  handleSize = (event, val) => {
+  handleMeasurement = (event, val) => {
     // if (event.target.value) {
-    //   this.setState({ size: event.target.value });
+    //   this.setState({ measurement: event.target.value });
     // } else {
-    //   this.setState({ size: "" });
+    //   this.setState({ measurement: "" });
     // }
 
-    console.log("In handleSize . \n val is: " + val);
+    console.log("In handleMeasurement . \n val is: " + val);
 
     if (val !== null && val !== undefined) {
       // CHECK IF INPUT MATCHES ANY PRODUCT ALREADY IN DB and
@@ -241,10 +335,10 @@ class SuggestKitchenUtensilForm extends Component {
       // set current ingredient to input Product regardless
       // console.log("Event is: \n"+ event.target);
       if (event != null && event.target.value !== null) {
-        this.setState({ size: event.target.innerHTML });
+        this.setState({ measurement: event.target.innerHTML });
 
       } else {
-        this.setState({ size: val });
+        this.setState({ measurement: val });
       }
     }
     else {
@@ -257,23 +351,23 @@ class SuggestKitchenUtensilForm extends Component {
     event.preventDefault();
     var properSizeStringSyntax;
     // var ingredientValue = document.getElementById("currentIngredient").value;
-    var priceValue = document.getElementById("price").value;
+    var quantityValue = document.getElementById("quantity").value;
     // best to get the measurement from the state
     // perhaps becuse inner html is defined before state is updated
     // var measurementValue = this.state.currentIngredientMeasurement;
-    var sizeValue = document.getElementById("size").value;
+    var sizeValue = document.getElementById("measurement").value;
 
 
-    if (sizeValue === "") { window.alert("Enter an ingredient to add to meal"); return; }
+    if (sizeValue === "") { window.alert("Enter measurement"); return; }
     // update ingredient string syntax for no quantity or no measurement.
-    if (priceValue === "") {
+    if (quantityValue === "") {
       properSizeStringSyntax = '';
-    } else if (sizeValue === "" && priceValue !== "") {
+    } else if (sizeValue === "" && quantityValue !== "") {
       // MAKE sure we are using the right and tested variables to display the right type of string at all times.
-      properSizeStringSyntax = "" + priceValue;
+      properSizeStringSyntax = "" + quantityValue;
     } else {
       properSizeStringSyntax =
-        "" + priceValue + " " + sizeValue;
+        "" + quantityValue + " " + sizeValue;
     }
     console.log(properSizeStringSyntax);
 
@@ -282,7 +376,7 @@ class SuggestKitchenUtensilForm extends Component {
 
       // display: this.state.currProductIndexInDBsProductsList,
       // availableLocations: [],
-      size: sizeValue,
+      measurement: sizeValue,
       properSizeStringSyntax: properSizeStringSyntax
     };
 
@@ -303,14 +397,14 @@ class SuggestKitchenUtensilForm extends Component {
     // var updatedProductList = [tmpNewProducts, sizeObject];
 
     // this.setState({ new_product_ingredients: updatedProductList })
-    this.setState({ new_product_size: [...this.state.new_product_size, sizeObject] });
+    this.setState({ new_product_size: [sizeObject] });
 
-    this.setState({ sizeGroupList: [...this.state.sizeGroupList, sizeObject] });
+    this.setState({ sizeGroupList: [sizeObject] });
     // after adding product to ingredient group list
     // reset current product img src and path to null, and same for current ingredient inputs
     // this.setState({ currentProductImgSrc: null, productImg_path: "" });
-    this.setState({ price: '', size: "null" });
-    this.setState({ size: "" });
+    this.setState({ quantity: '', measurement: "null" });
+    this.setState({ measurement: "" });
     this.handleAddSizeChip(properSizeStringSyntax);
 
     //  Resetting inner html directly to clear ingredient inputs without changing state
@@ -322,7 +416,7 @@ class SuggestKitchenUtensilForm extends Component {
 
   handleAddSizeChip(chip) {
     this.setState({
-      sizeStrings: [...this.state.sizeStrings, chip],
+      sizeStrings: [chip],
     });
   }
 
@@ -381,17 +475,17 @@ class SuggestKitchenUtensilForm extends Component {
 
     return (
           <div className="suggestion_section_2" >
-            <form className="suggestion_forms" noValidate autoComplete="off" encType="multipart/form-data" method="post" >
+            <form id="formutensil" className="suggestion_forms" noValidate autoComplete="off" encType="multipart/form-data" method="post" >
               <div className="suggestion_form">
                 <div className="suggestion_form_group">
                   <label htmlFor="utensilName" className="suggestion_form_label">
                     Utensil Name
                   </label>
-                  <TextField id="utensilName" fullWidth onChange={this.onInputChange} variant="outlined" required />
+                  <TextField value={this.state.utensilName} id="utensilName" fullWidth onChange={this.onInputChange} variant="outlined" required />
                 </div>
 
                 <h3>Upload Utensil Images <em>(Up to 4)</em></h3>
-
+                {this.state.utensilImagesData.length < 3 &&
                 <div className="suggestion_form_image">
                     <div className="suggestion_form_image_col_1">
                       <div onClick={() => this.uploadUtensilImage()} className="suggestion_form_image_icon_con">
@@ -401,7 +495,7 @@ class SuggestKitchenUtensilForm extends Component {
                     <div className="suggestion_form_image_col_2">
                       <p>Upload picture with : Jpeg or Png format and not more than 500kb</p>
                     </div>
-                </div>
+                </div>}
 
                 <Row>
                   <Col md={12} style={{ marginTop: "20px" }}>
@@ -426,38 +520,38 @@ class SuggestKitchenUtensilForm extends Component {
                   <label htmlFor="intro" className="suggestion_form_label">
                     Intro (150 words)
                   </label>
-                  <TextField multiline id="intro" fullWidth onChange={this.onTextFieldChange} variant="outlined" />
+                  <TextField value={this.state.intro} multiline id="intro" fullWidth onChange={this.onTextFieldChange} variant="outlined" />
                 </div>
               </div>
-              <h3>Utensil Sizes And Price</h3>
+              <h3>Utensil Size</h3>
               <div className="suggestion_form">
                 
                 <div className="suggestion_form_2_col">
-                  <div className="suggestion_form_2_col_1">
+                  <div className="suggestion_form_2_col_2">
                     <div className="suggestion_form_group">
-                      <label htmlFor="size" className="suggestion_form_label">
-                        Size
+                      <label htmlFor="quantity" className="suggestion_form_label">
+                        Quantity
                       </label>
-                      <Autocomplete
-                        id="size"
-                        options={this.props.measurements.map((option) => option)}
-                        value={this.state.size}
-                        onChange={this.handleSize}
-                        freeSolo
-                        renderInput={(params) => (<TextField {...params}
-                          value={this.state.size} id="size"
-                          variant="outlined" type="text"  />)}
-                      />
+                      <TextField fullWidth id="quantity" type="number" onChange={this.onTextFieldChange}
+                        variant="outlined" placeholder="1.." value={this.state.quantity} />
                     </div>
                   </div>
 
-                  <div className="suggestion_form_2_col_2">
+                  <div className="suggestion_form_2_col_1">
                     <div className="suggestion_form_group">
-                      <label htmlFor="price" className="suggestion_form_label">
-                        Price
+                      <label htmlFor="measurement" className="suggestion_form_label">
+                        Measurement
                       </label>
-                      <TextField fullWidth id="price" type="number" onChange={this.onTextFieldChange}
-                        variant="outlined" placeholder="1.." value={this.state.price} />
+                      <Autocomplete
+                        id="measurement"
+                        options={this.props.measurements.map((option) => option)}
+                        value={this.state.measurement}
+                        onChange={this.handleMeasurement}
+                        freeSolo
+                        renderInput={(params) => (<TextField {...params}
+                          value={this.state.measurement} id="measurement"
+                          variant="outlined" type="text"  />)}
+                      />
                     </div>
                   </div>
 
@@ -492,6 +586,8 @@ class SuggestKitchenUtensilForm extends Component {
                       multiple
                       id="tags-outlined"
                       freeSolo
+                      clearOnBlur
+                      onBlur={this.categoryBlur}
                       // filterSelectedOptions
                       options={this.props.categories.map((option) => option)}
                       // onChange={(ev,val)=>this.handleCategoryDropdownChange(ev,val)}

@@ -48,6 +48,7 @@ class Popup2 extends Component {
                     </div>
                     <div className="popup2_row_2">
                         <div className="popup2_col_1">
+                            <div className="img_col">
                             {imageData !== '' &&
                             <img
                                 src={imageData}
@@ -63,6 +64,7 @@ class Popup2 extends Component {
                                 }
                                 
                             </div>}
+                            </div>
                             <div className="del">
                                 <h2 className="popup2_name">{name}</h2>
                                 <ul className="popup2_del">
@@ -72,7 +74,7 @@ class Popup2 extends Component {
                                     <li><p>Chef</p><h5>{this.props.chef}</h5></li>
                                 </ul>
                                 <p className="popup2_description">
-                                    intro<br />
+                                    Intro<br />
                                     {description}
                                 </p>
                             </div>
@@ -89,16 +91,16 @@ class Popup2 extends Component {
                                         </tr>
                                         {ingredientsList.map((ingredient, index) => (
                                         <tr key={index}>
-                                            <td>{ingredient.split(' ')[1]}</td>
-                                            <td>{ingredient.split(' ')[0]}</td>
                                             <td>{ingredient.split('of')[1]}</td>
+                                            <td>{ingredient.split(' ')[0]}</td>
+                                            <td>{ingredient.split(' ')[1]}</td>
                                         </tr>
                                         ))}
                                     </table>
                                 </div>
                                 <div className="popup2_categories">
                                     <h3 className="popup2_category_name">Meal Category</h3>
-                                    <p className="popup2_category">{categories.map((cat) => cat + ' ')}</p>
+                                    <p className="popup2_category">{categories.map((cat) => <span>{cat} &nbsp; &nbsp;</span>)}</p>
                                 </div>
                             </div>
                         </div>
@@ -109,7 +111,7 @@ class Popup2 extends Component {
                                 <>
                                     {this.props['chunk'+curIn+'Content'] !== undefined &&
                                     <img
-                                        src={URL.createObjectURL(this.props['chunk'+curIn+'Content'])}
+                                        src={this.props['chunk'+curIn+'Content']}
                                         alt={this.props['instructionChunk'+curIn].title}
                                         className="popup2_step_img"
                                     />}

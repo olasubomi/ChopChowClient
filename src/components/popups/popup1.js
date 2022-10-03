@@ -59,19 +59,12 @@ class Popup1 extends Component {
                             <div className="popup_size">
                                 {sizesList.map((sizeSyntax, index) => 
                                     <React.Fragment key={index}>
-                                        <p>{sizeSyntax.split(' ')[1]}</p>
-                                        <div></div>
-                                        <p>${sizeSyntax.split(' ')[0]}.00</p>
+                                        <p>{sizeSyntax}</p>
                                     </React.Fragment>
                                 )}
                                 
                             </div>
                         </div>
-                    </div>
-                    <div className="available_quantity">
-                        <h3>Available left</h3>
-                        <p className="amount_left">{quantity} left</p>
-
                     </div>
                 </div>
                 
