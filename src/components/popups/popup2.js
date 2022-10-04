@@ -91,9 +91,9 @@ class Popup2 extends Component {
                                         </tr>
                                         {ingredientsList.map((ingredient, index) => (
                                         <tr key={index}>
-                                            <td>{ingredient.split('of')[1]}</td>
-                                            <td>{ingredient.split(' ')[0]}</td>
-                                            <td>{ingredient.split(' ')[1]}</td>
+                                            <td>{ingredient.split('of').length > 1 ? ingredient.split('of')[1] : ingredient.split(' ')[1]}</td>
+                                            <td>{ingredient.split('of').length > 1 ? ingredient.split(' ')[0] : ingredient.split(' ')[0]}</td>
+                                            <td>{ingredient.split('of').length > 1 ? ingredient.split(' ')[1] : ''}</td>
                                         </tr>
                                         ))}
                                     </table>
