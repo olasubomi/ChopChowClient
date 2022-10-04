@@ -1,7 +1,7 @@
 import React from 'react';
 import './style.css';
 import { Form, Button, Container, Modal, Row, Col, ButtonToolbar } from 'react-bootstrap';
-import { setTimeout } from 'timers';
+// import { setTimeout } from 'timers';
 
 export default class ResetPassword extends React.Component {
   state = {
@@ -21,9 +21,9 @@ export default class ResetPassword extends React.Component {
 
 
   handleClose = (delay) => {
-    setTimeout(() => {
-      this.props.history.push('/grocery');
-    }, delay || 0);
+    // setTimeout(() => {
+      this.props.history.push('/');
+    // }, delay || 0);
   };
 
   formSubmit = (e) => {
@@ -36,7 +36,7 @@ export default class ResetPassword extends React.Component {
   };
 
   submitForm = () => {
-    fetch('/api/forgotpass', {
+    fetch('https://chopchowdev.herokuapp.com/api/forgotpass', {
       method: 'POST',
       credentials: 'include',
       headers: {

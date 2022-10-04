@@ -1,510 +1,248 @@
 import React, { Component } from "react";
-import TextField from "@material-ui/core/TextField";
-import ChipInput from "material-ui-chip-input";
-import Chip from "@material-ui/core/Chip";
-import Autocomplete from "@material-ui/lab/Autocomplete"; // createFilterOptions,
-
-// height of the TextField
+// import axios from 'axios';
+import axios from '../util/Api';
+import WestIcon from '@mui/icons-material/West';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import "./suggestionPages/suggestion.css";
+import { Link } from "react-router-dom";
+import SuggestMealForm from "./suggestionPages/SuggestMeal";
+import SuggestProductForm from "./suggestionPages/SuggestProduct";
+import SuggestKitchenUtensilForm from "./suggestionPages/SuggestKitchenUtensil";
+import SuggestCategoryForm from "./suggestionPages/SuggestCategory";
 
 class SuggestMeal extends Component {
-  products = [];
-  categories = [];
-  measurements = [
-    "mL",
-    "oz",
-    "L",
-    "cup(s)",
-    "Tbsp",
-    "tsp",
-    "pt",
-    "lb",
-    "g",
-    "kg",
-    "lb",
-  ];
+  ingredientsQuantityMeasurements = [];
+
   constructor(props) {
     super(props);
     this.state = {
-      mealLabel: "",
-      intro: "",
-      servings: 0,
-      currentIngredient: "Butter scotch",
-      currentIngredientMeasurement: null,
-      currentIngredientQuantity: 0,
-      ingredientStrings: [],
-      formatted_ingredient: [],
-      instructionsChip: [],
-      imgSrc: "",
-      readTime: "0 mins read",
-      cookTime: "10 mins cook time",
-      categoryChips: ["snacks", "abc", "123"],
-      productsPopulated: false,
+
+      currentStore: "",
+
+      // we need to update how we create image paths
+      productImg_path: "",
+      new_product_ingredients: [],
+      suggested_stores: [],
+      currProductIndexInDBsProductsList: -1,
+      // currStoreIndexIfExistsInProductsList: -1,
+
+      booleanOfDisplayOfDialogBoxConfirmation: false,
+
+      //mealsModal controller
+      openModal: false,
+      suggestOption: false,
+      suggestionType: 'Meal',
     };
-    this.handleIngredientDropdownChange = this.handleIngredientDropdownChange.bind(
-      this
-    );
-    this.handleIngredientMeasurement = this.handleIngredientMeasurement.bind(
-      this
-    );
-    this.handleIngredientQuantity = this.handleIngredientQuantity.bind(this);
-    this.addIngredientToMeal = this.addIngredientToMeal.bind(this);
+
+    this.openMealDetailsModal = this.openMealDetailsModal.bind(this);
+
+    this.closeModal = this.closeModal.bind(this);
+    // this.handleStoreNameInput = this.handleStoreNameInput.bind(this);
+
+    // this.getProductIndex = this.getProductIndex.bind(this);
   }
 
+  ///////////////////////////////////////////////////////////////////////////////////////
   componentDidMount() {
-    var url = "./api/get-all-products";
 
-    fetch(url, {
-      method: "GET",
-      // credentials: 'include',
-      // headers: {
-      //   'Content-Type': 'application/json',
-      // }
-    })
-      .then((res) => res.text())
-      .then((body) => {
-        // console.log("should print body");
-        // console.log(body);
-        var productsList = JSON.parse(body);
-        if (productsList && productsList.data.length !== 0) {
-          console.log("returns GET ALL PRODUCTS ");
-          console.log(productsList.data.length);
-          for (var i = 0; i < productsList.data.length; i++) {
-            this.products.push(productsList.data[i].product_name);
-          }
-          console.log("PRINTING ALL PRODUCTS LIST");
-          console.log(this.products);
-          this.setState({ productsPopulated: true });
-        } else {
-          console.log("get all products function does not return");
+    // get all Meal Names***
+    var url = "/get-meals";
+    axios.get(url).then((body) => {
+      var mealList = body.data;
+      if (mealList && mealList.data.length !== 0) {
+        console.log("returns GET of ALL MEALS ");
+        for (var i = 0; i < mealList.data.length; i++) {
+          this.props.allMealNames.push(mealList.data[i].mealName);
         }
-      })
+      } else {
+        console.log("get all meal names function does not return");
+      }
+    })
       .catch((err) => {
         console.log(err);
       });
 
-    //get category meals
-    url = "./api/get-all-categories";
+    console.log(this.props.allMealNames);
+    // get all store names*, if NEW products section exists.
 
-    fetch(url, {
-      method: "GET",
-      // credentials: 'include',
-      // headers: {
-      //   'Content-Type': 'application/json',
-      // }
-    })
-      .then((res) => res.text())
-      .then((body) => {
-        // console.log("should print body");
-        console.log(body);
-        var categoryList = JSON.parse(body);
-        if (categoryList && categoryList.data.length !== 0) {
-          console.log("returns GET of ALL Categories ");
-          console.log(categoryList.data.length);
-          for (var i = 0; i < categoryList.data.length; i++) {
-            this.categories.push(categoryList.data[i]);
-          }
-          console.log("PRINTING UPDATED CATEGORIES LIST");
-          console.log(this.categories);
-        } else {
-          console.log("get all products function does not return");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+    // can redux resolve this for us by checking if we recently called this in cache or from another page ??
+    // var url = "/get-all-products";
+    url = "https://chopchowdev.herokuapp.com/get-all-products";
 
-  onTextFieldChange = (e) => {
-    /*
-          Because we named the inputs to match their
-          corresponding values in state, it's
-          super easy to update the state
-        */
-    console.log("Comes in on change");
-    // console.log("Target name: " + [e.target]);
-    this.setState({ [e.target.id]: e.target.value });
-  };
-
-  handleAddIngredientChip(chip) {
-    this.setState({
-      ingredientStrings: [...this.state.ingredientStrings, chip],
-    });
-    // check if ingredients already exists , if exists use product,
-    // else add product to suggested products
-  }
-
-  handleAddCategoryChip(chip) {
-    this.setState({ categoryChips: [...this.state.categoryChips, chip] }); //
-    // check if category already exists , if exists use it,
-    // else add category to new category
-  }
-
-  handleAddInstructionStep(chip) {
-    // this.setState({
-    //     instructionsChip: [...this.state.instructionsChip, instructionStep]
+    // axios.get(url).then((body) => {
+    //   this.productsList = body.data;
+    //   if (this.productsList && this.productsList.data.length !== 0) {
+    //     console.log("returns GET ALL PRODUCTS ");
+    //     for (var i = 0; i < this.productsList.data.length; i++) {
+    //       this.productNames.push(this.productsList.data[i].product_name);
+    //       this.productImageLink.push(this.productsList.data[i].product_image);
+    //     }       
+    //   } else {
+    //     console.log("get all products function does not return");
+    //   }
     // })
+    // .catch((err) => {
+    //   console.log(err);
+    // });
 
-    this.setState({
-      instructionsChip: [...this.state.instructionsChip, chip],
-    });
+    //----get category meals-------------------------
+    url = "/get-all-categories";
+    // axios.get(url).then((body) => {
+    //   var categoriesFromDBList = body.data;
+    //   if (categoriesFromDBList && categoriesFromDBList.data.length !== 0) {
+    //     console.log("returns GET of ALL Categories ");
+
+    //     for (var i = 0; i < categoriesFromDBList.data.length; i++) {
+    //       this.props.categories.push(categoriesFromDBList.data[i].category_name);
+    //     }
+    //     console.log("PRINTING UPDATED CATEGORIES LIST");
+    //   } else {
+    //     console.log("get all products function does not return");
+    //   }
+    // })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    this.categories = this.props.categories;
   }
 
-  handleDeleteIngredientChip(chip) {
-    console.log("removing chop input");
-    var array = [...this.state.ingredientStrings]; // make a separate copy of the array
-    var index = array.indexOf(chip);
-    if (index !== -1) {
-      array.splice(index, 1);
-      this.setState({ ingredientStrings: array });
-    }
-  }
-
-  handleDeleteCategoryChip(chip) {
-    console.log("removing chop input");
-    var array = [...this.state.categoryChips]; // make a separate copy of the array
-    var index = array.indexOf(chip);
-    if (index !== -1) {
-      array.splice(index, 1);
-      this.setState({ categoryChips: array });
-    }
-  }
-
-  handleDeleteInstructionsStep(chip) {
-    console.log("removing chop input");
-    var array = [...this.state.instructionsChip]; // make a separate copy of the array
-    var index = array.indexOf(chip);
-    if (index !== -1) {
-      array.splice(index, 1);
-      this.setState({ instructionsChip: array });
-    }
-  }
-  handleIngredientQuantity(event) {
-    console.log(event.target.value);
-    this.setState({ currentIngredientQuantity: event.target.value });
-  }
-  handleIngredientDropdownChange(event) {
-    console.log(event.target);
-    if (event.target.value) {
-      this.setState({ currentIngredient: event.target.value });
-    } else {
-      this.setState({ currentIngredient: event.target.innerHTML });
-    }
-  }
-  handleIngredientMeasurement(event) {
-    if (event.target.value) {
-      this.setState({ currentIngredientMeasurement: event.target.value });
-    } else {
-      this.setState({ currentIngredientMeasurement: event.target.innerHTML });
-    }
-  }
-
-  addIngredientToMeal(event) {
-    event.preventDefault();
-    console.log(this.state.currentIngredientMeasurement);
-    var properIngredientStringSyntax;
-
-    if (document.getElementById("currentIngredient").value === "") {
-      window.alert("Enter an ingredient to add to meal");
-      return;
-    }
-
-    if (this.state.currentIngredientQuantity === 0) {
-      properIngredientStringSyntax = document.getElementById(
-        "currentIngredient"
-      ).value;
-    } else if (
-      document.getElementById("currentIngredientMeasurement").value === null
-    ) {
-      properIngredientStringSyntax =
-        "" +
-        this.state.currentIngredientQuantity +
-        " " +
-        document.getElementById("currentIngredient").value;
-    } else {
-      properIngredientStringSyntax =
-        "" +
-        this.state.currentIngredientQuantity +
-        " " +
-        document.getElementById("currentIngredientMeasurement").value +
-        " of " +
-        document.getElementById("currentIngredient").value;
-    }
-    var currIngredientObject = {
-      product: this.state.currentIngredient,
-      quantity: this.state.currentIngredientQuantity,
-      measurement: this.state.currentIngredientMeasurement,
-    };
-    console.log(properIngredientStringSyntax);
-    this.handleAddIngredientChip(properIngredientStringSyntax);
-    this.setState({
-      formatted_ingredient: [
-        ...this.state.formatted_ingredient,
-        currIngredientObject,
-      ],
-    });
-    // this.state.currentIngredientMeasurement +
-  }
-  // use function format to allow for use of this.state
-  // within a component function
-  sendSuggestedMealToDB = (e) => {
-    // e.preventDefault();
-    console.log("Comes in suggest meal func");
-    // get our form data out of state
-    const {
-      mealLabel,
-      intro,
-      servings,
-      ingredientStrings,
-      formatted_ingredient,
-      instructionsChip,
-      imgSrc,
-      readTime,
-      cookTime,
-      categoryChips,
-    } = this.state;
-
-    if (mealLabel === "") {
-      console.log("meal label blank");
-      return;
-    }
-    console.log("ingredient chips are:");
-    console.log(ingredientStrings);
-    if (ingredientStrings.length === 0) {
-      window.alert(
-        "Suggested meal requires adding at least one ingredient to submit"
-      );
-      return;
-    }
-
-    var url = "/api/addMealSuggestion/";
-    console.log("gets to call fetch");
-
-    fetch(url, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        mealLabel,
-        intro,
-        servings,
-        formatted_ingredient,
-        instructionsChip,
-        ingredientStrings,
-        imgSrc,
-        readTime,
-        cookTime,
-        categoryChips,
-      }),
-    })
-      .then((response) => {
-        if (response.status >= 200 && response.status < 300) {
-          console.log(response);
-          console.log("Display Meal submitted successfully");
-          // return response;
-          // window.location.reload();
-        } else {
-          console.log("Somthing happened wrong");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  ///////////////////////////////////////////////////////////////////////////////////////
+  handleCloseOfMealSubmissinoDialogMessage = () => {
+    this.setState({ booleanOfDisplayOfDialogBoxConfirmation: false });
+    // close out of state tracker..
+    // productDisplayBooleansOutOfState[index] = false;
   };
 
+  //////////////////////////////////////////////////////////////////////////////////////////////
+  openMealDetailsModal = (index) => {
+    // toggle products page visibility for product to be Edited.
+    // this.productDisplayBooleansOutOfState[this.state.ingredientGroupList.length] = false;
+    // this.productDisplayBooleansOutOfState[index] = true;
+
+    // var tmpIngredientGroupList = this.state.ingredientGroupList;
+    // tmpIngredientGroupList[index].display = true;
+    // tmpIngredientGroupList[currentProductDisplayIndex].display = false;
+    // this.setState({ingredientGroupList: tmpIngredientGroupList});
+    console.log("Comes in toggle product details div id. Index is : " + index);
+
+    var individualProductDisplay = document.getElementById("ProductAdditionalDataDisplayed");
+    console.log(individualProductDisplay);
+
+    // if (individualProductDisplay.style.display === "block") {
+    //   individualProductDisplay.style.display = "none";
+    // }
+    // else {
+    //   individualProductDisplay.style.display = "block";
+    // }
+    this.setState({openModal: true});
+  }
+
+
+  closeModal() {
+    this.setState({ openModal: false });
+    // this.props.openModal = false;
+    // this.props.func_removeMealFlag();
+  }
+
+  suggestOption = () => {
+    this.setState({
+      suggestOption: !this.state.suggestOption
+    })
+  }
+
+  handleSuggestionType = (type) => {
+    this.setState({
+      suggestionType: type
+    })
+    this.suggestOption()
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////////
   render() {
-    var instructionSteps = (
-      <ol className="mdc-list">
-        {this.state.instructionsChip.map((chip) => (
-          <li className="mdc-list-item" tabIndex="0">
-            <span className="mdc-list-item__text">{chip}</span>
-          </li>
-        ))}
-      </ol>
-    );
+
+    // const [ingredientInput, setIngredientInput] = useState('');    
+
+    // const theme = createMuiTheme({
+    //   palette: { primary: green },
+    // });
+
+    const { suggestOption, suggestionType } = this.state;
 
     return (
-      <div>
-        <div id="title">
-          <b>Suggestions</b>
-        </div>
-
-        <div style={{ textAlign: "center" }}>
-          <br></br>
-          {/* add hash action so that form does not reload on enter or button click */}
-          <form autoComplete="off" action="#">
-            <TextField
-              id="mealLabel"
-              onChange={this.onTextFieldChange}
-              label="Meal Name"
-              required
-              variant="filled"
-            />
-            <br></br>
-            <TextField
-              multiline
-              id="intro"
-              onChange={this.onTextFieldChange}
-              label="Intro"
-              variant="filled"
-            />
-            <br></br>
-            <TextField
-              id="servings"
-              type="number"
-              onChange={this.onTextFieldChange}
-              label="Servings"
-              variant="filled"
-              placeholder="1 person, 2, 4 or 10 people"
-            />
-            <br></br>
-            {/*  Be able to display product images on clock */}
-            <ChipInput
-              label="IngredientsList"
-              value={this.state.ingredientStrings}
-              onAdd={(chip) => this.handleAddIngredientChip(chip)}
-              placeholder="e.g 1 Onion, 2 Cups of Water, etc"
-              onDelete={(chip, index) =>
-                this.handleDeleteIngredientChip(chip, index)
-              }
-              variant="filled"
-            />
-            <br></br>
-            <div>
-              {/* <select onChange={this.handleIngredientDropdownChange}>
-                {productOptions}
-              </select> */}
-
-              <Autocomplete
-                id="currentIngredient"
-                options={this.products.map((option) => option)}
-                onChange={this.handleIngredientDropdownChange}
-                // style={{ width: 200 }}
-                freeSolo
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Ingredient.."
-                    variant="filled"
-                  />
-                )}
-              />
-
-              <TextField
-                id="currentIngredientQuantity"
-                type="number"
-                onChange={this.onTextFieldChange}
-                label="Quantity"
-                variant="filled"
-                placeholder="1.."
-              />
-
-              <Autocomplete
-                id="currentIngredientMeasurement"
-                options={this.measurements.map((option) => option)}
-                onChange={this.handleIngredientMeasurement}
-                freeSolo
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Measurement.."
-                    variant="outlined"
-                  />
-                )}
-              />
-              <button onClick={this.addIngredientToMeal}>
-                {" "}
-                Add Ingredient +{" "}
-              </button>
-
-              {/* <FormControl>
-                                <InputLabel id="demo-simple-select-helper-label">Age</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-helper-label"
-                                    id="demo-simple-select-helper"
-                                    value={measurement}
-                                    onChange={handleMeasurementChange}
-                                >
-                                    <MenuItem value={measurement}>
-                                        <em>Measurement</em>
-                                    </MenuItem>
-                                    <MenuItem value={1}>mL</MenuItem>
-                                    <MenuItem value={2}>oz</MenuItem>
-                                    <MenuItem value={3}>tbs</MenuItem>
-                                    <MenuItem value={4}>lbs</MenuItem>
-                                </Select>
-                                <FormHelperText>Enter measurement unit for serving</FormHelperText>
-                            </FormControl> */}
-              {/* <input>Measurement</input><input>Product</input> */}
+      <div className="suggestion_container">
+        <div className="suggestion_sections">
+          <div className="suggestion_section_1">
+            <div className="suggestion_section_1_col_1">
+                <ul className="suggestion_header_pages">
+                  <WestIcon className="suggestion_header_page_arrow" />
+                  <li>
+                    <Link href="/">back</Link>
+                  </li>
+                </ul>
             </div>
-            {instructionSteps}
-            <ChipInput
-              label="Instructions"
-              value={this.state.instructionsChip}
-              onAdd={(chip) => this.handleAddInstructionStep(chip)}
-              onDelete={(chip, index) =>
-                this.handleDeleteInstructionsStep(chip, index)
-              }
-            />
-            <br></br>
-            {/* <TextField id="instructions" onChange={this.onChange} label="Instructions" variant="filled" /><br></br> */}
-            <TextField
-              id="imgsrc"
-              type="file"
-              onChange={this.onTextFieldChange}
-              label="Upload meal image"
-              variant="filled"
-            />
-            <br></br>
-            {/* <input type="file" name="file-input" multiple /><br></br>  */}
-            {/* {...props} */}
-            <TextField
-              id="readTime"
-              type="number"
-              onChange={this.onTextFieldChange}
-              label="ReadTime (mins)"
-              variant="filled"
-              required
-            />{" "}
-            <br></br>
-            <TextField
-              id="cookTime"
-              type="number"
-              onChange={this.onTextFieldChange}
-              label="CookTime (mins)"
-              variant="filled"
-              required
-            />
-            <br></br>
-            <Autocomplete
-              multiple
-              id="tags-filled"
-              options={this.categories.map((option) => option)}
-              defaultValue={[this.categories[0]]}
-              freeSolo
-              renderTags={(value, getTagProps) =>
-                value.map((option, index) => (
-                  <Chip
-                    variant="outlined"
-                    label={option}
-                    {...getTagProps({ index })}
-                  />
-                ))
-              }
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="filled"
-                  label="Categories"
-                  placeholder="Suggest categories for this meal.."
-                />
-              )}
-            />
-            <br></br>
-            <button onClick={this.sendSuggestedMealToDB}> Suggest Meal </button>
-          </form>
+            <div className="suggestion_section_1_col_2">
+                <p className="suggestion_section_1_col_2_p"> Choose type</p>
+                <div className="select_container">
+                  <div onClick={this.suggestOption} className="select_box">
+                    <p>{suggestionType}</p>
+                    <ArrowDropDownIcon className="select_box_icon" />
+                  </div>
+                  {suggestOption &&
+                  <div className="select_options">
+                    <p onClick={() => this.handleSuggestionType('Meal') }>Meals</p>
+                    <p onClick={() => this.handleSuggestionType('Product') }>Products</p>
+                    <p onClick={() => this.handleSuggestionType('Kitchen Utensil') }>Kitchen Utensils</p>
+                    <p onClick={() => this.handleSuggestionType('Category') }>Category</p>
+                  </div>}
+                </div>
+            </div>
+          </div>
+            {suggestionType === 'Meal' &&
+              <SuggestMealForm 
+              allMealNames={this.props.allMealNames}
+              productNames={this.props.productNames}
+              measurements={this.props.measurements}
+              kitchenUtensils={this.props.kitchenUtensils}
+              categories={this.props.categories}
+              ></SuggestMealForm>
+            }
+            {suggestionType === 'Product' &&
+              <SuggestProductForm 
+              allMealNames={this.props.allMealNames}
+              productNames={this.props.productNames}
+              measurements={this.props.measurements}
+              kitchenUtensils={this.props.kitchenUtensils}
+              categories={this.props.categories}
+              ></SuggestProductForm>
+            }
+            {suggestionType === 'Kitchen Utensil' &&
+              <SuggestKitchenUtensilForm 
+              measurements={this.props.measurements}
+              kitchenUtensils={this.props.kitchenUtensils}
+              categories={this.props.categories}
+              ></SuggestKitchenUtensilForm>
+            }
+            {suggestionType === 'Category' &&
+              <SuggestCategoryForm 
+              categories={this.props.categories}
+              ></SuggestCategoryForm>
+            }
         </div>
+        <Dialog
+          open={this.state.booleanOfDisplayOfDialogBoxConfirmation}
+          onClose={this.handleCloseOfMealSubmissinoDialogMessage}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth="xs"
+          fullWidth
+        >
+          <DialogTitle id="alert-dialog-title">Meal Submitted Successfully!</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Thanks for your submission. Your recipe may be published to our meals page upon admin review. Explore our Preview and Print option to create a hard copy of this meal.</DialogContentText>
+          </DialogContent>
+        </Dialog>
       </div>
     );
   }

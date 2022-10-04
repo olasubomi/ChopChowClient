@@ -1,7 +1,6 @@
 import React from 'react';
-import './ProductFullDetail.scss';
+// import './ProductFullDetail.scss';
 import {  Row, Col } from "react-bootstrap";
-
 
 class ProductFullDetail extends React.Component {
     constructor(props) {
@@ -44,7 +43,7 @@ componentWillMount() {
         
           for(let i=0; i< response.data.length; i++ )
           {
-            if(response.data[i].id == productId){
+            if(response.data[i].id === productId){
                 this.setState({ productData: response.data[i] });
                 break;
             }
@@ -77,17 +76,17 @@ componentWillMount() {
                             <Col md={2} style={{ textAlign: "center" }}>
                                 {
                                     this.state.productData &&
-                                    <img src={ `/images/products/${this.state.productData.product_image}`}  width="100%" className="productF-img1" />
+                                    <img src={ `/images/products/${this.state.productData.product_image}`}  width="100%" className="productF-img1" alt=""/>
                                 }
                                 {
                                     this.state.productData &&
-                                    <img src={ `/images/products/${this.state.productData.product_image}`}  width="100%" className="productF-img1" />
+                                    <img src={ `/images/products/${this.state.productData.product_image}`}  width="100%" className="productF-img1" alt=""/>
                                 }
                             </Col>
                             <Col md={5} style={{ textAlign: "center" }}>
                                 {
                                     this.state.productData &&
-                                    <img src={ `/images/products/${this.state.productData.product_image}`}  width="100%" className="productF-img" />
+                                    <img src={ `/images/products/${this.state.productData.product_image}`}  width="100%" className="productF-img"alt="" />
                                 }
                             </Col>
                             <Col md={5}>
@@ -128,7 +127,7 @@ componentWillMount() {
                                     </div>
                                     <hr/>
                                     <div className="productF-price-panel">            
-                                        <div className="price-value"><a href="#">Next Day Delivery</a></div>
+                                        <div className="price-value"><a href="/">Next Day Delivery</a></div>
                                         <div className="price-value">$10.00</div>
                                     </div>
                                     <div className = "cart-btn">
@@ -141,14 +140,6 @@ componentWillMount() {
                                 </div>
                             </Col>
                         </Row>
-                        {/* <Row className="btn-panel">
-                            <Col md={6} style={{ textAlign: "center" }}>
-                                <button className="productF-btn">View Item</button>
-                            </Col>
-                            <Col md={6} style={{ textAlign: "center" }}>
-                                <button className="productF-btn">Add To Card</button>
-                            </Col>
-                        </Row> */}
                     </div>
                 </div>
             </div>
