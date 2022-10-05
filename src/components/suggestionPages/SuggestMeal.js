@@ -1062,7 +1062,6 @@ class SuggestMealForm extends Component {
 
     if (ingredientValue === "") { window.alert("Enter ingredient to add to meal"); return; }
     if (quantityValue === "") { window.alert("Enter quantity to add to meal"); return; }
-    if (measurementValue === "") { window.alert("Enter measurement to add to meal"); return; }
     // update ingredient string syntax for no quantity or no measurement.
     if (quantityValue === "") {
       properIngredientStringSyntax = ingredientValue;
