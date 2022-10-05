@@ -1,19 +1,26 @@
 {
-  "files": {
-    "main.css": "/static/css/main.ebdbb59c.css",
-    "main.js": "/static/js/main.1b7c00f0.js",
-    "static/media/food_prep.jpg": "/static/media/food_prep.25733fbe6d8d82d81cf5.jpg",
-    "static/media/grocery_bag.jpg": "/static/media/grocery_bag.fb448ffade2d2574c969.jpg",
-    "static/media/CC_Logo_no_bg.png": "/static/media/CC_Logo_no_bg.ab28aee4659a51f9fd46.png",
-    "static/media/ola_ola_palm_oil.jpg": "/static/media/ola_ola_palm_oil.71212b7a58caaa239801.jpg",
-    "static/media/no_meal_step_image.png": "/static/media/no_meal_step_image.db87af01898efd0c843a.png",
-    "static/media/logo2.png": "/static/media/logo2.2d4f6f905df348c5bf92.png",
-    "index.html": "/index.html",
-    "main.ebdbb59c.css.map": "/static/css/main.ebdbb59c.css.map",
-    "main.1b7c00f0.js.map": "/static/js/main.1b7c00f0.js.map"
-  },
-  "entrypoints": [
-    "static/css/main.ebdbb59c.css",
-    "static/js/main.1b7c00f0.js"
-  ]
+  "main.css": "/static/css/main.37b1425f.chunk.css",
+  "main.js": "/static/js/main.d0eacff3.chunk.js",
+  "main.js.map": "/static/js/main.d0eacff3.chunk.js.map",
+  "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
+  "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
+  "static/css/2.8c1ba396.chunk.css": "/static/css/2.8c1ba396.chunk.css",
+  "static/js/2.66bb4335.chunk.js": "/static/js/2.66bb4335.chunk.js",
+  "static/js/2.66bb4335.chunk.js.map": "/static/js/2.66bb4335.chunk.js.map",
+  "index.html": "/index.html",
+  "precache-manifest.1a0d9599a593b566124a0cd84f3c0d9b.js": "/precache-manifest.1a0d9599a593b566124a0cd84f3c0d9b.js",
+  "service-worker.js": "/service-worker.js",
+  "static/css/2.8c1ba396.chunk.css.map": "/static/css/2.8c1ba396.chunk.css.map",
+  "static/css/main.37b1425f.chunk.css.map": "/static/css/main.37b1425f.chunk.css.map",
+  "static/media/CC_Logo_no_bg.png": "/static/media/CC_Logo_no_bg.23a343fa.png",
+  "static/media/banner-1.png": "/static/media/banner-1.ee861c44.png",
+  "static/media/banner-2.png": "/static/media/banner-2.dc12c874.png",
+  "static/media/banner-3.png": "/static/media/banner-3.d4b6bfac.png",
+  "static/media/food.png": "/static/media/food.6dce1400.png",
+  "static/media/grocery_bag.jpg": "/static/media/grocery_bag.6702032b.jpg",
+  "static/media/logo2.png": "/static/media/logo2.8340d35f.png",
+  "static/media/no_meal_step_image.png": "/static/media/no_meal_step_image.da8c3317.png",
+  "static/media/ola_ola_palm_oil.jpg": "/static/media/ola_ola_palm_oil.70ad3e22.jpg",
+  "static/media/shop.png": "/static/media/shop.a52aa050.png",
+  "static/media/utensil.png": "/static/media/utensil.14fadc1f.png"
 }

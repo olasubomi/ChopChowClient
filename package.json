@@ -5,6 +5,9 @@
     "node": "16.x"
   },
   "private": true,
+  "resolutions": {
+    "@types/react": "17.0.50"
+  },
   "dependencies": {
     "@aws-sdk/client-cognito-identity": "^3.41.0",
     "@aws-sdk/client-s3": "^3.41.0",
@@ -40,6 +43,7 @@
     "source-map-explorer": "^2.5.2"
   },
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start-js": "react-scripts start",
     "start": "react-scripts start",
