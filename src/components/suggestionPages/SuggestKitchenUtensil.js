@@ -146,8 +146,6 @@ class SuggestKitchenUtensilForm extends Component {
         utensilName,
         utensilImage,
         utensilImageName,
-        utensilImageData,
-        utensilImagesData,
         intro,
 
         sizeNames,
@@ -177,18 +175,13 @@ class SuggestKitchenUtensilForm extends Component {
         booleanOfDisplayOfDialogBoxConfirmation
       } = JSON.parse(localStorage.getItem('suggestUtensilForm'))
 
-      if(utensilImageData !== ''){
-        var image = document.getElementById("UtensilsMainImages");
-        image.style.display = "block";
-        image.src = utensilImageData;
-      }
 
       this.setState({
         utensilName,
         utensilImage,
         utensilImageName,
-        utensilImageData,
-        utensilImagesData,
+        utensilImageData: '',
+        utensilImagesData: [],
         intro,
 
         sizeNames,
@@ -310,6 +303,15 @@ class SuggestKitchenUtensilForm extends Component {
     this.setState({
       suggestedCategories
     })
+  }
+
+  handleDeleteCategoryChip(chip) {
+    var array = [...this.state.suggestedCategories]; // make a separate copy of the array
+    var index = array.indexOf(chip);
+    if (index !== -1) {
+      array.splice(index, 1);
+      this.setState({ suggestedCategories: array });
+    }
   }
 
   handleMeasurement = (event, val) => {

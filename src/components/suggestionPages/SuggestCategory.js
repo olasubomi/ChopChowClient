@@ -128,6 +128,15 @@ class SuggestCategoryForm extends Component {
     cat.value = '';
   }
 
+  handleDeleteCategoryChip(chip) {
+    var array = [...this.state.suggestedCategories]; // make a separate copy of the array
+    var index = array.indexOf(chip);
+    if (index !== -1) {
+      array.splice(index, 1);
+      this.setState({ suggestedCategories: array });
+    }
+  }
+
   closeModal() {
     this.setState({ openModal: false });
     // this.props.openModal = false;

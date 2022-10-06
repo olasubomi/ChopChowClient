@@ -39,13 +39,14 @@ class ComponentToPrint extends React.Component {
         const { ingredientsList, categories, utensilsList } = this.props;
         let displayedCategories = ''
         displayedCategories = categories.map((cat) => cat + ', ');
-        let displayedIngredients = ingredientsList.map((ingredientSyntax) => <li key={ingredientSyntax} > <h4>{ingredientSyntax} </h4></li>);
-        let displayedUtensils =  utensilsList.map((utensil) => <li key={utensil} >{utensil}</li>);
+        let displayedIngredients = ingredientsList.map((ingredientSyntax) => ingredientSyntax + ', ');
+        let displayedUtensils =  utensilsList.map((utensil) => utensil + ', ');
         //  displayedCategories+= '</div>'
     
         let fontSize;
+        let lineHeight;
 
-        if(ingredientsList.length > 11){
+        if(ingredientsList.length > 11 || utensilsList.length > 11 || (ingredientsList.length + utensilsList.length) > 11){
           fontSize = (14 - (ingredientsList.length / 11)) + "px"
         }else{
           fontSize = '14px'
@@ -53,8 +54,10 @@ class ComponentToPrint extends React.Component {
         let mealFont;
         if(this.props.mealName.length > 16){
           mealFont = '20px'
+          lineHeight= '20px'
         }else{
           mealFont = '70px'
+          lineHeight = '30px'
         }
         console.log("categories are:")
         console.log(this.props.categories);
@@ -147,7 +150,7 @@ class ComponentToPrint extends React.Component {
                         
                         <div className="print_top2">
                           <img className="print_top_logo_img" alt="print_top_logo_img" src={img_logo} />
-                          <h2 style={{ fontSize: mealFont }}>{this.props.mealName}</h2>
+                          <h2 style={{ fontSize: mealFont, lineHeight: lineHeight }}>{this.props.mealName}</h2>
                         </div>
                       </div>
                       <div className="print_col_1_detail">

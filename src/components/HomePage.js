@@ -28,6 +28,7 @@ class HomePage extends Component {
 
   componentDidMount() {
     let slideIndex = this.state.slideIndex;
+    this.slider(slideIndex)
 
     setInterval(() => {
       this.plusSlides(slideIndex)
