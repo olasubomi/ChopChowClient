@@ -418,9 +418,13 @@ html {
   display: flex;
   grid-gap: 4px;
   flex-wrap: wrap;
+  overflow: hidden;
 }
 
 .instruction_step {
+  /* word-break: break-word; */
+  text-overflow: ellipsis;
+  overflow: hidden;
   padding-left: 1rem;
   font-weight: normal !important;
   font-size: 14px;

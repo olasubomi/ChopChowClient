@@ -132,20 +132,15 @@ class SuggestKitchenUtensilForm extends Component {
 
     let doc = document.querySelector('#formutensil')
     if(doc){
-      doc.addEventListener('keyup', (e) => {
+      setInterval(() => {
         localStorage.setItem('suggestUtensilForm', JSON.stringify(this.state))
-      })
-
-      doc.addEventListener('click', (e) => {
-        localStorage.setItem('suggestUtensilForm', JSON.stringify(this.state))
-      }, false)
+        
+      }, 100)
     }
 
     if(localStorage.getItem('suggestUtensilForm')){
       let {
         utensilName,
-        utensilImage,
-        utensilImageName,
         intro,
 
         sizeNames,
@@ -178,8 +173,8 @@ class SuggestKitchenUtensilForm extends Component {
 
       this.setState({
         utensilName,
-        utensilImage,
-        utensilImageName,
+        utensilImage: '',
+        utensilImageName: '',
         utensilImageData: '',
         utensilImagesData: [],
         intro,

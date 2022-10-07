@@ -194,21 +194,20 @@ class SuggestMealForm extends Component {
 
     let doc = document.querySelector('#formmeal')
     if(doc){
-      doc.addEventListener('keyup', (e) => {
-        console.log('sdcd')
-        localStorage.setItem('suggestMealForm', JSON.stringify(this.state))
-      })
 
-      doc.addEventListener('click', (e) => {
+      setInterval(() => {
         localStorage.setItem('suggestMealForm', JSON.stringify(this.state))
-      }, false)
+        
+      }, 100)
+
+      // doc.addEventListener('click', (e) => {
+      //   localStorage.setItem('suggestMealForm', JSON.stringify(this.state))
+      // }, false)
     }
 
     if(localStorage.getItem('suggestMealForm')){
       let {
         mealName,
-        mealImage,
-        mealImageName,
         intro,
 
         ingredientNames,
@@ -269,8 +268,8 @@ class SuggestMealForm extends Component {
 
       this.setState({
         mealName,
-        mealImage,
-        mealImageName,
+        mealImage: '',
+        mealImageName: '',
         mealImageData: '',
         mealImagesData: [],
         intro,
@@ -300,12 +299,36 @@ class SuggestMealForm extends Component {
         cookTime,
         prepTime,
 
-        instructionChunk6,
-        instructionChunk1,
-        instructionChunk2,
-        instructionChunk3,
-        instructionChunk4,
-        instructionChunk5,
+        instructionChunk6: {
+          title: instructionChunk6.title,
+          instructionSteps: instructionChunk6.instructionSteps,
+          dataName: ""
+        },
+        instructionChunk1: {
+          title: instructionChunk1.title,
+          instructionSteps: instructionChunk1.instructionSteps,
+          dataName: ""
+        },
+        instructionChunk2: {
+          title: instructionChunk2.title,
+          instructionSteps: instructionChunk2.instructionSteps,
+          dataName: ""
+        },
+        instructionChunk3: {
+          title: instructionChunk3.title,
+          instructionSteps: instructionChunk3.instructionSteps,
+          dataName: ""
+        },
+        instructionChunk4: {
+          title: instructionChunk4.title,
+          instructionSteps: instructionChunk4.instructionSteps,
+          dataName: ""
+        },
+        instructionChunk5: {
+          title: instructionChunk5.title,
+          instructionSteps: instructionChunk5.instructionSteps,
+          dataName: ""
+        },
         instructionWordlength,
 
         chunk1Content: '',

@@ -133,20 +133,15 @@ class SuggestProductForm extends Component {
 
     let doc = document.querySelector('#formproduct')
     if(doc){
-      doc.addEventListener('keyup', (e) => {
+      setInterval(() => {
         localStorage.setItem('suggestProductForm', JSON.stringify(this.state))
-      })
-
-      doc.addEventListener('click', (e) => {
-        localStorage.setItem('suggestProductForm', JSON.stringify(this.state))
-      }, false)
+        
+      }, 100)
     }
 
     if(localStorage.getItem('suggestProductForm')){
       let {
         productName,
-        productImage,
-        productImageName,
         productDescription,
 
         ingredientNames,
@@ -188,8 +183,8 @@ class SuggestProductForm extends Component {
 
       this.setState({
         productName,
-        productImage,
-        productImageName,
+        productImage: '',
+        productImageName: '',
         productImageData: '',
         productImagesData: [],
         productDescription,

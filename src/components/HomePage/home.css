@@ -28,7 +28,7 @@
 }
 
 .slide_wrapper{
-    display: none;
+    display: grid;
     grid-row: 1/-1;
     grid-column: 1/-1;
     height: 100%;
@@ -213,7 +213,7 @@
     grid-gap: 6rem;
     justify-content: space-between;
     /* margin-bottom: -9rem; */
-    top: -53px;
+    top: -40px;
     left: 19%;
 }
 

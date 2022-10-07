@@ -37,6 +37,9 @@ class Popup2 extends Component {
 
         const { popupType, imageData, imagesData, name, description, categories, ingredientsList } = this.props
         const { curIn } = this.state;
+
+        var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
+        var allowedVideoExtensions = /(\.mp4|\.m4v|\.)$/i;
         return (
             <>
             {this.props.openModal &&
@@ -68,13 +71,13 @@ class Popup2 extends Component {
                             <div className="del">
                                 <h2 className="popup2_name">{name}</h2>
                                 <ul className="popup2_del">
-                                    <li><p>CookTime</p><h5>{this.props.cookTime} Minute{parseInt(this.props.cookTime) > 1 ? 's': ''}</h5></li>
-                                    <li><p>PrepTime</p><h5>{this.props.prepTime} Minute{parseInt(this.props.prepTime) > 1 ? 's': ''}</h5></li>
-                                    <li><p>Serves</p><h5>{this.props.serves} {parseInt(this.props.serves) > 1 ? 'people': 'person'}</h5></li>
-                                    <li><p>Chef</p><h5>{this.props.chef}</h5></li>
+                                    <li><p>CookTime:</p><h5>{this.props.cookTime} Minute{parseInt(this.props.cookTime) > 1 ? 's': ''}</h5></li>
+                                    <li><p>PrepTime:</p><h5>{this.props.prepTime} Minute{parseInt(this.props.prepTime) > 1 ? 's': ''}</h5></li>
+                                    <li><p>Serves:</p><h5>{this.props.serves} {parseInt(this.props.serves) > 1 ? 'people': 'person'}</h5></li>
+                                    <li><p>Chef:</p><h5>{this.props.chef}</h5></li>
                                 </ul>
                                 <p className="popup2_description">
-                                    Intro<br />
+                                    Intro:<br />
                                     {description}
                                 </p>
                             </div>
@@ -109,12 +112,17 @@ class Popup2 extends Component {
                             <div className="popup2_steps">
                                 {this.props['instructionChunk'+curIn].title !== '' &&
                                 <>
-                                    {this.props['chunk'+curIn+'Content'] !== undefined &&
+                                    {allowedImageExtensions.exec(this.props['instructionChunk'+curIn].dataName) && this.props['chunk'+curIn+'Content'] !== undefined &&
                                     <img
                                         src={this.props['chunk'+curIn+'Content']}
                                         alt={this.props['instructionChunk'+curIn].title}
                                         className="popup2_step_img"
                                     />}
+
+                                    {allowedVideoExtensions.exec(this.props['instructionChunk'+curIn].dataName) && this.props['chunk'+curIn+'Content'] !== undefined &&
+                                    <video className="popup2_step_img" src={this.props['chunk'+curIn+'Content']} controls>
+                                        Your browser does not support the video tag.
+                                    </video>}
                                     <div className="del">
                                         <h2 className="popup2_step_name">{this.props['instructionChunk'+curIn].title}</h2>
                                         <p className="popup2_instructions">
