@@ -108,6 +108,18 @@ class SuggestCategoryForm extends Component {
     //     console.log(err);
     //   });
     this.categories = this.props.categories;
+
+    setInterval(() => {
+      localStorage.setItem('suggestCategories', JSON.stringify(this.state.suggestedCategories))
+      
+    }, 100)
+
+    if(localStorage.getItem('suggestCategories')){
+      let suggestedCategories = JSON.parse(localStorage.getItem('suggestCategories'))
+      this.setState({
+        suggestedCategories
+      })
+    }
   }
 
   handleCategoryDropdownChange = (val) => {
