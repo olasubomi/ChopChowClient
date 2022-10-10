@@ -131,7 +131,7 @@ class Popup2 extends Component {
                                     </div>
                                 </>
                                 }
-                                {this.props['instructionChunk'+(curIn+1)].title !== '' &&
+                                {this.props['instructionChunk'+(curIn+1)] !== undefined &&
                                 <ArrowCircleRightIcon onClick={this.incIn} className="popup2_inc_con" />}
                                 {curIn > 1 &&
                                 <ArrowCircleLeftIcon onClick={this.decIn} className="popup2_dec_con" />}
