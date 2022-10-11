@@ -194,23 +194,20 @@ class SuggestMealForm extends Component {
 
     let doc = document.querySelector('#formmeal')
     if(doc){
-      doc.addEventListener('keyup', (e) => {
-        console.log('sdcd')
-        localStorage.setItem('suggestMealForm', JSON.stringify(this.state))
-      })
 
-      doc.addEventListener('click', (e) => {
+      setInterval(() => {
         localStorage.setItem('suggestMealForm', JSON.stringify(this.state))
-      }, false)
+        
+      }, 100)
+
+      // doc.addEventListener('click', (e) => {
+      //   localStorage.setItem('suggestMealForm', JSON.stringify(this.state))
+      // }, false)
     }
 
     if(localStorage.getItem('suggestMealForm')){
       let {
         mealName,
-        mealImage,
-        mealImageName,
-        mealImageData,
-        mealImagesData,
         intro,
 
         ingredientNames,
@@ -245,13 +242,6 @@ class SuggestMealForm extends Component {
         instructionChunk4,
         instructionChunk5,
         instructionWordlength,
-
-        chunk1Content,
-        chunk2Content,
-        chunk3Content,
-        chunk4Content,
-        chunk5Content,
-        chunk6Content,
 
         // do we want all the instruction variables ?
         // instructionGroupList:[],
@@ -268,95 +258,20 @@ class SuggestMealForm extends Component {
         stepInputs
       } = JSON.parse(localStorage.getItem('suggestMealForm'))
 
-      if(mealImageData !== ''){
-        var imageM = document.getElementById("MealsMainImages");
-        imageM.style.display = "block";
-        imageM.src = mealImageData;
-      }
-
-      var allowedImageExtensions = /(\.jpg|\.jpeg|\.png|\.)$/i;
-      var allowedVideoExtensions = /(\.mp4|\.m4v|\.)$/i;
-
-      var imageElementId = "chunk1Image";
-      var videoElementId = "chunk1Video";
-
-      // console.log(allowedImageExtensions.exec(event.target.files[0].name));
+      // if(mealImageData !== ''){
+      //   var imageM = document.getElementById("MealsMainImages");
+      //   imageM.style.display = "block";
+      //   imageM.src = mealImageData;
+      // }
 
       // we need to keep track of wether an image or video was last uploaded and use the last one only.
-      if(JSON.parse(localStorage.getItem('suggestMealForm'))['chunk1Content'] !== ''){
-        if (allowedImageExtensions.exec(JSON.parse(localStorage.getItem('suggestMealForm'))['instructionChunk1'].dataName)) {
-          //display meals main image or videoin suggest meal
-
-          setTimeout(()  => {
-            var image = document.getElementById(imageElementId);
-            var video = document.getElementById(videoElementId);
-            image.style.display = "block";
-            image.src= JSON.parse(localStorage.getItem('suggestMealForm'))['chunk1Content'];
-            video.style.display = "none";
-          }, 100)
-
-        }
-        else if (allowedVideoExtensions.exec(JSON.parse(localStorage.getItem('suggestMealForm'))['instructionChunk1'].dataName)) {
-          //display meals main image or videoin suggest meal
-          setTimeout(()  => {
-            var image = document.getElementById(imageElementId);
-            var video = document.getElementById(videoElementId);
-            video.style.display = "block";
-            video.src= JSON.parse(localStorage.getItem('suggestMealForm'))['chunk1Content'];
-            image.style.display = "none";
-            video.play();
-          }, 100)
-        }
-        else {
-          alert('Invalid file type');
-        }
-      }
-      
-      for(let i=0; i<stepInputs.length; i++){
-
-        let imageElementId = "chunk" + (stepInputs[i]) + "Image";
-        let videoElementId = "chunk" + (stepInputs[i]) + "Video";
-
-        // console.log(allowedImageExtensions.exec(event.target.files[0].name));
-
-        // we need to keep track of wether an image or video was last uploaded and use the last one only.
-        if(JSON.parse(localStorage.getItem('suggestMealForm'))['chunk'+stepInputs[i]+'Content'] !== ''){
-          if (allowedImageExtensions.exec(JSON.parse(localStorage.getItem('suggestMealForm'))['instructionChunk'+stepInputs[i]].dataName)) {
-            //display meals main image or videoin suggest meal
-
-            setTimeout(()  => {
-              console.log(imageElementId, videoElementId)
-              var image = document.getElementById(imageElementId);
-              var video = document.getElementById(videoElementId);
-              image.style.display = "block";
-              image.src= JSON.parse(localStorage.getItem('suggestMealForm'))['chunk'+stepInputs[i]+'Content'];
-              video.style.display = "none";
-            }, 100)
-
-          }
-          else if (allowedVideoExtensions.exec(JSON.parse(localStorage.getItem('suggestMealForm'))['instructionChunk'+stepInputs[i]].dataName)) {
-            //display meals main image or videoin suggest meal
-            setTimeout(()  => {
-              var image = document.getElementById(imageElementId);
-              var video = document.getElementById(videoElementId);
-              video.style.display = "block";
-              video.src= JSON.parse(localStorage.getItem('suggestMealForm'))['chunk'+stepInputs[i]+'Content'];
-              image.style.display = "none";
-              video.play();
-            }, 100)
-          }
-          else {
-            alert('Invalid file type');
-          }
-        }
-      }
 
       this.setState({
         mealName,
-        mealImage,
-        mealImageName,
-        mealImageData,
-        mealImagesData,
+        mealImage: '',
+        mealImageName: '',
+        mealImageData: '',
+        mealImagesData: [],
         intro,
 
         ingredientNames,
@@ -384,20 +299,44 @@ class SuggestMealForm extends Component {
         cookTime,
         prepTime,
 
-        instructionChunk6,
-        instructionChunk1,
-        instructionChunk2,
-        instructionChunk3,
-        instructionChunk4,
-        instructionChunk5,
+        instructionChunk6: {
+          title: instructionChunk6.title,
+          instructionSteps: instructionChunk6.instructionSteps,
+          dataName: ""
+        },
+        instructionChunk1: {
+          title: instructionChunk1.title,
+          instructionSteps: instructionChunk1.instructionSteps,
+          dataName: ""
+        },
+        instructionChunk2: {
+          title: instructionChunk2.title,
+          instructionSteps: instructionChunk2.instructionSteps,
+          dataName: ""
+        },
+        instructionChunk3: {
+          title: instructionChunk3.title,
+          instructionSteps: instructionChunk3.instructionSteps,
+          dataName: ""
+        },
+        instructionChunk4: {
+          title: instructionChunk4.title,
+          instructionSteps: instructionChunk4.instructionSteps,
+          dataName: ""
+        },
+        instructionChunk5: {
+          title: instructionChunk5.title,
+          instructionSteps: instructionChunk5.instructionSteps,
+          dataName: ""
+        },
         instructionWordlength,
 
-        chunk1Content,
-        chunk2Content,
-        chunk3Content,
-        chunk4Content,
-        chunk5Content,
-        chunk6Content,
+        chunk1Content: '',
+        chunk2Content: '',
+        chunk3Content: '',
+        chunk4Content: '',
+        chunk5Content: '',
+        chunk6Content: '',
 
         // do we want all the instruction variables ?
         // instructionGroupList:[],

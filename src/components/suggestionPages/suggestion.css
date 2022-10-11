@@ -311,6 +311,11 @@ textarea:hover{
     align-self: end;
 }
 
+.stack{
+    width: 100%;
+    overflow: hidden;
+}
+
 .chip{
     background-color: #D9D9D9 !important;
     border-radius: 28px !important;
@@ -321,6 +326,13 @@ textarea:hover{
     margin-bottom: 8px !important;
 
     color: #000000 !important;
+    overflow: hidden;
+}
+
+.chip > span{
+    white-space: unset;
+    padding: 9px 12px;
+    word-break: break-all;
 }
 
 .chip > svg{
@@ -421,6 +433,13 @@ u{
     flex-wrap: wrap;
 }
 
+@media screen and (max-width: 650px) {
+
+    .more_steps{
+        grid-template-columns: 1fr;
+    }
+}
+
 @media screen and (max-width: 620px) {
     
     .suggestion_form_2_col{
@@ -431,6 +450,10 @@ u{
     .input_button{
         grid-template-columns: 1fr;
         grid-gap: 1rem;
+    }
+
+    .more_steps{
+        grid-template-columns: 1fr;
     }
 }
 

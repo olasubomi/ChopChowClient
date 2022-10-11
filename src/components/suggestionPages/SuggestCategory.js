@@ -108,6 +108,18 @@ class SuggestCategoryForm extends Component {
     //     console.log(err);
     //   });
     this.categories = this.props.categories;
+
+    setInterval(() => {
+      localStorage.setItem('suggestCategories', JSON.stringify(this.state.suggestedCategories))
+      
+    }, 100)
+
+    if(localStorage.getItem('suggestCategories')){
+      let suggestedCategories = JSON.parse(localStorage.getItem('suggestCategories'))
+      this.setState({
+        suggestedCategories
+      })
+    }
   }
 
   handleCategoryDropdownChange = (val) => {
@@ -126,6 +138,15 @@ class SuggestCategoryForm extends Component {
       suggestedCategories
     })
     cat.value = '';
+  }
+
+  handleDeleteCategoryChip(chip) {
+    var array = [...this.state.suggestedCategories]; // make a separate copy of the array
+    var index = array.indexOf(chip);
+    if (index !== -1) {
+      array.splice(index, 1);
+      this.setState({ suggestedCategories: array });
+    }
   }
 
   closeModal() {

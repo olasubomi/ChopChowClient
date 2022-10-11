@@ -133,22 +133,15 @@ class SuggestProductForm extends Component {
 
     let doc = document.querySelector('#formproduct')
     if(doc){
-      doc.addEventListener('keyup', (e) => {
+      setInterval(() => {
         localStorage.setItem('suggestProductForm', JSON.stringify(this.state))
-      })
-
-      doc.addEventListener('click', (e) => {
-        localStorage.setItem('suggestProductForm', JSON.stringify(this.state))
-      }, false)
+        
+      }, 100)
     }
 
     if(localStorage.getItem('suggestProductForm')){
       let {
         productName,
-        productImage,
-        productImageName,
-        productImageData,
-        productImagesData,
         productDescription,
 
         ingredientNames,
@@ -187,18 +180,13 @@ class SuggestProductForm extends Component {
         stepInputs
       } = JSON.parse(localStorage.getItem('suggestProductForm'))
 
-      if(productImageData !== ''){
-        var image = document.getElementById("ProductsMainImages");
-        image.style.display = "block";
-        image.src = productImageData;
-      }
 
       this.setState({
         productName,
-        productImage,
-        productImageName,
-        productImageData,
-        productImagesData,
+        productImage: '',
+        productImageName: '',
+        productImageData: '',
+        productImagesData: [],
         productDescription,
 
         ingredientNames,
@@ -332,6 +320,15 @@ class SuggestProductForm extends Component {
     this.setState({
       suggestedCategories
     })
+  }
+
+  handleDeleteCategoryChip(chip) {
+    var array = [...this.state.suggestedCategories]; // make a separate copy of the array
+    var index = array.indexOf(chip);
+    if (index !== -1) {
+      array.splice(index, 1);
+      this.setState({ suggestedCategories: array });
+    }
   }
 
   handleProductNameInput = (event, val) => {
@@ -548,7 +545,8 @@ class SuggestProductForm extends Component {
     var measurementValue = document.getElementById("currentIngredientMeasurement").value;
 
 
-    if (ingredientValue === "") { window.alert("Enter an ingredient to add to meal"); return; }
+    if (ingredientValue === "") { window.alert("Enter ingredient to add to meal"); return; }
+    if (quantityValue === "") { window.alert("Enter quantity"); return; }
     // update ingredient string syntax for no quantity or no measurement.
     if (quantityValue === "") {
       properIngredientStringSyntax = ingredientValue;
@@ -937,12 +935,11 @@ class SuggestProductForm extends Component {
               </Row> */}
               <u >View privacy policy</u>
               <div id="ProductAdditionalDataDisplayed" >
-                <Popup1 openModal={this.state.openModal} closeModal={this.closeModal}
+                <Popup1 popup='product' openModal={this.state.openModal} closeModal={this.closeModal}
                  name={this.state.productName} description={this.state.productDescription}
                  imageData={this.state.productImageData} image={this.state.productImage}
                  imagesData={this.state.productImagesData} categories={this.state.suggestedCategories}
-                 quantity={this.state.quantity}
-                 sizesList = {this.state.sizeStrings}
+                 sizesList = {this.state.sizeStrings} ingredientList={ingredientStrings}
                 />
                 {/* <MealPageModal openModal={this.state.openModal} closeModal={this.closeModal}
                  mealName={this.state.mealName} mealImage={this.state.mealImage}
